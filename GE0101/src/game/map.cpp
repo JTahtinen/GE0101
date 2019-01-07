@@ -19,12 +19,11 @@ void Map::render(Graphics* g)
 	{
 		for (int x = 0; x < _width; ++x)
 		{
-			float xStart = x * 32;
-			float yStart = y * 32;
-			float xEnd = xStart + 32;
-			float yEnd = yStart + 32;
+			int xStart = x * 32;
+			int yStart = y * 32;
+			int xEnd = xStart + 32;
+			int yEnd = yStart + 32;
 			g->drawRectAbsBordered(xStart, yStart, xEnd, yEnd, 0x0000ff);
-
 		}
 	}
 }
