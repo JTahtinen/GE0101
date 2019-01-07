@@ -38,7 +38,7 @@ void Graphics::drawPoint(float x, float y, unsigned int color)
 
 void Graphics::drawPointAbs(int x, int y, unsigned int color)
 {
-	if (math::inBounds(x, y, 0, 0, _target->getWidth(), _target->getHeight()))
+	if (math::inBounds((float)x, (float)y, 0.0f, 0.0f, (float)_target->getWidth(), (float)_target->getHeight()))
 	{
 		drawPointFast(x, y, color);
 	}
@@ -90,9 +90,9 @@ void Graphics::drawRectAbs(int xStart, int yStart, int xEnd, int yEnd, unsigned 
 	else finalXStart = xStart;
 	if (yStart < 0) { finalYStart = 0; }
 	else finalYStart = yStart;
-	if (xEnd > targetW) {finalXEnd = (float)targetW;}
+	if (xEnd > targetW) {finalXEnd = targetW;}
 	else finalXEnd = xEnd;
-	if (yEnd > targetH) {finalYEnd = (float)targetH;}
+	if (yEnd > targetH) {finalYEnd = targetH;}
 	else finalYEnd = yEnd;
 
 	for (int y = finalYStart; y < finalYEnd; ++y)
@@ -114,4 +114,10 @@ void Graphics::drawRectAbsBordered(int xStart, int yStart, int xEnd, int yEnd, u
 {
 	drawRectAbs(xStart, yStart, xEnd, yEnd, 0);
 	drawRectAbs(xStart + 1, yStart + 1, xEnd - 1, yEnd - 1, color);
+}
+
+void Graphics::drawSurfaceAbs(const Surface* surface, int xStart, int yStart, int xEnd, int yEnd)
+{
+	SDL_Rect dimensions = { xStart, yStart, xEnd - xStart, yEnd - yStart };
+	SDL_BlitScaled(surface->_image, NULL, _target->_image, &dimensions);
 }

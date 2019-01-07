@@ -8,8 +8,8 @@ Surface::Surface(int width, int height)
 	, _pixels((unsigned int* const)_image->pixels)
 {
 	ASSERT(_image);
-
-	clear();
+	fill(0xff0000);
+	//clear();
 }
 
 Surface::~Surface()
@@ -18,10 +18,15 @@ Surface::~Surface()
 	_image = nullptr;
 }
 
-void Surface::clear()
+void Surface::fill(unsigned int color)
 {
 	for (int i = 0; i < _width * _height; ++i)
 	{
-		_pixels[i] = 0;
+		_pixels[i] = color;
 	}
+}
+
+void Surface::clear()
+{
+	fill(0);
 }

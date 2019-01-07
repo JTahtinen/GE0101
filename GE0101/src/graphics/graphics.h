@@ -13,6 +13,7 @@ public:
 	void drawRectAbs(int xStart, int yStart, int xEnd, int yEnd, unsigned int color);
 	void drawRectBordered(float xStart, float yStart, float xEnd, float yEnd, unsigned int color);
 	void drawRectAbsBordered(int xStart, int yStart, int xEnd, int yEnd, unsigned int color);
+	void drawSurfaceAbs(const Surface* surface, int xStart, int yStart, int xEnd, int yEnd);
 private:
 	Vec2 translatePoint(float x, float y);
 	inline void drawPointFast(int x, int y, unsigned int color)
