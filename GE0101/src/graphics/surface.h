@@ -16,4 +16,8 @@ public:
 	inline int getHeight() const { return _height; }
 	void clear();
 	void fill(unsigned int color);
+	static Surface* loadSurface(const char* filepath);
+	static Surface* convertToSurface(SDL_Surface* surface);
+private:
+	Surface(SDL_Surface* source);
 };

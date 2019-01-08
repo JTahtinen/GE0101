@@ -21,8 +21,9 @@ void Application::run()
 
 	Renderer renderer(&_window, &g);
 	
-
-	Renderable renderable(&s, Vec2(10, 10));
+	Surface* snowman = Surface::loadSurface("res/IMG_2086.JPG");
+	Vec2 pos(10, 10);
+	Renderable renderable(&s, pos);
 
 	while (running)
 	{
@@ -35,15 +36,32 @@ void Application::run()
 				{
 				case SDLK_ESCAPE:
 					running = false;
+					break;
+				case SDLK_LEFT:
+					pos.x--;
+					break;
+				case SDLK_RIGHT:
+					pos.x++;
+					break;
+				case SDLK_UP:
+					pos.y--;
+					break;
+				case SDLK_DOWN:
+					pos.y++;
+					break;
 				}
 			}
 		}
 
 		_game.update();
+		g.drawSurfaceAbs(snowman, 0, 0, 800, 600);
 		renderer.submit(&renderable);
 		renderer.flush();
 		//_game.render(&g);
 		_window.applySurface(&testSurface);
 		_window.update();
 	}
+
+	delete snowman;
+	snowman = nullptr;
 }

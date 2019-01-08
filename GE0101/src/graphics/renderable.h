@@ -4,7 +4,7 @@
 
 struct Renderable
 {
-	Vec2 pos;
+	const Vec2& pos;
 	const Surface* sprite;
 	Renderable(const Surface* sprite, const Vec2& pos) : pos(pos), sprite(sprite) {}
 };

@@ -1,5 +1,7 @@
 #include "surface.h"
 #include "../defs.h"
+#include <SDL2/SDL_image.h>
+#include <iostream>
 
 Surface::Surface(int width, int height)
 	: _width(width)
@@ -10,6 +12,15 @@ Surface::Surface(int width, int height)
 	ASSERT(_image);
 	fill(0xff0000);
 	//clear();
+}
+
+Surface::Surface(SDL_Surface* source)
+	: _width(source->w)
+	, _height(source->h)
+	, _image(source)
+	, _pixels((unsigned int*)source->pixels)
+{
+	ASSERT(_image);
 }
 
 Surface::~Surface()
@@ -29,4 +40,25 @@ void Surface::fill(unsigned int color)
 void Surface::clear()
 {
 	fill(0);
+}
+
+Surface* Surface::loadSurface(const char* filepath)
+{
+	SDL_Surface* rawSurface = IMG_Load(filepath);
+	if (!rawSurface)
+	{
+		std::cout << "WARNING: Could not load image: " << filepath << std::endl;
+		return nullptr;
+	}
+	return convertToSurface(rawSurface);
+}
+
+Surface* Surface::convertToSurface(SDL_Surface* surface)
+{
+	if (!surface)
+	{
+		std::cout << "WARNING: Conversion failed - Surface was NULL" << std::endl;
+		return nullptr;
+	}
+	return new Surface(surface);
 }
