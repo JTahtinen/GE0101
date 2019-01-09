@@ -8,14 +8,24 @@ public:
 
 	Vec2() = default;
 	Vec2(float x, float y);
+	Vec2& set(float x, float y);
 	Vec2 getNormal() const;
-	Vec2 normalize();
+	Vec2& normalize();
 	float length() const;
-	void add(float x, float y);
-	void add(const Vec2& other);
-	void sub(float x, float y);
-	void sub(const Vec2& other);
-	void mul(float value);
+	Vec2& add(float x, float y);
+	Vec2& add(const Vec2& other);
+	Vec2& sub(float x, float y);
+	Vec2& sub(const Vec2& other);
+	Vec2& mul(float value);
 	float dot(const Vec2& other);
+	Vec2 operator+(const Vec2& other);
+	Vec2 operator-(const Vec2& other);
+	Vec2 operator*(float value);
+	float operator*(const Vec2& other);
+	Vec2& operator+=(const Vec2& other);
+	Vec2& operator-=(const Vec2& other);
+	Vec2& operator*=(float value);
+	bool operator==(const Vec2& other);
+	bool operator!=(const Vec2& other);
 
 };

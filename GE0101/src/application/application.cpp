@@ -3,6 +3,12 @@
 #include "../math/vec2.h"
 #include <SDL2/SDL.h>
 #include "../graphics/renderer.h"
+#include "../input/input.h"
+#include "../util/log.h"
+#include "../game/scenegraph.h"
+
+Log gameLog;
+Renderer* renderer;
 
 Application::Application()
 	: _window(800, 600, "GE0101")
@@ -15,48 +21,29 @@ void Application::run()
 	Surface testSurface = _window.createDrawSurface();
 	Graphics g;
 	g.setTarget(&testSurface);
-	SDL_Event ev;
 
-	Surface s(12, 12);
 
-	Renderer renderer(&_window, &g);
+	Renderer r(&_window, &g);
+	renderer = &r;
 	
 	Surface* snowman = Surface::loadSurface("res/IMG_2086.JPG");
 	Vec2 pos(10, 10);
-	Renderable renderable(&s, pos);
+
+	Input& in = Input::instance();
 
 	while (running)
 	{
+		in.update();
 		testSurface.clear();
-		while (SDL_PollEvent(&ev))
+		if (in.poll(KEY_ESCAPE))
 		{
-			if (ev.type == SDL_KEYDOWN)
-			{
-				switch (ev.key.keysym.sym)
-				{
-				case SDLK_ESCAPE:
-					running = false;
-					break;
-				case SDLK_LEFT:
-					pos.x--;
-					break;
-				case SDLK_RIGHT:
-					pos.x++;
-					break;
-				case SDLK_UP:
-					pos.y--;
-					break;
-				case SDLK_DOWN:
-					pos.y++;
-					break;
-				}
-			}
+			running = false;
 		}
 
 		_game.update();
 		g.drawSurfaceAbs(snowman, 0, 0, 800, 600);
-		renderer.submit(&renderable);
-		renderer.flush();
+		//renderer->submit(&renderable);
+		renderer->flush();
 		//_game.render(&g);
 		_window.applySurface(&testSurface);
 		_window.update();

@@ -1,7 +1,10 @@
 #pragma once
+#include <iostream>
 
 #ifdef _DEBUG
-#define ASSERT(x) if(x) { } else { __debugbreak(); }
+#define ASSERT(expr) if(expr) { } else { __debugbreak(); }
 #else
 #define ASSERT(x) 
 #endif
+
+#define MSG(expr) std::cout << expr << std::endl
