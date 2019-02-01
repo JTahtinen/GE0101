@@ -4,9 +4,14 @@
 #include "defs.h"
 #include "application\application.h"
 #include "globals.h"
+#include "util/file.h"
 
 int main(int argc, char** argv)
 {
+	std::string text = load_text_file("res/test.txt");
+	MSG(text);
+
+
 	gameLog.message("Message looks like this");
 	gameLog.warning("Warning looks like this");
 	gameLog.error("Error looks like this");

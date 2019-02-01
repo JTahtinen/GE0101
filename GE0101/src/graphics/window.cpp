@@ -23,36 +23,50 @@ Window::Window(int width, int height, const char* title)
 		_height = 2000;
 	}
 
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+
 	_win = SDL_CreateWindow(
 		title,
 		SDL_WINDOWPOS_CENTERED, 
 		SDL_WINDOWPOS_CENTERED, 
 		_width, 
 		_height, 
-		SDL_WINDOW_SHOWN);
+		SDL_WINDOW_OPENGL);
+	_glContext = SDL_GL_CreateContext(_win);
+
+	GLenum status = glewInit();
+	setClearColor(0.3f, 0.1f, 0.8f);
 }
 
 Window::~Window()
 {
+	SDL_GL_DeleteContext(_glContext);
 	SDL_DestroyWindow(_win);
 }
 
 void Window::update() const
 {
-	SDL_UpdateWindowSurface(_win);
+	SDL_GL_SwapWindow(_win);
 }
 
-void Window::applySurface(const Surface* surface)
+void Window::setClearColor(GLclampf r, GLclampf g, GLclampf b)
 {
-	if (!surface)
-	{
-		std::cout << "Warning: Could not apply surface to window - surface was null!" << std::endl;
-		return;
-	}
-	SDL_BlitScaled(surface->_image, NULL, SDL_GetWindowSurface(_win), NULL);
+	glClearColor(r, g, b, 1.0f);
 }
 
-Surface Window::createDrawSurface()
+void Window::clear() const
 {
-	return Surface(_width, _height);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 }

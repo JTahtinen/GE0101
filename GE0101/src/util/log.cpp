@@ -11,7 +11,7 @@ void Log::message(const std::string& content)
 
 void Log::warning(const std::string& content)
 {
-	_messages.push_back("WARNING: " + content);
+	_messages.push_back("[WARNING] " + content);
 #ifdef _DEBUG
 	printLast();
 #endif 
@@ -19,7 +19,7 @@ void Log::warning(const std::string& content)
 
 void Log::error(const std::string& content)
 {
-	_messages.push_back("ERROR: " + content);
+	_messages.push_back("[ERROR] " + content);
 #ifdef _DEBUG
 	printLast();
 #endif 

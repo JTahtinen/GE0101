@@ -10,5 +10,4 @@ class Map
 public:
 	Map(int width, int height);
 	void update(Game* game);
-	void render(Graphics* g);
 };

@@ -95,7 +95,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;glew32.lib;OpenGL32.lib;glew32s.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -154,11 +154,9 @@
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
+    <ClCompile Include="src\game\inputcontroller.cpp" />
     <ClCompile Include="src\game\map.cpp" />
     <ClCompile Include="src\game\scenegraph.cpp" />
-    <ClCompile Include="src\graphics\graphics.cpp" />
-    <ClCompile Include="src\graphics\renderer.cpp" />
-    <ClCompile Include="src\graphics\surface.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -169,19 +167,18 @@
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\defs.h" />
     <ClInclude Include="src\game\camera.h" />
+    <ClInclude Include="src\game\controller.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\game\game.h" />
+    <ClInclude Include="src\game\inputcontroller.h" />
     <ClInclude Include="src\game\map.h" />
     <ClInclude Include="src\game\scenegraph.h" />
     <ClInclude Include="src\globals.h" />
-    <ClInclude Include="src\graphics\graphics.h" />
-    <ClInclude Include="src\graphics\renderable.h" />
-    <ClInclude Include="src\graphics\renderer.h" />
-    <ClInclude Include="src\graphics\surface.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\math\vec2.h" />
+    <ClInclude Include="src\util\file.h" />
     <ClInclude Include="src\util\log.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

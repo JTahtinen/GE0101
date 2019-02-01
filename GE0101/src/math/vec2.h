@@ -17,15 +17,15 @@ public:
 	Vec2& sub(float x, float y);
 	Vec2& sub(const Vec2& other);
 	Vec2& mul(float value);
-	float dot(const Vec2& other);
-	Vec2 operator+(const Vec2& other);
-	Vec2 operator-(const Vec2& other);
-	Vec2 operator*(float value);
-	float operator*(const Vec2& other);
+	float dot(const Vec2& other) const;
+	Vec2 operator+(const Vec2& other) const;
+	Vec2 operator-(const Vec2& other) const;
+	Vec2 operator*(float value) const;
+	float operator*(const Vec2& other) const;
 	Vec2& operator+=(const Vec2& other);
 	Vec2& operator-=(const Vec2& other);
 	Vec2& operator*=(float value);
-	bool operator==(const Vec2& other);
-	bool operator!=(const Vec2& other);
+	bool operator==(const Vec2& other) const;
+	bool operator!=(const Vec2& other) const;
 
 };

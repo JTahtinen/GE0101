@@ -4,7 +4,6 @@
 SceneGraph::SceneGraph()
 {
 	_entities.reserve(100);
-	_surfaces.reserve(100);
 }
 
 SceneGraph::~SceneGraph()
@@ -12,11 +11,6 @@ SceneGraph::~SceneGraph()
 	for (auto* entity : _entities)
 	{
 		delete entity;
-	}
-
-	for (auto* surface : _surfaces)
-	{
-		delete surface;
 	}
 }
 
@@ -29,15 +23,6 @@ void SceneGraph::pushEntity(const Entity* entity)
 	_entities.push_back(entity);
 }
 
-void SceneGraph::pushSurface(const Surface* surface)
-{
-	if (!surface)
-	{
-		gameLog.warning("Could not add null surface to scenegraph!");
-		return;
-	}
-	_surfaces.push_back(surface);
-}
 
 const Entity* SceneGraph::getEntity(unsigned int index) const
 {
@@ -46,13 +31,4 @@ const Entity* SceneGraph::getEntity(unsigned int index) const
 		return nullptr;
 	}
 	return _entities[index];
-}
-
-const Surface* SceneGraph::getSurface(unsigned int index) const
-{
-	if (_surfaces.size() < index + 1)
-	{
-		return nullptr;
-	}
-	return _surfaces[index];
 }

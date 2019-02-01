@@ -3,12 +3,12 @@
 #include <vector>
 #include "../globals.h"
 #include "../input/input.h"
+#include "controller.h"
 
 static std::vector<GUID> availableGUIDs;
 
-Entity::Entity(const Vec2& pos, const Surface* sprite)
+Entity::Entity(const Vec2& pos)
 	: _pos(pos)
-	, _sprite(sprite)
 	, _id(nextId())
 {
 #ifdef _DEBUG
@@ -16,15 +16,11 @@ Entity::Entity(const Vec2& pos, const Surface* sprite)
 #endif
 }
 
-Entity::Entity(const Surface* sprite)
-	: Entity(Vec2(0, 0), sprite)
+Entity::Entity()
+	: Entity(Vec2(0, 0))
 {
 }
 
-Entity::Entity()
-	: Entity(nullptr)
-{
-}
 
 Entity::~Entity()
 {
@@ -34,30 +30,25 @@ Entity::~Entity()
 #endif
 }
 
+void Entity::setVel(const Vec2& vel)
+{
+	_vel = vel;
+}
+
+void Entity::addVel(const Vec2& vel)
+{
+	_vel += vel;
+}
+
 void Entity::update(Game* game)
 {
 	_vel *= 0;
-	Input& in = Input::instance();
-	if (in.poll(KEY_LEFT))
+	if (_controller)
 	{
-		_vel.add(-1.0f, 0);
-	}
-	if (in.poll(KEY_RIGHT))
-	{
-		_vel.add(1.0f, 0);
-	}
-	if (in.poll(KEY_UP))
-	{
-		_vel.add(0, -1.0f);
-	}
-	if (in.poll(KEY_DOWN))
-	{
-		_vel.add(0, 1.0f);
+		_controller->update(this);
 	}
 
 	_pos += _vel;
-	Renderable renderable(_sprite, _pos);
-	renderer->submit(this);
 }
 
 GUID Entity::nextId()
@@ -72,3 +63,11 @@ GUID Entity::nextId()
 	return numEntities++;
 }
 
+void Entity::addController(const Controller* controller)
+{
+	_controller = controller;
+	if (!_controller)
+	{
+		gameLog.warning("Could not add controller - nullptr!");
+	}
+}
