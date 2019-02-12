@@ -4,7 +4,7 @@
 #include <iostream>
 #include "../defs.h"
 
-inline std::string load_text_file(const char* filepath)
+inline std::string load_text_file(const std::string& filepath)
 {
 	std::string text = "";
 	std::ifstream file;

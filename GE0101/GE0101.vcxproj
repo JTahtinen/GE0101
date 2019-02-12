@@ -157,6 +157,11 @@
     <ClCompile Include="src\game\inputcontroller.cpp" />
     <ClCompile Include="src\game\map.cpp" />
     <ClCompile Include="src\game\scenegraph.cpp" />
+    <ClCompile Include="src\graphics\buffers\buffer.cpp" />
+    <ClCompile Include="src\graphics\buffers\bufferlayout.cpp" />
+    <ClCompile Include="src\graphics\buffers\indexbuffer.cpp" />
+    <ClCompile Include="src\graphics\buffers\vertexarray.cpp" />
+    <ClCompile Include="src\graphics\shader.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -174,12 +179,22 @@
     <ClInclude Include="src\game\map.h" />
     <ClInclude Include="src\game\scenegraph.h" />
     <ClInclude Include="src\globals.h" />
+    <ClInclude Include="src\graphics\buffers\buffer.h" />
+    <ClInclude Include="src\graphics\buffers\bufferlayout.h" />
+    <ClInclude Include="src\graphics\buffers\indexbuffer.h" />
+    <ClInclude Include="src\graphics\buffers\vertexarray.h" />
+    <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\math\vec2.h" />
     <ClInclude Include="src\util\file.h" />
+    <ClInclude Include="src\util\glutil.h" />
     <ClInclude Include="src\util\log.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\basic.fs" />
+    <None Include="res\shaders\basic.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

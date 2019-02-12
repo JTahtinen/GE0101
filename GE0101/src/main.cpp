@@ -8,13 +8,6 @@
 
 int main(int argc, char** argv)
 {
-	std::string text = load_text_file("res/test.txt");
-	MSG(text);
-
-
-	gameLog.message("Message looks like this");
-	gameLog.warning("Warning looks like this");
-	gameLog.error("Error looks like this");
 	if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
 	{
 		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
@@ -24,7 +17,7 @@ int main(int argc, char** argv)
 	}
 	else
 	{
-		MSG("SDL failed to initialize!");
+		ERR("SDL failed to initialize!");
 	}
 	IMG_Quit();
 	SDL_Quit();
