@@ -162,10 +162,12 @@
     <ClCompile Include="src\graphics\buffers\indexbuffer.cpp" />
     <ClCompile Include="src\graphics\buffers\vertexarray.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
+    <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math\vec2.cpp" />
+    <ClCompile Include="src\math\vec4.cpp" />
     <ClCompile Include="src\util\log.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,10 +186,12 @@
     <ClInclude Include="src\graphics\buffers\indexbuffer.h" />
     <ClInclude Include="src\graphics\buffers\vertexarray.h" />
     <ClInclude Include="src\graphics\shader.h" />
+    <ClInclude Include="src\graphics\texture.h" />
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\math\vec2.h" />
+    <ClInclude Include="src\math\vec4.h" />
     <ClInclude Include="src\util\file.h" />
     <ClInclude Include="src\util\glutil.h" />
     <ClInclude Include="src\util\log.h" />

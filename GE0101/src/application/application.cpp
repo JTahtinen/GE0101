@@ -1,5 +1,5 @@
 #include "application.h"
-#include "../math/vec2.h"
+#include "../math/math.h"
 #include <SDL2/SDL.h>
 #include "../input/input.h"
 #include "../util/log.h"
@@ -9,7 +9,7 @@
 #include "../graphics/buffers/vertexarray.h"
 #include "../graphics/buffers/indexbuffer.h"
 #include "../graphics/shader.h"
-
+#include "../graphics/texture.h"
 Log gameLog;
 
 std::vector<unsigned int> indices;
@@ -58,28 +58,8 @@ void Application::run()
 
 	//Textures
 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	IMG_Init(IMG_INIT_PNG);
-
-	SDL_Surface* texImage = IMG_Load("res/IMG_2086.png");
-
-	if (!texImage)
-	{
-		__debugbreak();
-	}
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glActiveTexture(GL_TEXTURE0);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texImage->w, texImage->h,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, texImage->pixels);
-	SDL_FreeSurface(texImage);
-
+	Texture snowman("res/IMG_2086.png");
+	snowman.bind(0);
 
 	Vec2 texCoords[] = {
 		Vec2(0, 0),
@@ -97,15 +77,16 @@ void Application::run()
 	vao.push(&texCoordBuffer, texCoordLayout);
 
 
-	float colors[] =
-	{
-		1.0f, 0,	0,		1.0f,
-		0	, 1.0f, 0,		1.0f,
-		0	, 0,	1.0f,	1.0f,
-		1.0f, 1.0f, 0,		1.0f,
-	};
+	std::vector<Vec4> colors;
+	colors.reserve(4);
 
-	colorBuffer.push(&colors[0], 16 * sizeof(float));
+	colors.push_back(Vec4(1.0f, 0, 0, 1.0f));
+	colors.push_back(Vec4(0, 1.0f, 0, 1.0f));
+	colors.push_back(Vec4(0, 0, 1.0f, 1.0f));
+	colors.push_back(Vec4(1.0f, 1.0f, 0, 1.0f));
+
+
+	colorBuffer.push(&colors[0], colors.size() * sizeof(Vec4));
 	BufferLayout colorLayout;
 	colorLayout.push<float>(4);
 	vao.push(&colorBuffer, colorLayout);
@@ -116,8 +97,24 @@ void Application::run()
 
 	Input& in = Input::instance();
 
+	float r = 0;
+	int dir = 1;
 	while (running)
 	{
+		if (r <= 0)
+		{
+			dir = 1;
+		}
+		else if (r >= 1.0f)
+		{
+			dir = -1;
+		}
+
+		r += (float)dir * 0.0003f;
+
+		shader.setUniform4f("u_Color", r, 0, 0, 1.0f);
+
+
 		in.update();
 		if (in.poll(KEY_ESCAPE))
 		{

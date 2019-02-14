@@ -13,6 +13,6 @@ uniform vec4 u_Color;
 void main()
 {
 	gl_Position = vec4(position.xy, 1, 1);
-	v_color = color + u_Color;
+	v_color = u_Color;
 	v_texCoord = texCoord;
 }
