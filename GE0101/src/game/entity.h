@@ -14,6 +14,7 @@ protected:
 	Vec2				_pos{ Vec2(0, 0) };
 	Vec2				_vel{ Vec2(0, 0) };
 	const Controller*	_controller{ nullptr };
+
 public:
 	Entity(const Vec2& pos);
 	Entity();

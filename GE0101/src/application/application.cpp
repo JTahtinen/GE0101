@@ -10,6 +10,8 @@
 #include "../graphics/buffers/indexbuffer.h"
 #include "../graphics/shader.h"
 #include "../graphics/texture.h"
+#include "../graphics/renderers/simple2drenderer.h"
+
 Log gameLog;
 
 std::vector<unsigned int> indices;
@@ -31,7 +33,7 @@ void Application::run()
 
 
 	//Vertex data
-	std::vector<Vec2> vertices;
+/*	std::vector<Vec2> vertices;
 	vertices.push_back(Vec2(-0.8f, 0.8f));
 	vertices.push_back(Vec2(0.8f, 0.8f));
 	vertices.push_back(Vec2(0.8f, -0.8f));
@@ -49,7 +51,7 @@ void Application::run()
 	indices.push_back(3);
 
 	IndexBuffer ibo;	
-	ibo.push(&indices[0], indices.size());
+	ibo.push(&indices[0], indices.size());*/
 
 	//Shaders
 
@@ -58,7 +60,7 @@ void Application::run()
 
 	//Textures
 
-	Texture snowman("res/IMG_2086.png");
+	Texture snowman("res/textures/IMG_2086.png");
 	snowman.bind(0);
 
 	Vec2 texCoords[] = {
@@ -71,6 +73,11 @@ void Application::run()
 	shader.setUniform1i("u_Texture", 0);
 	shader.setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
 
+	Sprite sprite(snowman, 0.1f, 0.1f, "snowman");
+	Renderable renderable;
+	renderable.pos = Vec2(0.1f, 0.1f);
+	renderable.sprite = &sprite;
+	Simple2DRenderer renderer;
 	texCoordBuffer.push(&texCoords[0], 4 * sizeof(Vec2));
 	BufferLayout texCoordLayout;
 	texCoordLayout.push<float>(2);
@@ -101,6 +108,7 @@ void Application::run()
 	int dir = 1;
 	while (running)
 	{
+		renderer.submit(&renderable);
 		if (r <= 0)
 		{
 			dir = 1;
@@ -123,7 +131,8 @@ void Application::run()
 
 		_game.update();
 		_window.clear();
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+		renderer.flush();
+	//	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 		_window.update();
 	}
 

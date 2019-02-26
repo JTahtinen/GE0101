@@ -14,6 +14,7 @@ Game::Game()
 
 Game::~Game()
 {
+	delete _map;
 }
 
 void Game::update()
