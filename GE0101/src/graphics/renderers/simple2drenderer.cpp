@@ -14,8 +14,8 @@ Simple2DRenderer::Simple2DRenderer()
 	_indices.push_back(1);
 	_indices.push_back(2);
 	_indices.push_back(2);
-	_indices.push_back(3);
 	_indices.push_back(0);
+	_indices.push_back(3);
 	glBufferData
 	(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), &_indices[0], GL_STATIC_DRAW);
 }
@@ -37,17 +37,12 @@ void Simple2DRenderer::flush()
 	{
 		const Vec2& pos = renderable->pos;
 		const Vec2& dim = renderable->sprite->_dimensions;
-
-		Vec2 vertices[] =
-		{
-		pos,
-		Vec2(pos.x, pos.y + dim.y),
-		Vec2(pos.x + dim.x, pos.y + dim.y),
-		Vec2(pos.x + dim.x, pos.y)
-		};
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * 4, &vertices[0], GL_STATIC_DRAW);
+		renderable->shader->setUniform2f("u_Offset", pos.x, pos.y);
+		renderable->data->bind();
+		renderable->indices->bind();
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(Vec2) * 4, &vertices[0], GL_STATIC_DRAW);
 		renderable->sprite->_texture.bind();
-		glDrawElements(GL_TRIANGLES, _indices.size(), GL_UNSIGNED_INT, NULL);
+		glDrawElements(GL_TRIANGLES, renderable->indices->getSize(), GL_UNSIGNED_INT, NULL);
 	}
 	_renderables.clear();
 }

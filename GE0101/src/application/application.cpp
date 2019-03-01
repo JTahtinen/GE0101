@@ -26,11 +26,30 @@ Application::Application()
 void Application::run()
 {
 	VertexArray vao;
-	Buffer vbo;
+	//Buffer vbo;
+	Buffer tile;
 	Buffer colorBuffer;
 	Buffer texCoordBuffer;
 	BufferLayout layout;
 
+	Vec2 vertices[] =
+	{
+	Vec2(-0.5f, -0.5f),
+	Vec2(-0.5f,  0.5f),
+	Vec2( 0.5f,  0.5f),
+	Vec2( 0.5f, -0.5f)
+	};
+
+	
+	tile.push(&vertices[0], 4 * sizeof(Vec2));
+	IndexBuffer ibo;
+
+	unsigned int indices[] =
+	{
+		0, 1, 2, 2, 0, 3
+	};
+
+	ibo.push(&indices[0], 6);
 
 	//Vertex data
 /*	std::vector<Vec2> vertices;
@@ -64,10 +83,10 @@ void Application::run()
 	snowman.bind(0);
 
 	Vec2 texCoords[] = {
+		Vec2(0, 1),
 		Vec2(0, 0),
 		Vec2(1, 0),
-		Vec2(1, 1),
-		Vec2(0, 1)
+		Vec2(1, 1)
 	};
 
 	shader.setUniform1i("u_Texture", 0);
@@ -75,9 +94,19 @@ void Application::run()
 
 	Sprite sprite(snowman, 0.1f, 0.1f, "snowman");
 	Renderable renderable;
-	renderable.pos = Vec2(0.1f, 0.1f);
+
+	renderable.data = &tile;
+	renderable.pos = Vec2(0.5f, 0.5f);
 	renderable.sprite = &sprite;
+	renderable.shader = &shader;
+	renderable.indices = &ibo;
+
 	Simple2DRenderer renderer;
+	
+	BufferLayout tileLayout;
+	tileLayout.push<float>(2);
+	vao.push(&tile, tileLayout);
+
 	texCoordBuffer.push(&texCoords[0], 4 * sizeof(Vec2));
 	BufferLayout texCoordLayout;
 	texCoordLayout.push<float>(2);

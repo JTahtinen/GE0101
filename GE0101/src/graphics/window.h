@@ -2,6 +2,7 @@
 #include <SDL2\SDL.h>
 #include <GLEW/glew.h>
 
+
 class Window
 {
 	SDL_Window*		_win;
