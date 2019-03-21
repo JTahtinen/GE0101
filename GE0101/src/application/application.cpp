@@ -14,42 +14,66 @@
 
 Log gameLog;
 
-std::vector<unsigned int> indices;
+Sprite defaultSprite;
+
+//std::vector<unsigned int> indices;
+
+void loadGlobalData()
+{
+	Buffer* tileVertices = new Buffer();
+	defaultSprite.vbo = tileVertices;
+	Vec2 vertices[] =
+	{
+	Vec2(-0.5f, -0.5f),
+	Vec2(-0.5f,  0.5f),
+	Vec2(0.5f,  0.5f),
+	Vec2(0.5f, -0.5f)
+	};
+
+
+	defaultSprite.vbo->push(&vertices[0], 4 * sizeof(Vec2));
+	IndexBuffer* ibo = new IndexBuffer;
+	unsigned int indices[] =
+	{
+		0, 1, 2, 2, 0, 3
+	};
+
+	ibo->push(&indices[0], 6);
+	defaultSprite.indices = ibo;
+}
+
+void deleteGlobalData()
+{
+	delete defaultSprite.indices;
+	delete defaultSprite.vbo;
+}
 
 Application::Application()
 	: _window(800, 600, "GE0101")
 {
+	loadGlobalData();
+	_renderer = new Simple2DRenderer();
+	_game = new Game(_renderer);
+}
 
-
+Application::~Application()
+{
+	deleteGlobalData();
+	delete _renderer;
+	_renderer = nullptr;
 }
 
 void Application::run()
 {
 	VertexArray vao;
 	//Buffer vbo;
-	Buffer tile;
 	Buffer colorBuffer;
 	Buffer texCoordBuffer;
 	BufferLayout layout;
-
-	Vec2 vertices[] =
-	{
-	Vec2(-0.5f, -0.5f),
-	Vec2(-0.5f,  0.5f),
-	Vec2( 0.5f,  0.5f),
-	Vec2( 0.5f, -0.5f)
-	};
-
 	
-	tile.push(&vertices[0], 4 * sizeof(Vec2));
-	IndexBuffer ibo;
+	
+	
 
-	unsigned int indices[] =
-	{
-		0, 1, 2, 2, 0, 3
-	};
-
-	ibo.push(&indices[0], 6);
 
 	//Vertex data
 /*	std::vector<Vec2> vertices;
@@ -79,7 +103,7 @@ void Application::run()
 
 	//Textures
 
-	Texture snowman("res/textures/IMG_2086.png");
+	const Texture snowman("res/textures/IMG_2086.png");
 	snowman.bind(0);
 
 	Vec2 texCoords[] = {
@@ -92,20 +116,18 @@ void Application::run()
 	shader.setUniform1i("u_Texture", 0);
 	shader.setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
 
-	Sprite sprite(snowman, 0.1f, 0.1f, "snowman");
-	Renderable renderable;
+	defaultSprite.texture = &snowman;
+	defaultSprite.shader = &shader;
+	defaultSprite.name = "snowman";
+		
+	
 
-	renderable.data = &tile;
-	renderable.pos = Vec2(0.5f, 0.5f);
-	renderable.sprite = &sprite;
-	renderable.shader = &shader;
-	renderable.indices = &ibo;
 
-	Simple2DRenderer renderer;
+	
 	
 	BufferLayout tileLayout;
 	tileLayout.push<float>(2);
-	vao.push(&tile, tileLayout);
+	vao.push(defaultSprite.vbo, tileLayout);
 
 	texCoordBuffer.push(&texCoords[0], 4 * sizeof(Vec2));
 	BufferLayout texCoordLayout;
@@ -126,8 +148,8 @@ void Application::run()
 	BufferLayout colorLayout;
 	colorLayout.push<float>(4);
 	vao.push(&colorBuffer, colorLayout);
-
-
+	shader.setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
+	MSG("Screen Ratio: " << (float)_window.getWidth() / (float)_window.getHeight());
 	bool running = true;
 	Vec2 pos(10, 10);
 
@@ -137,7 +159,6 @@ void Application::run()
 	int dir = 1;
 	while (running)
 	{
-		renderer.submit(&renderable);
 		if (r <= 0)
 		{
 			dir = 1;
@@ -158,9 +179,9 @@ void Application::run()
 			running = false;
 		}
 
-		_game.update();
+		_game->update();
 		_window.clear();
-		renderer.flush();
+		_renderer->flush();
 	//	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 		_window.update();
 	}

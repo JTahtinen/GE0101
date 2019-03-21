@@ -1,11 +1,11 @@
 #pragma once
 #include "renderable.h"
 
-class Sprite;
+struct Sprite;
 
 class Renderer 
 {
 public:
-	virtual void submit(const Renderable* renderable) = 0;
+	virtual void submit(const Sprite* sprite, const Vec2& pos) = 0;
 	virtual void flush() = 0;
 };

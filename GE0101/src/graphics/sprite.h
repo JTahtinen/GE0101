@@ -1,12 +1,15 @@
 #pragma once
 #include "texture.h"
 #include "../math/vec2.h"
+#include "../graphics/shader.h"
+#include "../graphics/buffers/buffer.h"
+#include "../graphics/buffers/indexbuffer.h"
 
-class Sprite
+struct Sprite
 {
-public:
-	const Texture&			_texture;
-	const Vec2				_dimensions;
-	const std::string		_name;
-	Sprite(const Texture& texture, float width, float height, const std::string& name);
+	Buffer*					vbo;
+	const					IndexBuffer* indices;
+	const Texture*			texture;
+	Shader*					shader;
+	std::string				name;
 };

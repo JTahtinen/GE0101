@@ -12,8 +12,9 @@ class Game
 	std::vector<Entity*>	_entities;
 	Camera					_camera;
 	InputController			_inputController;
+	Renderer*				_renderer;
 public:
-	Game();
+	Game(Renderer* renderer);
 	~Game();
 	void update();
 	const Camera& getCamera() const;

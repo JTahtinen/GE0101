@@ -7,9 +7,6 @@
 
 struct Renderable
 {
-	Buffer* data;
-	IndexBuffer* indices;
-	Sprite* sprite;
-	Shader* shader;
-	Vec2	pos;
+	const Sprite*	sprite;
+	Vec2			pos;
 };

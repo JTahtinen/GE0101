@@ -72,10 +72,10 @@
     <ClCompile Include="src\math\vec4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\sprite.cpp">
+    <ClCompile Include="src\graphics\renderers\simple2drenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\renderers\simple2drenderer.cpp">
+    <ClCompile Include="src\game\tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -162,6 +162,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderers\renderable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\tile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

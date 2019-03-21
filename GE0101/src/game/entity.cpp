@@ -7,13 +7,19 @@
 
 static std::vector<GUID> availableGUIDs;
 
-Entity::Entity(const Vec2& pos)
+Entity::Entity(const Vec2& pos, Sprite* sprite)
 	: _pos(pos)
+	, _sprite(sprite)
 	, _id(nextId())
 {
 #ifdef _DEBUG
 	std::cout << "Created Entity GUID: " << _id << std::endl;
 #endif
+}
+
+Entity::Entity(const Vec2& pos)
+	: Entity(pos, nullptr)
+{
 }
 
 Entity::Entity()
@@ -51,6 +57,23 @@ void Entity::update(Game* game)
 	_pos += _vel;
 }
 
+void Entity::render(Renderer* renderer)
+{
+	if (renderer && _sprite)
+	{
+		renderer->submit(_sprite, _pos);
+	}
+}
+
+void Entity::addController(const Controller* controller)
+{
+	_controller = controller;
+	if (!_controller)
+	{
+		gameLog.warning("Could not add controller - nullptr!");
+	}
+}
+
 GUID Entity::nextId()
 {
 	static GUID numEntities = 0;
@@ -61,13 +84,4 @@ GUID Entity::nextId()
 		return guid;
 	}
 	return numEntities++;
-}
-
-void Entity::addController(const Controller* controller)
-{
-	_controller = controller;
-	if (!_controller)
-	{
-		gameLog.warning("Could not add controller - nullptr!");
-	}
 }

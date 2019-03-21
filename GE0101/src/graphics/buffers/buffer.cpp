@@ -6,7 +6,7 @@ Buffer::Buffer()
 	glGenBuffers(1, &_id);
 }
 
-void Buffer::push(const void* data, unsigned int size)
+void Buffer::push(const void* data, unsigned int size) const
 {
 	bind();
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);

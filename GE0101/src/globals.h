@@ -1,6 +1,7 @@
 #pragma once
 #include "util/log.h"
-#include "graphics/buffers/buffer.h"
+#include "graphics/sprite.h"
+
 extern Log gameLog;
 
-//extern Buffer tile;
+extern Sprite defaultSprite;

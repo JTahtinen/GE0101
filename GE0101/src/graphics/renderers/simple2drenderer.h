@@ -4,10 +4,9 @@
 
 class Simple2DRenderer : public Renderer
 {
-	std::vector<const Renderable*> _renderables;
-	std::vector<unsigned int>      _indices;
+	std::vector<Renderable> _renderables;
 public:
 	Simple2DRenderer();
-	virtual void submit(const Renderable* renderable) override;
+	virtual void submit(const Sprite* sprite, const Vec2& pos) override;
 	virtual void flush() override;
 };

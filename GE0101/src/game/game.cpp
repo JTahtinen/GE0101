@@ -2,19 +2,27 @@
 #include "scenegraph.h"
 #include "../input/input.h"
 #include "../defs.h"
-Game::Game()
+#include "../globals.h"
+
+Game::Game(Renderer* renderer)
 	: _camera({ Vec2(0, 0), 16.0f / 9.0f })
+	, _renderer(renderer)
 {
+	ASSERT(renderer);
 	_map = new Map(10, 10);
-	Entity* player = new Entity(Vec2(10, 10));
+	Entity* player = new Entity(Vec2(0.2f, 0.2f), &defaultSprite);
 	player->addController(&_inputController);
 	_entities.push_back(player);
-	_entities.push_back(new Entity(Vec2(20, 20)));
+	_entities.push_back(new Entity(Vec2(-0.5f, -0.5f), &defaultSprite));
 }
 
 Game::~Game()
 {
 	delete _map;
+	for (auto* entity : _entities)
+	{
+		delete entity;
+	}
 }
 
 void Game::update()
@@ -34,6 +42,7 @@ void Game::update()
 	for (auto& entity : _entities)
 	{
 		entity->update(this);
+		entity->render(_renderer);
 	}
 	_camera.pos = _entities[0]->getPos();
 }
