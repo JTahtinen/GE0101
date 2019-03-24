@@ -2,11 +2,11 @@
 #include "../sprite.h"
 #include "../../math/math.h"
 #include "../buffers/buffer.h"
-#include "../buffers/indexbuffer.h"
-#include "../shader.h"
 
 struct Renderable
 {
-	const Sprite*	sprite;
-	Vec2			pos;
+	const Buffer*		vbo;
+	const IndexBuffer*	ibo;
+	const Texture*		texture;
+	Vec2				pos;
 };

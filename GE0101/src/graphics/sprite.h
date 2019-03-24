@@ -10,6 +10,5 @@ struct Sprite
 	Buffer*					vbo;
 	const					IndexBuffer* indices;
 	const Texture*			texture;
-	Shader*					shader;
 	std::string				name;
 };

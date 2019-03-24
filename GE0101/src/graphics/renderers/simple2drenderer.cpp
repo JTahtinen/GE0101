@@ -19,7 +19,15 @@ void Simple2DRenderer::submit(const Sprite* sprite, const Vec2& pos)
 		return;
 	}
 
-	_renderables.push_back(Renderable{ sprite, pos});
+	submit(sprite->vbo, sprite->indices, sprite->texture, pos);
+}
+
+void Simple2DRenderer::submit(const Buffer* vbo, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos)
+{
+	if (vbo && ibo && texture && _shader)
+	{
+		_renderables.push_back(Renderable{ vbo, ibo, texture, pos });
+	}
 }
 
 void Simple2DRenderer::flush()
@@ -27,11 +35,11 @@ void Simple2DRenderer::flush()
 	for (auto& renderable : _renderables)
 	{
 		const Vec2& pos = renderable.pos;
-		renderable.sprite->shader->setUniform2f("u_Offset", pos.x, pos.y);
-		renderable.sprite->vbo->bind();
-		renderable.sprite->indices->bind();
-		renderable.sprite->texture->bind();
-		glDrawElements(GL_TRIANGLES, renderable.sprite->indices->getSize(), GL_UNSIGNED_INT, NULL);
+		_shader->setUniform2f("u_Offset", pos.x, pos.y);
+		renderable.vbo->bind();
+		renderable.ibo->bind();
+		renderable.texture->bind();
+		glDrawElements(GL_TRIANGLES, renderable.ibo->getSize(), GL_UNSIGNED_INT, NULL);
 	}
 	_renderables.clear();
 }

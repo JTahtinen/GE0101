@@ -9,7 +9,7 @@ Game::Game(Renderer* renderer)
 	, _renderer(renderer)
 {
 	ASSERT(renderer);
-	_map = new Map(10, 10);
+	_map = Map::createMap(5, 5);
 	Entity* player = new Entity(Vec2(0.2f, 0.2f), &defaultSprite);
 	player->addController(&_inputController);
 	_entities.push_back(player);
@@ -42,8 +42,9 @@ void Game::update()
 	for (auto& entity : _entities)
 	{
 		entity->update(this);
-		entity->render(_renderer);
+	//	entity->render(_renderer);
 	}
+	_map->render(_renderer, _camera.pos.x, _camera.pos.y);
 	_camera.pos = _entities[0]->getPos();
 }
 

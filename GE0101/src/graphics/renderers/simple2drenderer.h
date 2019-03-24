@@ -8,5 +8,6 @@ class Simple2DRenderer : public Renderer
 public:
 	Simple2DRenderer();
 	virtual void submit(const Sprite* sprite, const Vec2& pos) override;
+	void submit(const Buffer* vbo, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos) override;
 	virtual void flush() override;
 };

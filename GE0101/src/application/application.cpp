@@ -15,11 +15,48 @@
 Log gameLog;
 
 Sprite defaultSprite;
-
+Tile defTile;
+Texture* snowman;
+VertexArray* vao;
+BufferLayout tileLayout;
+BufferLayout texCoordLayout;
+Buffer* texCoordBuffer;
+Buffer* tileVertices;
+IndexBuffer* tileIndices;
 //std::vector<unsigned int> indices;
 
 void loadGlobalData()
 {
+	vao = new VertexArray();
+	texCoordBuffer = new Buffer();
+	tileVertices = new Buffer();
+	tileIndices = new IndexBuffer();
+	tileLayout.push<float>(2);
+
+	Vec2 texCoords[] = {
+		Vec2(0, 1),
+		Vec2(0, 0),
+		Vec2(1, 0),
+		Vec2(1, 1)
+	};
+
+	Vec2 tileVertData[] = { Vec2(-0.1f, -0.1f),
+						Vec2(-0.1f,  0.1f),
+						Vec2(0.1f,  0.1f),
+						Vec2(0.1f, -0.1f) };
+	unsigned int tileIndexData[] = {
+		0, 1, 2, 2, 3, 0
+	};
+
+
+
+	tileVertices->push(&tileVertData[0], sizeof(tileVertData));
+	tileIndices->push(&tileIndexData[0], 6);
+	vao->push(tileVertices, tileLayout);
+
+	texCoordBuffer->push(&texCoords[0], 4 * sizeof(Vec2));
+	texCoordLayout.push<float>(2);
+	vao->push(texCoordBuffer, texCoordLayout);
 	Buffer* tileVertices = new Buffer();
 	defaultSprite.vbo = tileVertices;
 	Vec2 vertices[] =
@@ -30,15 +67,19 @@ void loadGlobalData()
 	Vec2(0.5f, -0.5f)
 	};
 
+	snowman = new Texture("res/textures/IMG_2086.png");
+	snowman->bind(0);
 
-	defaultSprite.vbo->push(&vertices[0], 4 * sizeof(Vec2));
+	defTile.texture = snowman;
+	defTile.barrier = false;
+	defaultSprite.vbo->push(&tileVertices[0], 4 * sizeof(Vec2));
 	IndexBuffer* ibo = new IndexBuffer;
 	unsigned int indices[] =
 	{
 		0, 1, 2, 2, 0, 3
 	};
 
-	ibo->push(&indices[0], 6);
+	ibo->push(&tileIndices[0], 6);
 	defaultSprite.indices = ibo;
 }
 
@@ -46,6 +87,9 @@ void deleteGlobalData()
 {
 	delete defaultSprite.indices;
 	delete defaultSprite.vbo;
+	delete texCoordBuffer;
+	delete snowman;
+	delete vao;
 }
 
 Application::Application()
@@ -65,10 +109,8 @@ Application::~Application()
 
 void Application::run()
 {
-	VertexArray vao;
 	//Buffer vbo;
 	Buffer colorBuffer;
-	Buffer texCoordBuffer;
 	BufferLayout layout;
 	
 	
@@ -100,24 +142,16 @@ void Application::run()
 
 	Shader shader("res/shaders/basic");
 	shader.bind();
-
 	//Textures
 
-	const Texture snowman("res/textures/IMG_2086.png");
-	snowman.bind(0);
 
-	Vec2 texCoords[] = {
-		Vec2(0, 1),
-		Vec2(0, 0),
-		Vec2(1, 0),
-		Vec2(1, 1)
-	};
 
 	shader.setUniform1i("u_Texture", 0);
 	shader.setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
+	
+	_renderer->setShader(&shader);
 
-	defaultSprite.texture = &snowman;
-	defaultSprite.shader = &shader;
+	defaultSprite.texture = snowman;
 	defaultSprite.name = "snowman";
 		
 	
@@ -125,14 +159,8 @@ void Application::run()
 
 	
 	
-	BufferLayout tileLayout;
-	tileLayout.push<float>(2);
-	vao.push(defaultSprite.vbo, tileLayout);
+	vao->push(defaultSprite.vbo, tileLayout);
 
-	texCoordBuffer.push(&texCoords[0], 4 * sizeof(Vec2));
-	BufferLayout texCoordLayout;
-	texCoordLayout.push<float>(2);
-	vao.push(&texCoordBuffer, texCoordLayout);
 
 
 	std::vector<Vec4> colors;
@@ -147,7 +175,7 @@ void Application::run()
 	colorBuffer.push(&colors[0], colors.size() * sizeof(Vec4));
 	BufferLayout colorLayout;
 	colorLayout.push<float>(4);
-	vao.push(&colorBuffer, colorLayout);
+	vao->push(&colorBuffer, colorLayout);
 	shader.setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
 	MSG("Screen Ratio: " << (float)_window.getWidth() / (float)_window.getHeight());
 	bool running = true;
