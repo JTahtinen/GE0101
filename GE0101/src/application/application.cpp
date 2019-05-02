@@ -23,7 +23,6 @@ BufferLayout texCoordLayout;
 Buffer* texCoordBuffer;
 Buffer* tileVertices;
 IndexBuffer* tileIndices;
-//std::vector<unsigned int> indices;
 
 void loadGlobalData()
 {
@@ -59,6 +58,7 @@ void loadGlobalData()
 	vao->push(texCoordBuffer, texCoordLayout);
 	Buffer* tileVertices = new Buffer();
 	defaultSprite.vbo = tileVertices;
+
 	Vec2 vertices[] =
 	{
 	Vec2(-0.5f, -0.5f),
@@ -90,6 +90,8 @@ void deleteGlobalData()
 	delete texCoordBuffer;
 	delete snowman;
 	delete vao;
+	delete tileVertices;
+	delete tileIndices;
 }
 
 Application::Application()

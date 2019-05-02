@@ -35,11 +35,46 @@ void Map::update(Game* game)
 
 void Map::render(Renderer* renderer, float xOffset, float yOffset) const
 {
+	float yRatio = 16.0f / 9.0f;
+	int widthOnScreen = _width * TILE_SIZE;
+	int heightOnScreen = _height * yRatio * TILE_SIZE;
+	int xEnd;
+	int yEnd;
+	if (widthOnScreen + xOffset + 0.1f > 1.0f)
+	{
+		xEnd = (1.0f - xOffset + 0.1f) / TILE_SIZE + 1;
+		if (xEnd > _width)
+		{
+			xEnd = _width;
+		}
+	}
+	else
+	{
+		xEnd = _width;
+	}
+
+	if (heightOnScreen + yOffset + 0.1f > 1.0f)
+	{
+		yEnd = (1.0f - yOffset + 0.1f) / (TILE_SIZE * yRatio) + 1;
+		if (yEnd > _height)
+		{
+			yEnd = _height;
+		}
+	}
+	else
+	{
+		yEnd = _height;
+	}
+
+
+	//MSG("XEND: " << xEnd);
+	MSG("YEND: " << yEnd);
+
 	if (renderer)
 	{
-		for (int y = 0; y < _height; ++y)
+		for (int y = 0; y < yEnd; ++y)
 		{
-			for (int x = 0; x < _width; ++x)
+			for (int x = 0; x < xEnd; ++x)
 			{
 				renderer->submit(tileVertices, tileIndices, _tiles[x + y * _width]->texture, Vec2(x * 0.2f + xOffset, y * 0.2f + yOffset));
 			}

@@ -44,8 +44,9 @@ void Game::update()
 		entity->update(this);
 	//	entity->render(_renderer);
 	}
-	_map->render(_renderer, _camera.pos.x, _camera.pos.y);
 	_camera.pos = _entities[0]->getPos();
+
+	_map->render(_renderer, -_camera.pos.x, -_camera.pos.y);
 }
 
 const Camera& Game::getCamera() const

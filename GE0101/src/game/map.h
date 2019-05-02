@@ -2,6 +2,8 @@
 #include "../graphics/texture.h"
 #include <vector>
 
+#define TILE_SIZE 0.2f
+
 class Game;
 class Renderer;
 

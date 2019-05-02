@@ -3,8 +3,7 @@
 #include "../../defs.h"
 #include "../buffers/vertexarray.h"
 
-#define MAX_RENDERABLES 10
-#define MAX_INDICES 6 * MAX_RENDERABLES
+#define MAX_RENDERABLES 100
 
 Simple2DRenderer::Simple2DRenderer()
 {
