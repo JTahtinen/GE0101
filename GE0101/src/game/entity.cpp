@@ -4,6 +4,7 @@
 #include "../globals.h"
 #include "../input/input.h"
 #include "controller.h"
+#include "camera.h"
 
 static std::vector<GUID> availableGUIDs;
 
@@ -57,11 +58,11 @@ void Entity::update(Game* game)
 	_pos += _vel;
 }
 
-void Entity::render(Renderer* renderer)
+void Entity::render(Renderer* renderer, const Camera* camera) const
 {
 	if (renderer && _sprite)
 	{
-		renderer->submit(_sprite, _pos);
+		renderer->submit(_sprite, _pos - camera->pos);
 	}
 }
 

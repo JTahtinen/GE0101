@@ -4,6 +4,7 @@
 struct Camera
 {
 	Vec2			pos;
-	float			ratio;
+	float			xRatio;
+	float			yRatio;
 	float			zoom{ 1 };
 };

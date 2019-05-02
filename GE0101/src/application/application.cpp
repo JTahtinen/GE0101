@@ -58,14 +58,8 @@ void loadGlobalData()
 	vao->push(texCoordBuffer, texCoordLayout);
 	Buffer* tileVertices = new Buffer();
 	defaultSprite.vbo = tileVertices;
+	defaultSprite.indices = tileIndices;
 
-	Vec2 vertices[] =
-	{
-	Vec2(-0.5f, -0.5f),
-	Vec2(-0.5f,  0.5f),
-	Vec2(0.5f,  0.5f),
-	Vec2(0.5f, -0.5f)
-	};
 
 	snowman = new Texture("res/textures/IMG_2086.png");
 	snowman->bind(0);
@@ -73,20 +67,13 @@ void loadGlobalData()
 	defTile.texture = snowman;
 	defTile.barrier = false;
 	defaultSprite.vbo->push(&tileVertices[0], 4 * sizeof(Vec2));
-	IndexBuffer* ibo = new IndexBuffer;
-	unsigned int indices[] =
-	{
-		0, 1, 2, 2, 0, 3
-	};
 
-	ibo->push(&tileIndices[0], 6);
-	defaultSprite.indices = ibo;
+
+
 }
 
 void deleteGlobalData()
 {
-	delete defaultSprite.indices;
-	delete defaultSprite.vbo;
 	delete texCoordBuffer;
 	delete snowman;
 	delete vao;
@@ -116,29 +103,6 @@ void Application::run()
 	BufferLayout layout;
 	
 	
-	
-
-
-	//Vertex data
-/*	std::vector<Vec2> vertices;
-	vertices.push_back(Vec2(-0.8f, 0.8f));
-	vertices.push_back(Vec2(0.8f, 0.8f));
-	vertices.push_back(Vec2(0.8f, -0.8f));
-	vertices.push_back(Vec2(-0.8f, -0.8f));
-
-	vbo.push(&vertices[0], vertices.size() * sizeof(Vec2));
-	layout.push<float>(2);
-	vao.push(&vbo, layout);
-
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(2);
-	indices.push_back(0);
-	indices.push_back(3);
-
-	IndexBuffer ibo;	
-	ibo.push(&indices[0], indices.size());*/
 
 	//Shaders
 

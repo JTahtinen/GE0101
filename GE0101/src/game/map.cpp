@@ -33,51 +33,53 @@ void Map::update(Game* game)
 
 }
 
-void Map::render(Renderer* renderer, float xOffset, float yOffset) const
+void Map::render(Renderer* renderer, const Camera* camera) const
 {
-	float yRatio = 16.0f / 9.0f;
-	int widthOnScreen = _width * TILE_SIZE;
-	int heightOnScreen = _height * yRatio * TILE_SIZE;
-	int xEnd;
-	int yEnd;
-	if (widthOnScreen + xOffset + 0.1f > 1.0f)
+	const Vec2& camPos = camera->pos;
+
+	int xStartTile;
+	int yStartTile;
+
+	int xEndTile;
+	int yEndTile;
+
+	float left = camPos.x - 1.0f;
+	float right = camPos.x + 1.0f;
+	float top = camPos.y + 1.0f;
+	float bottom = camPos.y - camera->yRatio;
+
+	if (left < 0.0f) left = 0.0f;
+	if (right < 0.0f) right = 0.0f;
+	if (top < 0.0f) top = 0.0f;
+	if (bottom < 0.0f) bottom = 0.0f;
+
+	xStartTile = (int)(left / TILE_SIZE);
+	xEndTile = (int)(right / TILE_SIZE);
+	yStartTile = (int)(bottom / TILE_SIZE);
+	yEndTile = (int)(top / TILE_SIZE);
+
+
+
+	if (xStartTile < 0) xStartTile = 0;
+	if (xStartTile > _width) xStartTile = _width;
+
+	if (xEndTile < 0) xEndTile = 0;
+	if (xEndTile > _width) xEndTile = _width;
+
+	if (yStartTile < 0) yStartTile = 0;
+	if (yStartTile > _height) yStartTile = _height;
+
+	if (yEndTile < 0) yEndTile = 0;
+	if (yEndTile > _height) yEndTile = _height;
+
+	MSG("YStart: " << yStartTile);
+	MSG("YEnd:" << yEndTile);
+
+	for (int y = yStartTile; y < yEndTile; ++y)
 	{
-		xEnd = (1.0f - xOffset + 0.1f) / TILE_SIZE + 1;
-		if (xEnd > _width)
+		for (int x = xStartTile; x < xEndTile; ++x)
 		{
-			xEnd = _width;
-		}
-	}
-	else
-	{
-		xEnd = _width;
-	}
-
-	if (heightOnScreen + yOffset + 0.1f > 1.0f)
-	{
-		yEnd = (1.0f - yOffset + 0.1f) / (TILE_SIZE * yRatio) + 1;
-		if (yEnd > _height)
-		{
-			yEnd = _height;
-		}
-	}
-	else
-	{
-		yEnd = _height;
-	}
-
-
-	//MSG("XEND: " << xEnd);
-	MSG("YEND: " << yEnd);
-
-	if (renderer)
-	{
-		for (int y = 0; y < yEnd; ++y)
-		{
-			for (int x = 0; x < xEnd; ++x)
-			{
-				renderer->submit(tileVertices, tileIndices, _tiles[x + y * _width]->texture, Vec2(x * 0.2f + xOffset, y * 0.2f + yOffset));
-			}
+			renderer->submit(tileVertices, tileIndices, _tiles[x + y * _width]->texture, Vec2(-camPos.x + x * TILE_SIZE + TILE_SIZE / 2.0f, -camPos.y + y * TILE_SIZE + TILE_SIZE / 2.0f));
 		}
 	}
 }

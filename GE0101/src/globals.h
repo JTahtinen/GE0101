@@ -4,6 +4,7 @@
 #include "game/map.h"
 #include "graphics/buffers/vertexarray.h"
 
+
 extern Log gameLog;
 extern Sprite defaultSprite;
 extern Texture* snowman;

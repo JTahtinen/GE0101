@@ -5,7 +5,7 @@
 #include "../globals.h"
 
 Game::Game(Renderer* renderer)
-	: _camera({ Vec2(0, 0), 16.0f / 9.0f })
+	: _camera({ Vec2(0, 0), 16.0f / 9.0f, 9.0f / 16.0f })
 	, _renderer(renderer)
 {
 	ASSERT(renderer);
@@ -39,14 +39,19 @@ void Game::update()
 		MSG(_camera.zoom);
 	}
 	_map->update(this);
+	
 	for (auto& entity : _entities)
 	{
 		entity->update(this);
-	//	entity->render(_renderer);
 	}
-	_camera.pos = _entities[0]->getPos();
 
-	_map->render(_renderer, -_camera.pos.x, -_camera.pos.y);
+ 	_camera.pos = _entities[0]->getPos();
+
+	_map->render(_renderer, &_camera);
+	for (auto& entity : _entities)
+	{
+		entity->render(_renderer, &_camera);
+	}
 }
 
 const Camera& Game::getCamera() const

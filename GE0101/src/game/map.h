@@ -6,6 +6,7 @@
 
 class Game;
 class Renderer;
+struct Camera;
 
 struct Tile
 {
@@ -23,7 +24,8 @@ class Map
 public:
 	~Map();
 	void update(Game* game);
-	void render(Renderer* renderer, float xOffset, float yOffset) const;
+	//void render(Renderer* renderer, float xOffset, float yOffset) const;
+	void render(Renderer* renderer, const Camera* camera) const;
 	static Map* createMap(int width, int height);
 private:
 	Map(int width, int height);

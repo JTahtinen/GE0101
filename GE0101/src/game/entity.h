@@ -29,7 +29,7 @@ public:
 	virtual ~Entity(); 
 	virtual void update(Game* game);
 	void addController(const Controller* controller);
-	void render(Renderer* renderer);
+	void render(Renderer* renderer, const Camera* camera) const;
 private:
 	static GUID nextId();
 };
