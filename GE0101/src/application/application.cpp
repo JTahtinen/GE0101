@@ -114,7 +114,8 @@ void Application::run()
 
 	shader.setUniform1i("u_Texture", 0);
 	shader.setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
-	
+	shader.setUniform1f("u_Zoom", 1.0f);
+
 	_renderer->setShader(&shader);
 
 	defaultSprite.texture = snowman;
@@ -151,6 +152,8 @@ void Application::run()
 
 	float r = 0;
 	int dir = 1;
+	float zoom = 1;
+	bool updateZoom = false;
 	while (running)
 	{
 		if (r <= 0)
@@ -172,7 +175,25 @@ void Application::run()
 		{
 			running = false;
 		}
+		if (in.poll(KEY_Z, KEYSTATE_TYPED))
+		{
+			++zoom;
+			updateZoom = true;
+		}
+		if (in.poll(KEY_X, KEYSTATE_TYPED))
+		{
+			if (zoom > 1)
+			{
+				--zoom;
+				updateZoom = true;
+			}
+		}
 
+		if (updateZoom)
+		{
+			shader.setUniform1f("u_Zoom", zoom);
+			updateZoom = false;
+		}
 		_game->update();
 		_window.clear();
 		_renderer->flush();

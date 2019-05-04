@@ -37,26 +37,27 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 {
 	const Vec2& camPos = camera->pos;
 
+	float screenTileSize = TILE_SIZE * camera->zoom;
+	Vec2 scrCamPos = camera->pos * camera->zoom;
+
+	static float halfTileSize = screenTileSize / 2.0f;
+
+
 	int xStartTile;
 	int yStartTile;
 
 	int xEndTile;
 	int yEndTile;
 
-	float left = camPos.x - 1.0f;
-	float right = camPos.x + 1.0f;
-	float top = camPos.y + 1.0f;
-	float bottom = camPos.y - camera->yRatio;
+	float left		= scrCamPos.x - 1.0f / camera->zoom;
+	float right		= scrCamPos.x + 1.0f / camera->zoom;
+	float bottom	= scrCamPos.y - camera->yRatio / camera->zoom;
+	float top		= scrCamPos.y + camera->yRatio / camera->zoom;
 
-	if (left < 0.0f) left = 0.0f;
-	if (right < 0.0f) right = 0.0f;
-	if (top < 0.0f) top = 0.0f;
-	if (bottom < 0.0f) bottom = 0.0f;
-
-	xStartTile = (int)(left / TILE_SIZE);
-	xEndTile = (int)(right / TILE_SIZE);
-	yStartTile = (int)(bottom / TILE_SIZE);
-	yEndTile = (int)(top / TILE_SIZE);
+	xStartTile		= (int)((left	+ halfTileSize) / screenTileSize);
+	xEndTile		= (int)((right	+ halfTileSize) / screenTileSize) + 1;
+	yStartTile		= (int)((bottom	+ halfTileSize) / screenTileSize);
+	yEndTile		= (int)((top	+ halfTileSize) / screenTileSize) + 1;
 
 
 
@@ -72,14 +73,17 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 	if (yEndTile < 0) yEndTile = 0;
 	if (yEndTile > _height) yEndTile = _height;
 
+	MSG("XStart: " << xStartTile);
+	MSG("XEnd:   " << xEndTile << std::endl);
 	MSG("YStart: " << yStartTile);
-	MSG("YEnd:" << yEndTile);
+	MSG("YEnd:   " << yEndTile << std::endl);
 
+	
 	for (int y = yStartTile; y < yEndTile; ++y)
 	{
 		for (int x = xStartTile; x < xEndTile; ++x)
 		{
-			renderer->submit(tileVertices, tileIndices, _tiles[x + y * _width]->texture, Vec2(-camPos.x + x * TILE_SIZE + TILE_SIZE / 2.0f, -camPos.y + y * TILE_SIZE + TILE_SIZE / 2.0f));
+			renderer->submit(tileVertices, tileIndices, _tiles[x + y * _width]->texture, Vec2(-camPos.x + x * TILE_SIZE, -camPos.y + y * TILE_SIZE));
 		}
 	}
 }
