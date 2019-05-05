@@ -98,6 +98,9 @@ Application::~Application()
 
 void Application::run()
 {
+
+	const Camera& camera = _game->getCamera();
+
 	//Buffer vbo;
 	Buffer colorBuffer;
 	BufferLayout layout;
@@ -108,22 +111,15 @@ void Application::run()
 
 	Shader shader("res/shaders/basic");
 	shader.bind();
-	//Textures
-
-
 
 	shader.setUniform1i("u_Texture", 0);
 	shader.setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
-	shader.setUniform1f("u_Zoom", 1.0f);
+	shader.setUniform1f("u_Zoom", camera.getZoom());
 
 	_renderer->setShader(&shader);
 
 	defaultSprite.texture = snowman;
 	defaultSprite.name = "snowman";
-		
-	
-
-
 	
 	
 	vao->push(defaultSprite.vbo, tileLayout);
@@ -175,25 +171,11 @@ void Application::run()
 		{
 			running = false;
 		}
-		if (in.poll(KEY_Z, KEYSTATE_TYPED))
-		{
-			++zoom;
-			updateZoom = true;
-		}
-		if (in.poll(KEY_X, KEYSTATE_TYPED))
-		{
-			if (zoom > 1)
-			{
-				--zoom;
-				updateZoom = true;
-			}
-		}
 
-		if (updateZoom)
-		{
-			shader.setUniform1f("u_Zoom", zoom);
-			updateZoom = false;
-		}
+
+		shader.setUniform1f("u_Zoom", camera.getZoom());
+		updateZoom = false;
+		
 		_game->update();
 		_window.clear();
 		_renderer->flush();

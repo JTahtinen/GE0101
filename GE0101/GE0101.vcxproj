@@ -195,6 +195,7 @@
     <ClInclude Include="src\graphics\window.h" />
     <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\math\math.h" />
+    <ClInclude Include="src\math\shapes.h" />
     <ClInclude Include="src\math\vec2.h" />
     <ClInclude Include="src\math\vec4.h" />
     <ClInclude Include="src\util\file.h" />

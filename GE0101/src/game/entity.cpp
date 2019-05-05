@@ -62,7 +62,7 @@ void Entity::render(Renderer* renderer, const Camera* camera) const
 {
 	if (renderer && _sprite)
 	{
-		renderer->submit(_sprite, _pos - camera->pos);
+		renderer->submit(_sprite, _pos - camera->getPos());
 	}
 }
 

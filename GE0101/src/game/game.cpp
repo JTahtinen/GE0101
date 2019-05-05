@@ -5,7 +5,7 @@
 #include "../globals.h"
 
 Game::Game(Renderer* renderer)
-	: _camera({ Vec2(0, 0), 1280.0f / 720.0f, 720.0f / 1280.0f })
+	: _camera(Camera(16.0f, 9.0f))
 	, _renderer(renderer)
 {
 	ASSERT(renderer);
@@ -30,15 +30,11 @@ void Game::update()
 	static Input& in = Input::instance();
 	if (in.poll(KEY_Z, KEYSTATE_TYPED))
 	{
-		++_camera.zoom;
-		MSG(_camera.zoom);
+		_camera.zoomIn();
 	}
 	if (in.poll(KEY_X, KEYSTATE_TYPED))
 	{
-		if (_camera.zoom > 1) {
-			--_camera.zoom;
-			MSG(_camera.zoom);
-		}
+		_camera.zoomOut();
 	}
 	_map->update(this);
 	
@@ -47,12 +43,13 @@ void Game::update()
 		entity->update(this);
 	}
 
- 	_camera.pos = _entities[0]->getPos();
+ 	_camera.setPos(_entities[0]->getPos());
+	_camera.update();
 
 	_map->render(_renderer, &_camera);
 	for (auto& entity : _entities)
 	{
-	//	entity->render(_renderer, &_camera);
+		entity->render(_renderer, &_camera);
 	}
 }
 
