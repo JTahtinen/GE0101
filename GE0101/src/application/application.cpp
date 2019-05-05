@@ -82,7 +82,7 @@ void deleteGlobalData()
 }
 
 Application::Application()
-	: _window(800, 600, "GE0101")
+	: _window(1280, 720, "GE0101")
 {
 	loadGlobalData();
 	_renderer = new Simple2DRenderer();
@@ -160,12 +160,12 @@ void Application::run()
 		{
 			dir = 1;
 		}
-		else if (r >= 1.0f)
+		else if (r >= 0.6f)
 		{
 			dir = -1;
 		}
 
-		r += (float)dir * 0.0003f;
+		r += (float)dir * 0.001f;
 
 		shader.setUniform4f("u_Color", r, 0, 0, 1.0f);
 

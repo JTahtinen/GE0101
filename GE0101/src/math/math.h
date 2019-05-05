@@ -34,4 +34,9 @@ namespace math
 	{
 		return { (int)(vec.x + 0.5f), (int)(vec.y + 0.5f) };
 	}
+
+	inline int round(float val)
+	{
+		return (int)(val + 0.5f);
+	}
 }

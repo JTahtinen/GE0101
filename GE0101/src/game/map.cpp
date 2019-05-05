@@ -4,6 +4,7 @@
 #include "../graphics/buffers/indexbuffer.h"
 #include "../defs.h"
 #include "../math/vec2.h"
+#include "../math/math.h"
 
 
 Map* Map::_instance;
@@ -36,28 +37,20 @@ void Map::update(Game* game)
 void Map::render(Renderer* renderer, const Camera* camera) const
 {
 	const Vec2& camPos = camera->pos;
+	Vec2 scrCamPos = camPos;// *camera->zoom;
 
 	float screenTileSize = TILE_SIZE * camera->zoom;
-	Vec2 scrCamPos = camera->pos * camera->zoom;
+	float halfTileSize = TILE_SIZE / 2.0f;
 
-	static float halfTileSize = screenTileSize / 2.0f;
+	float left			= camPos.x - 1.0f / camera->zoom;
+	float right			= camPos.x + 1.0f / camera->zoom;
+	float bottom		= camPos.y - camera->yRatio / camera->zoom;
+	float top			= camPos.y + camera->yRatio / camera->zoom;
 
-
-	int xStartTile;
-	int yStartTile;
-
-	int xEndTile;
-	int yEndTile;
-
-	float left		= scrCamPos.x - 1.0f / camera->zoom;
-	float right		= scrCamPos.x + 1.0f / camera->zoom;
-	float bottom	= scrCamPos.y - camera->yRatio / camera->zoom;
-	float top		= scrCamPos.y + camera->yRatio / camera->zoom;
-
-	xStartTile		= (int)((left	+ halfTileSize) / screenTileSize);
-	xEndTile		= (int)((right	+ halfTileSize) / screenTileSize) + 1;
-	yStartTile		= (int)((bottom	+ halfTileSize) / screenTileSize);
-	yEndTile		= (int)((top	+ halfTileSize) / screenTileSize) + 1;
+	int xStartTile		= (int)(((left	 + halfTileSize) / screenTileSize) * camera->zoom);
+	int xEndTile		= (int)(((right	 + halfTileSize) / screenTileSize) * camera->zoom) + 1;
+	int yStartTile		= (int)(((bottom + halfTileSize) / screenTileSize) * camera->zoom);
+	int yEndTile		= (int)(((top	 + halfTileSize) / screenTileSize) * camera->zoom) + 1;
 
 
 

@@ -5,12 +5,12 @@
 #include "../globals.h"
 
 Game::Game(Renderer* renderer)
-	: _camera({ Vec2(0, 0), 800.0f / 600.0f, 600.0f / 800.0f })
+	: _camera({ Vec2(0, 0), 1280.0f / 720.0f, 720.0f / 1280.0f })
 	, _renderer(renderer)
 {
 	ASSERT(renderer);
 	_map = Map::createMap(5, 5);
-	Entity* player = new Entity(Vec2(0.2f, 0.2f), &defaultSprite);
+	Entity* player = new Entity(Vec2(0.0f, 0.0f), &defaultSprite);
 	player->addController(&_inputController);
 	_entities.push_back(player);
 	_entities.push_back(new Entity(Vec2(-0.5f, -0.5f), &defaultSprite));
