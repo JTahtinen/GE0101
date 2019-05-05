@@ -2,12 +2,12 @@
 
 namespace math
 {
-	struct circle
+	struct Circle
 	{
 		float r;
 	};
 
-	struct rect
+	struct Rect
 	{
 		float w;
 		float h;

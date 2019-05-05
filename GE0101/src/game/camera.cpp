@@ -35,7 +35,7 @@ void Camera::zoomIn()
 
 void Camera::zoomOut()
 {
-	if (_zoomTarget > 1)
+	if (_zoomTarget > 0.2)
 	{
 		_zoomTarget /= 2.0f;
 	}

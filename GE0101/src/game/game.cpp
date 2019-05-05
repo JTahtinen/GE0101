@@ -10,10 +10,10 @@ Game::Game(Renderer* renderer)
 {
 	ASSERT(renderer);
 	_map = Map::createMap(5, 5);
-	Entity* player = new Entity(Vec2(0.0f, 0.0f), &defaultSprite);
-	player->addController(&_inputController);
+	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, &_inputController);
 	_entities.push_back(player);
-	_entities.push_back(new Entity(Vec2(-0.5f, -0.5f), &defaultSprite));
+	addActor(player);
+	addEntity(new Entity(Vec2(-0.5f, -0.5f), &defaultSprite));
 }
 
 Game::~Game()
@@ -41,6 +41,7 @@ void Game::update()
 	for (auto& entity : _entities)
 	{
 		entity->update(this);
+
 	}
 
  	_camera.setPos(_entities[0]->getPos());
@@ -53,7 +54,29 @@ void Game::update()
 	}
 }
 
+void Game::addEntity(Entity* e)
+{
+	if (e)
+	{
+		_entities.push_back(e);
+	}
+}
+
+void Game::addActor(Actor* e)
+{
+	if (e)
+	{
+		_actors.push_back(e);
+		addEntity(e);
+	}
+}
+
 const Camera& Game::getCamera() const
 {
 	return _camera;
+}
+
+const std::vector<Entity*>& Game::getEntities() const
+{
+	return _entities;
 }

@@ -5,6 +5,7 @@
 #include "../input/input.h"
 #include "controller.h"
 #include "camera.h"
+#include "game.h"
 
 static std::vector<GUID> availableGUIDs;
 
@@ -12,6 +13,7 @@ Entity::Entity(const Vec2& pos, Sprite* sprite)
 	: _pos(pos)
 	, _sprite(sprite)
 	, _id(nextId())
+	, _collider(&boxCollider)
 {
 #ifdef _DEBUG
 	std::cout << "Created Entity GUID: " << _id << std::endl;
@@ -49,10 +51,19 @@ void Entity::addVel(const Vec2& vel)
 
 void Entity::update(Game* game)
 {
-	_vel *= 0;
-	if (_controller)
+
+	const auto& entities = game->getEntities();
+
+	for (auto& other: entities)
 	{
-		_controller->update(this);
+		if (other == this)
+		{
+			continue;
+		}
+		if (Collider::collidesWith(_pos, other->_pos, *_collider, *other->_collider))
+		{
+			MSG("Collision");
+		}
 	}
 
 	_pos += _vel;
@@ -63,15 +74,6 @@ void Entity::render(Renderer* renderer, const Camera* camera) const
 	if (renderer && _sprite)
 	{
 		renderer->submit(_sprite, _pos - camera->getPos());
-	}
-}
-
-void Entity::addController(const Controller* controller)
-{
-	_controller = controller;
-	if (!_controller)
-	{
-		gameLog.warning("Could not add controller - nullptr!");
 	}
 }
 

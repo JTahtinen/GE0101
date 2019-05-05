@@ -23,9 +23,11 @@ BufferLayout texCoordLayout;
 Buffer* texCoordBuffer;
 Buffer* tileVertices;
 IndexBuffer* tileIndices;
+Collider boxCollider;
 
 void loadGlobalData()
 {
+	boxCollider = Collider(0.2f, 0.2f);
 	vao = new VertexArray();
 	texCoordBuffer = new Buffer();
 	tileVertices = new Buffer();
@@ -106,7 +108,6 @@ void Application::run()
 	BufferLayout layout;
 	
 	
-
 	//Shaders
 
 	Shader shader("res/shaders/basic");

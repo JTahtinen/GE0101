@@ -3,7 +3,7 @@
 #include "graphics/sprite.h"
 #include "game/map.h"
 #include "graphics/buffers/vertexarray.h"
-
+#include "game/collider.h"
 
 extern Log gameLog;
 extern Sprite defaultSprite;
@@ -15,3 +15,4 @@ extern Buffer* texCoordBuffer;
 extern BufferLayout texCoordLayout;
 extern Buffer* tileVertices;
 extern IndexBuffer* tileIndices;
+extern Collider boxCollider;

@@ -151,7 +151,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\application\application.cpp" />
+    <ClCompile Include="src\game\actor.cpp" />
+    <ClCompile Include="src\game\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
+    <ClCompile Include="src\game\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\game\inputcontroller.cpp" />
@@ -174,7 +177,10 @@
   <ItemGroup>
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\defs.h" />
+    <ClInclude Include="src\game\actor.h" />
+    <ClInclude Include="src\game\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
+    <ClInclude Include="src\game\collider.h" />
     <ClInclude Include="src\game\controller.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\game\game.h" />
