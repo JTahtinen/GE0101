@@ -1,7 +1,7 @@
 #include "inputcontroller.h"
-#include "../input/input.h"
+#include "../../input/input.h"
 
-void InputController::update(Entity* e) const
+void InputController::update(Actor* e)
 {
 	static float speed = 0.01f;
 	Input& in = Input::instance();

@@ -25,6 +25,8 @@ public:
 	void setVel(const Vec2& vel);
 	void addVel(const Vec2& vel);
 	inline const Vec2& getPos() const { return _pos; } 
+	inline const Vec2& getVel() const { return _vel; }
+	inline const Collider* getCollider() const { return _collider; }
 	virtual void update(Game* game);
 	void render(Renderer* renderer, const Camera* camera) const;
 private:

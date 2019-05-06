@@ -152,12 +152,12 @@
   <ItemGroup>
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\game\actor.cpp" />
-    <ClCompile Include="src\game\aicontroller.cpp" />
+    <ClCompile Include="src\game\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
-    <ClCompile Include="src\game\inputcontroller.cpp" />
+    <ClCompile Include="src\game\controllers\inputcontroller.cpp" />
     <ClCompile Include="src\game\map.cpp" />
     <ClCompile Include="src\game\scenegraph.cpp" />
     <ClCompile Include="src\graphics\buffers\buffer.cpp" />
@@ -178,13 +178,13 @@
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\defs.h" />
     <ClInclude Include="src\game\actor.h" />
-    <ClInclude Include="src\game\aicontroller.h" />
+    <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\collider.h" />
-    <ClInclude Include="src\game\controller.h" />
+    <ClInclude Include="src\game\controllers\controller.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\game\game.h" />
-    <ClInclude Include="src\game\inputcontroller.h" />
+    <ClInclude Include="src\game\controllers\inputcontroller.h" />
     <ClInclude Include="src\game\map.h" />
     <ClInclude Include="src\game\scenegraph.h" />
     <ClInclude Include="src\globals.h" />

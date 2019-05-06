@@ -48,9 +48,6 @@
     <ClCompile Include="src\game\scenegraph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\inputcontroller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\buffers\buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,10 +75,13 @@
     <ClCompile Include="src\game\collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\aicontroller.cpp">
+    <ClCompile Include="src\game\actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\actor.cpp">
+    <ClCompile Include="src\game\controllers\aicontroller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\controllers\inputcontroller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,12 +123,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\globals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\inputcontroller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\util\file.h">
@@ -176,10 +170,16 @@
     <ClInclude Include="src\game\collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\aicontroller.h">
+    <ClInclude Include="src\game\actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\actor.h">
+    <ClInclude Include="src\game\controllers\aicontroller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\controllers\inputcontroller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\controllers\controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

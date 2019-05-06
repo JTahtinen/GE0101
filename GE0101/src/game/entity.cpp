@@ -3,7 +3,6 @@
 #include <vector>
 #include "../globals.h"
 #include "../input/input.h"
-#include "controller.h"
 #include "camera.h"
 #include "game.h"
 
@@ -51,7 +50,8 @@ void Entity::addVel(const Vec2& vel)
 
 void Entity::update(Game* game)
 {
-
+	bool isMoving = (_vel.length() != 0);
+	//bool isMoving = true;
 	const auto& entities = game->getEntities();
 
 	for (auto& other: entities)
@@ -60,13 +60,16 @@ void Entity::update(Game* game)
 		{
 			continue;
 		}
-		if (Collider::collidesWith(_pos, other->_pos, *_collider, *other->_collider))
+		/*if (Collider::collidesWith(_pos, other->_pos, *_collider, *other->_collider))
 		{
 			MSG("Collision");
-		}
+		}*/
 	}
-
-	_pos += _vel;
+		if (isMoving) 
+		{
+			_vel = Collider::clippedVelocityVector(game, this);
+			_pos += _vel;
+		}
 }
 
 void Entity::render(Renderer* renderer, const Camera* camera) const

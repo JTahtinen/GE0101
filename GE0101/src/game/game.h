@@ -5,15 +5,14 @@
 #include "entity.h"
 #include "actor.h"
 #include "camera.h"
-#include "inputcontroller.h"
 
 class Game
 {
 	Map*					_map;
 	std::vector<Entity*>	_entities;
 	std::vector<Actor*>		_actors;
+	Actor*					_player;
 	Camera					_camera;
-	InputController			_inputController;
 	Renderer*				_renderer;
 public:
 	Game(Renderer* renderer);
@@ -22,5 +21,6 @@ public:
 	void addEntity(Entity* e);
 	void addActor(Actor* e);
 	const Camera& getCamera() const;
+	const Actor* getPlayer() const;
 	const std::vector<Entity*>& getEntities() const;
 };

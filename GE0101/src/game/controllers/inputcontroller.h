@@ -4,5 +4,5 @@
 class InputController : public Controller
 {
 public:
-	virtual void update(Entity* e) const override;
+	virtual void update(Actor* e) override;
 };

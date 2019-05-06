@@ -1,5 +1,6 @@
 #include "vec2.h"
 #include "math.h"
+#include "../defs.h"
 
 Vec2::Vec2(float x, float y)
 	: x(x)
@@ -127,4 +128,41 @@ bool Vec2::operator==(const Vec2& other) const
 bool Vec2::operator!=(const Vec2& other) const
 {
 	return !(*this == other);
+}
+
+bool Vec2::operator>(float distance) const
+{
+	return (length() > distance);
+}
+
+bool Vec2::operator<(float distance) const
+{
+	return (length() < distance);
+}
+
+bool Vec2::operator>=(float distance) const
+{
+	float len = length();
+	return (len > distance || len == distance);
+}
+
+bool Vec2::operator<=(float distance) const
+{
+	float len = length();
+	return (len < distance || len == distance);
+}
+
+Vec2 Vec2::operator-() const
+{
+	return Vec2(-x, -y);
+}
+
+void Vec2::print() const
+{
+	MSG(toString());
+}
+
+std::string Vec2::toString() const
+{
+	return "Vec2( X : " + std::to_string(x) + ", Y: " + std::to_string(y) + ")";
 }

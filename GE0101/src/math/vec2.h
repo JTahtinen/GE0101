@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class Vec2
 {
@@ -27,5 +28,11 @@ public:
 	Vec2& operator*=(float value);
 	bool operator==(const Vec2& other) const;
 	bool operator!=(const Vec2& other) const;
-
+	bool operator>(float distance) const;
+	bool operator<(float distance) const;
+	bool operator>=(float distance) const;
+	bool operator<=(float distance) const;
+	Vec2 operator-() const;
+	void print() const;
+	std::string toString() const;
 };

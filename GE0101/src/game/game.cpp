@@ -3,6 +3,8 @@
 #include "../input/input.h"
 #include "../defs.h"
 #include "../globals.h"
+#include "controllers/inputcontroller.h"
+#include "controllers/aicontroller.h"
 
 Game::Game(Renderer* renderer)
 	: _camera(Camera(16.0f, 9.0f))
@@ -10,10 +12,11 @@ Game::Game(Renderer* renderer)
 {
 	ASSERT(renderer);
 	_map = Map::createMap(5, 5);
-	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, &_inputController);
-	_entities.push_back(player);
+	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, new InputController());
 	addActor(player);
-	addEntity(new Entity(Vec2(-0.5f, -0.5f), &defaultSprite));
+	_player = player;
+	//addActor(new Actor(Vec2(-0.5f, -0.5f), &defaultSprite, new AIController(this)));
+	addActor(new Actor(Vec2(0.5f, 0.5f), &defaultSprite));
 }
 
 Game::~Game()
@@ -41,12 +44,9 @@ void Game::update()
 	for (auto& entity : _entities)
 	{
 		entity->update(this);
-
 	}
-
- 	_camera.setPos(_entities[0]->getPos());
+ 	_camera.setPos(_player->getPos());
 	_camera.update();
-
 	_map->render(_renderer, &_camera);
 	for (auto& entity : _entities)
 	{
@@ -74,6 +74,11 @@ void Game::addActor(Actor* e)
 const Camera& Game::getCamera() const
 {
 	return _camera;
+}
+
+const Actor* Game::getPlayer() const
+{
+	return _player;
 }
 
 const std::vector<Entity*>& Game::getEntities() const
