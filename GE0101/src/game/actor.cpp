@@ -6,8 +6,8 @@ Actor::Actor(const Vec2& pos, Sprite* sprite, Controller* controller)
 	Entity(pos, sprite)
 	, _controller(controller)
 {
-
 }
+
 Actor::Actor(const Vec2& pos, Sprite* sprite)
 	: 
 	Actor(pos, sprite, nullptr)
@@ -74,7 +74,7 @@ void Actor::addEnemy(const Actor* enemy)
 
 void Actor::update(Game* game)
 {
-	setVel(Vec2(0, 0));
+	setForce(Vec2(0, 0));
 
 	if (_controller)
 	{

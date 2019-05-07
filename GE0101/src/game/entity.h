@@ -2,7 +2,7 @@
 #include "../math/vec2.h"
 #include "../graphics/sprite.h"
 #include "../graphics/renderers/renderer.h"
-#include "collider.h"
+#include "../physics/physicsobject.h"
 
 class Game;
 
@@ -13,20 +13,19 @@ class Entity
 protected:
 	friend class Controller;
 	GUID				_id;
+	PhysicsObject		_object;
 	Sprite*				_sprite;
-	Collider*			_collider;
-	Vec2				_pos{ Vec2(0, 0) };
-	Vec2				_vel{ Vec2(0, 0) };
 public:
 	Entity(const Vec2& pos, Sprite* sprite);
 	Entity(const Vec2& pos);
 	Entity();
 	virtual ~Entity();
-	void setVel(const Vec2& vel);
-	void addVel(const Vec2& vel);
-	inline const Vec2& getPos() const { return _pos; } 
-	inline const Vec2& getVel() const { return _vel; }
-	inline const Collider* getCollider() const { return _collider; }
+	void setForce(const Vec2& force);
+	void addForce(const Vec2& force);
+	inline const Vec2& getPos() const { return _object.location.pos; } 
+	inline const Vec2& getForce() const { return _object.force; }
+	inline const Vec2& getDimensions() const { return _object.location.dimensions; }
+	inline bool isMoving() const { return _object.force.length() != 0; }
 	virtual void update(Game* game);
 	void render(Renderer* renderer, const Camera* camera) const;
 private:

@@ -23,11 +23,9 @@ BufferLayout texCoordLayout;
 Buffer* texCoordBuffer;
 Buffer* tileVertices;
 IndexBuffer* tileIndices;
-Collider boxCollider;
 
 void loadGlobalData()
 {
-	boxCollider = Collider(0.2f, 0.2f);
 	vao = new VertexArray();
 	texCoordBuffer = new Buffer();
 	tileVertices = new Buffer();
@@ -177,8 +175,8 @@ void Application::run()
 		shader.setUniform1f("u_Zoom", camera.getZoom());
 		updateZoom = false;
 		
-		_game->update();
 		_window.clear();
+		_game->update();
 		_renderer->flush();
 	//	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 		_window.update();

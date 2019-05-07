@@ -5,14 +5,15 @@
 #include "../input/input.h"
 #include "camera.h"
 #include "game.h"
+#include "../physics/collider.h"
 
 static std::vector<GUID> availableGUIDs;
 
 Entity::Entity(const Vec2& pos, Sprite* sprite)
-	: _pos(pos)
-	, _sprite(sprite)
+	:
+	_sprite(sprite)
 	, _id(nextId())
-	, _collider(&boxCollider)
+	, _object({{ pos, Vec2(0.2f, 0.2f) }, Vec2(0, 0)})
 {
 #ifdef _DEBUG
 	std::cout << "Created Entity GUID: " << _id << std::endl;
@@ -38,45 +39,26 @@ Entity::~Entity()
 #endif
 }
 
-void Entity::setVel(const Vec2& vel)
+void Entity::setForce(const Vec2& force)
 {
-	_vel = vel;
+	_object.force = force;
 }
 
-void Entity::addVel(const Vec2& vel)
+void Entity::addForce(const Vec2& force)
 {
-	_vel += vel;
+	_object.force += force;
 }
 
 void Entity::update(Game* game)
 {
-	bool isMoving = (_vel.length() != 0);
-	//bool isMoving = true;
-	const auto& entities = game->getEntities();
-
-	for (auto& other: entities)
-	{
-		if (other == this)
-		{
-			continue;
-		}
-		/*if (Collider::collidesWith(_pos, other->_pos, *_collider, *other->_collider))
-		{
-			MSG("Collision");
-		}*/
-	}
-		if (isMoving) 
-		{
-			_vel = Collider::clippedVelocityVector(game, this);
-			_pos += _vel;
-		}
+	Collider::instance().push(&_object);
 }
 
 void Entity::render(Renderer* renderer, const Camera* camera) const
 {
 	if (renderer && _sprite)
 	{
-		renderer->submit(_sprite, _pos - camera->getPos());
+		renderer->submit(_sprite, _object.location.pos - camera->getPos());
 	}
 }
 

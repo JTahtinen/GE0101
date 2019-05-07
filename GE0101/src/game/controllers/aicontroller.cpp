@@ -21,10 +21,10 @@ void AIController::update(Actor* e)
 		}
 	} else if (_task == AI_FOLLOW)
 	{
-		e->setVel(-distanceFromPlayer.getNormal() * 0.001f);
+		e->setForce(-distanceFromPlayer.getNormal() * 0.001f);
 		if (distanceFromPlayer <= 0.3f)
 		{
-			e->setVel(Vec2(0, 0));
+			e->setForce(Vec2(0, 0));
 			_task = AI_IDLE;
 			MSG("AI TASK: Idle");
 		}
@@ -36,10 +36,10 @@ void AIController::update(Actor* e)
 	}
 	else if (_task == AI_HOSTILE)
 	{
-		e->setVel(-distanceFromPlayer.getNormal() * 0.01f);
+		e->setForce(-distanceFromPlayer.getNormal() * 0.01f);
 		if (distanceFromPlayer <= 0.3f)
 		{
-			e->setVel(Vec2(0, 0));
+			e->setForce(Vec2(0, 0));
 			_task = AI_IDLE;
 			MSG("AI TASK: Idle");
 		}

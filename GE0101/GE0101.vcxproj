@@ -154,7 +154,7 @@
     <ClCompile Include="src\game\actor.cpp" />
     <ClCompile Include="src\game\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
-    <ClCompile Include="src\game\collider.cpp" />
+    <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
     <ClCompile Include="src\game\controllers\inputcontroller.cpp" />
@@ -180,7 +180,7 @@
     <ClInclude Include="src\game\actor.h" />
     <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
-    <ClInclude Include="src\game\collider.h" />
+    <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />
     <ClInclude Include="src\game\entity.h" />
     <ClInclude Include="src\game\game.h" />
@@ -204,6 +204,7 @@
     <ClInclude Include="src\math\shapes.h" />
     <ClInclude Include="src\math\vec2.h" />
     <ClInclude Include="src\math\vec4.h" />
+    <ClInclude Include="src\physics\physicsobject.h" />
     <ClInclude Include="src\util\file.h" />
     <ClInclude Include="src\util\glutil.h" />
     <ClInclude Include="src\util\log.h" />

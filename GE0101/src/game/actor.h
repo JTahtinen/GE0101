@@ -13,7 +13,6 @@ public:
 	Actor(const Vec2& pos, Sprite* sprite, Controller* controller);
 	Actor(const Vec2& pos, Sprite* sprite);
 	Actor(const Vec2& pos);
-	Actor();
 	virtual ~Actor() override;
 	void setController(Controller* controller);
 	void setTarget(const Entity* target);

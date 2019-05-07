@@ -5,6 +5,7 @@
 #include "../globals.h"
 #include "controllers/inputcontroller.h"
 #include "controllers/aicontroller.h"
+#include "../physics/collider.h"
 
 Game::Game(Renderer* renderer)
 	: _camera(Camera(16.0f, 9.0f))
@@ -45,6 +46,10 @@ void Game::update()
 	{
 		entity->update(this);
 	}
+
+	Collider::instance().update();
+	_player->getPos().print();
+
  	_camera.setPos(_player->getPos());
 	_camera.update();
 	_map->render(_renderer, &_camera);
