@@ -15,9 +15,11 @@ class Game
 	Camera					_camera;
 	Renderer*				_renderer;
 public:
+	static float frameTime;
+public:
 	Game(Renderer* renderer);
 	~Game();
-	void update();
+	void update(float frameTime);
 	void addEntity(Entity* e);
 	void addActor(Actor* e);
 	const Camera& getCamera() const;

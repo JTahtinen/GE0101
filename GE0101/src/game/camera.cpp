@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "../graphics/window.h"
+#include "game.h"
 
 Camera::Camera(const Vec2& pos, float width, float height)
 	:
@@ -57,7 +58,7 @@ void Camera::update()
 		if (_zoomTarget > _zoom)
 		{
 			float diff = _zoomTarget - _zoom;
-			_zoom += diff / 20.0f;
+			_zoom += diff / 0.1f * Game::frameTime;
 			if (_zoom > _zoomTarget || diff < 0.005f)
 			{
 				_zoom = _zoomTarget;
@@ -66,7 +67,7 @@ void Camera::update()
 		else
 		{
 			float diff = _zoom- _zoomTarget;
-			_zoom -= diff / 20.0f;
+			_zoom -= diff / 0.1f * Game::frameTime;
 			if (_zoom < _zoomTarget || diff < 0.005f)
 			{
 				_zoom = _zoomTarget;

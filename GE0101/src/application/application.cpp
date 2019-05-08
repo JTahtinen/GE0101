@@ -1,11 +1,13 @@
 #include "application.h"
-#include "../math/math.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <chrono>
+#include <time.h>
+#include "../math/math.h"
 #include "../input/input.h"
 #include "../util/log.h"
 #include "../game/scenegraph.h"
 #include "../util/file.h"
-#include "SDL2/SDL_image.h"
 #include "../graphics/buffers/vertexarray.h"
 #include "../graphics/buffers/indexbuffer.h"
 #include "../graphics/shader.h"
@@ -149,18 +151,22 @@ void Application::run()
 	int dir = 1;
 	float zoom = 1;
 	bool updateZoom = false;
+	float frameTime = 0;
+	unsigned int frames = 0;
+	clock_t lastTime = clock();
+	float runningTime = 0;
 	while (running)
 	{
 		if (r <= 0)
 		{
 			dir = 1;
 		}
-		else if (r >= 0.6f)
+		else if (r >= 1.0f)
 		{
 			dir = -1;
 		}
 
-		r += (float)dir * 0.001f;
+		r += (float)dir * frameTime;
 
 		shader.setUniform4f("u_Color", r, 0, 0, 1.0f);
 
@@ -175,11 +181,25 @@ void Application::run()
 		shader.setUniform1f("u_Zoom", camera.getZoom());
 		updateZoom = false;
 		
+		clock_t currentTime = clock();
+		frameTime = (float)(currentTime - lastTime) / CLOCKS_PER_SEC;
+		lastTime = currentTime;
+		_game->update(frameTime);
+		runningTime += frameTime;
+
 		_window.clear();
-		_game->update();
+
 		_renderer->flush();
 	//	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 		_window.update();
+
+		++frames;
+		if (runningTime >= 1.0f)
+		{
+			--runningTime;
+			MSG("FPS: " << frames);
+			frames = 0;
+		}
 	}
 
 }

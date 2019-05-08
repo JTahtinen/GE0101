@@ -7,6 +7,8 @@
 #include "controllers/aicontroller.h"
 #include "../physics/collider.h"
 
+float Game::frameTime = 0.0f;
+
 Game::Game(Renderer* renderer)
 	: _camera(Camera(16.0f, 9.0f))
 	, _renderer(renderer)
@@ -29,8 +31,10 @@ Game::~Game()
 	}
 }
 
-void Game::update()
+void Game::update(float frameTime)
 {
+	Game::frameTime = frameTime;
+	//MSG(frameTime);
 	static Input& in = Input::instance();
 	if (in.poll(KEY_Z, KEYSTATE_TYPED))
 	{
@@ -48,7 +52,7 @@ void Game::update()
 	}
 
 	Collider::instance().update();
-	_player->getPos().print();
+	//_player->getPos().print();
 
  	_camera.setPos(_player->getPos());
 	_camera.update();

@@ -3,7 +3,7 @@
 
 void InputController::update(Actor* e)
 {
-	static float speed = 0.01f;
+	float speed = 1.0f;
 	Input& in = Input::instance();
 	if (in.poll(KEY_LEFT))
 	{

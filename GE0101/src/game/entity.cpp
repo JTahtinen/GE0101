@@ -41,12 +41,12 @@ Entity::~Entity()
 
 void Entity::setForce(const Vec2& force)
 {
-	_object.force = force;
+	_object.force = force * Game::frameTime;
 }
 
 void Entity::addForce(const Vec2& force)
 {
-	_object.force += force;
+	_object.force += force * Game::frameTime;
 }
 
 void Entity::update(Game* game)
