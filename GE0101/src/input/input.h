@@ -41,6 +41,16 @@ enum Key
 	KEY_RCTRL,
 	KEY_LALT,
 	KEY_RALT,
+	KEY_0,
+	KEY_1,
+	KEY_2,
+	KEY_3,
+	KEY_4,
+	KEY_5,
+	KEY_6,
+	KEY_7,
+	KEY_8,
+	KEY_9,
 	KEY_AMOUNT,
 	KEY_NULL
 };
@@ -71,6 +81,8 @@ public:
 	void update();
 	bool poll(Key key, KeyState state) const;
 	bool poll(Key key) const;
+	bool poll(unsigned int key, KeyState state) const;
+	bool poll(unsigned int key) const;
 	inline int getMouseX() const { return _mouseX; }
 	inline int getMouseY() const { return _mouseY; }
 	inline int getMouseDeltaX() const { return _deltaX; }

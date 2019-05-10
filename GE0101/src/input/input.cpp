@@ -86,6 +86,16 @@ bool Input::poll(Key key) const
 	return poll(key, KEYSTATE_PRESSED);
 }
 
+bool Input::poll(unsigned int key, KeyState state) const
+{
+	return poll((Key)key, state);
+}
+
+bool Input::poll(unsigned int key) const
+{
+	return poll((Key)key);
+}
+
 Key Input::translateSDLKey(SDL_Keycode key)
 {
 	switch (key)
@@ -164,6 +174,26 @@ Key Input::translateSDLKey(SDL_Keycode key)
 		return KEY_LALT;
 	case SDLK_RALT:
 		return KEY_RALT;
+	case SDLK_0:
+		return KEY_0;
+	case SDLK_1:
+		return KEY_1;
+	case SDLK_2:
+		return KEY_2;
+	case SDLK_3:
+		return KEY_3;
+	case SDLK_4:
+		return KEY_4;
+	case SDLK_5:
+		return KEY_5;
+	case SDLK_6:
+		return KEY_6;
+	case SDLK_7:
+		return KEY_7;
+	case SDLK_8:
+		return KEY_8;
+	case SDLK_9:
+		return KEY_9;
 	default:
 		return KEY_NULL;
 	}

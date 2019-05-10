@@ -141,7 +141,6 @@ void Application::run()
 	colorLayout.push<float>(4);
 	vao->push(&colorBuffer, colorLayout);
 	shader.setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
-	MSG("Screen Ratio: " << (float)_window.getWidth() / (float)_window.getHeight());
 	bool running = true;
 	Vec2 pos(10, 10);
 
@@ -157,7 +156,7 @@ void Application::run()
 	float runningTime = 0;
 	while (running)
 	{
-		if (r <= 0)
+		if (r < 0)
 		{
 			dir = 1;
 		}
@@ -168,7 +167,7 @@ void Application::run()
 
 		r += (float)dir * frameTime;
 
-		shader.setUniform4f("u_Color", r, 0, 0, 1.0f);
+		shader.setUniform4f("u_Color", r, 0.2f * r, 0.3f * r, 1.0f);
 
 
 		in.update();
@@ -190,7 +189,6 @@ void Application::run()
 		_window.clear();
 
 		_renderer->flush();
-	//	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 		_window.update();
 
 		++frames;

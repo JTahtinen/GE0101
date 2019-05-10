@@ -156,6 +156,7 @@
     <ClCompile Include="src\game\actor.cpp" />
     <ClCompile Include="src\game\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
+    <ClCompile Include="src\game\conversation.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="src\game\actor.h" />
     <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
+    <ClInclude Include="src\game\conversation.h" />
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />
     <ClInclude Include="src\game\entity.h" />

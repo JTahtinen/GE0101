@@ -6,6 +6,7 @@
 #include "controllers/inputcontroller.h"
 #include "controllers/aicontroller.h"
 #include "../physics/collider.h"
+#include "conversation.h"
 
 float Game::frameTime = 0.0f;
 
@@ -13,6 +14,23 @@ Game::Game(Renderer* renderer)
 	: _camera(Camera(16.0f, 9.0f))
 	, _renderer(renderer)
 {
+	Conversation conv;
+	ConvNode node1;
+	ConvNode node2;
+	ConvNode node3;
+	node1.setText("How are you?");
+	node1.addOption("I'm quite fine.", &node2);
+	node1.addOption("Go fuck yourself!", &node3);
+	node2.setText("It's such a nice evening!");
+	node2.addOption("Indeed it is. Goodbye!", nullptr);
+	node3.setText("Well, that's not very nice!");
+	node3.addOption("I'm sorry. Ask me again.", &node1);
+	node3.addOption("Deal with it!", nullptr);
+	
+	conv.push(&node1);
+	conv.push(&node2);
+	conv.push(&node3);
+	conv.start();
 	ASSERT(renderer);
 	_map = Map::createMap(5, 5);
 	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, new InputController());
@@ -33,7 +51,6 @@ Game::~Game()
 
 void Game::update(float frameTime)
 {
-	Game::frameTime = frameTime;
 	//MSG(frameTime);
 	static Input& in = Input::instance();
 	if (in.poll(KEY_Z, KEYSTATE_TYPED))
