@@ -191,9 +191,15 @@
     <ClInclude Include="src\game\conversation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\renderers\quadrenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basic.vs" />
     <None Include="res\shaders\basic.fs" />
+    <None Include="res\shaders\colorquad.vs" />
+    <None Include="res\shaders\colorquad.gs" />
+    <None Include="res\shaders\colorquad.fs" />
   </ItemGroup>
 </Project>

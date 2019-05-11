@@ -19,19 +19,17 @@ public:
 	void print() const;
 	void setText(const std::string& text);
 	void addOption(const std::string& text, ConvNode* link);
-	unsigned int numOptions() const;
+	unsigned int getNumOptions() const;
+	void activate();
 	ConvNode* getNodeFromOption(unsigned int i);
 };
 
 
 class Conversation
 {
-	bool						_active;
 	std::vector<ConvNode*>		_nodes;
 public:
 	Conversation();
 	void push(ConvNode* node);
 	void start();
-	void activateNode(ConvNode& node);
-	void end();
 };

@@ -164,5 +164,5 @@ void Vec2::print() const
 
 std::string Vec2::toString() const
 {
-	return "Vec2( X : " + std::to_string(x) + ", Y: " + std::to_string(y) + ")";
+	return "Vec2( X : " + std::to_string(x) + ", Y: " + std::to_string(y) + " )";
 }

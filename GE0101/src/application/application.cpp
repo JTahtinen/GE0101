@@ -167,7 +167,7 @@ void Application::run()
 
 		r += (float)dir * frameTime;
 
-		shader.setUniform4f("u_Color", r, 0.2f * r, 0.3f * r, 1.0f);
+		shader.setUniform4f("u_Color", 0.0f, 0.2f * r, 0.3f * r, 1.0f);
 
 
 		in.update();

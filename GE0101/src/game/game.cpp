@@ -18,6 +18,7 @@ Game::Game(Renderer* renderer)
 	ConvNode node1;
 	ConvNode node2;
 	ConvNode node3;
+	ConvNode node4;
 	node1.setText("How are you?");
 	node1.addOption("I'm quite fine.", &node2);
 	node1.addOption("Go fuck yourself!", &node3);
@@ -25,18 +26,20 @@ Game::Game(Renderer* renderer)
 	node2.addOption("Indeed it is. Goodbye!", nullptr);
 	node3.setText("Well, that's not very nice!");
 	node3.addOption("I'm sorry. Ask me again.", &node1);
-	node3.addOption("Deal with it!", nullptr);
+	node3.addOption("Deal with it!", &node4);
+	node4.setText("No need to be an asshole!");
 	
 	conv.push(&node1);
 	conv.push(&node2);
 	conv.push(&node3);
+	conv.push(&node4);
 	conv.start();
 	ASSERT(renderer);
 	_map = Map::createMap(5, 5);
 	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, new InputController());
 	addActor(player);
 	_player = player;
-	//addActor(new Actor(Vec2(-0.5f, -0.5f), &defaultSprite, new AIController(this)));
+	addActor(new Actor(Vec2(-0.5f, -0.5f), &defaultSprite, new AIController(this)));
 	addActor(new Actor(Vec2(0.5f, 0.5f), &defaultSprite));
 }
 
@@ -51,6 +54,7 @@ Game::~Game()
 
 void Game::update(float frameTime)
 {
+	Game::frameTime = frameTime;
 	//MSG(frameTime);
 	static Input& in = Input::instance();
 	if (in.poll(KEY_Z, KEYSTATE_TYPED))
@@ -69,7 +73,7 @@ void Game::update(float frameTime)
 	}
 
 	Collider::instance().update();
-	//_player->getPos().print();
+//	_player->getPos().print();
 
  	_camera.setPos(_player->getPos());
 	_camera.update();

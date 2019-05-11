@@ -31,13 +31,38 @@ ConvNode* ConvNode::getNodeFromOption(unsigned int i)
 	return nullptr;
 }
 
-unsigned int ConvNode::numOptions() const
+unsigned int ConvNode::getNumOptions() const
 {
 	return _options.size();
 }
 
+void ConvNode::activate()
+{
+	static Input& in = Input::instance();
+	print();
+	MSG(std::endl);
+	unsigned int  numOptions = getNumOptions();
+	bool active = (numOptions != 0);
+	while (active)
+	{
+		in.update();
+		for (unsigned int i = 0; i < numOptions; ++i)
+		{
+			if (in.poll(KEY_1 + i, KEYSTATE_TYPED))
+			{
+				ConvNode* next = getNodeFromOption(i);
+				if (next)
+				{
+					next->activate();
+				}
+				active = false;
+				break;
+			}
+		}
+	}
+}
+
 Conversation::Conversation()
-	: _active(false)
 {
 	_nodes.reserve(10);
 }
@@ -52,46 +77,10 @@ void Conversation::push(ConvNode* node)
 
 void Conversation::start()
 {
-	_active = true;
-	activateNode(*_nodes[0]);
-	
-}
-
-void Conversation::activateNode(ConvNode& node)
-{
-	static Input& in = Input::instance();
-	node.print();
-	MSG(std::endl);
-	unsigned int numOptions = node.numOptions();
-	while (_active)
+	if (_nodes.empty())
 	{
-		in.update();
-		if (numOptions == 0)
-		{
-			_active = false;
-			return;
-		}
-		for (unsigned int i = 0; i < numOptions; ++i)
-		{
-			if (in.poll(KEY_1 + i, KEYSTATE_TYPED))
-			{
-				ConvNode* next = node.getNodeFromOption(i);
-				if (next)
-				{
-					activateNode(*next);
-				}
-				else 
-				{
-					_active = false;
-					return;
-				}
-			}
-		}
+		WARN("Could not start Conversation - No nodes!");
+		return;
 	}
-	
-}
-
-void Conversation::end()
-{
-
+	_nodes[0]->activate();
 }

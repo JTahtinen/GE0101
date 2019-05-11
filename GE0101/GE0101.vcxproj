@@ -184,6 +184,7 @@
     <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
+    <ClInclude Include="src\graphics\renderers\quadrenderer.h" />
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />
     <ClInclude Include="src\game\entity.h" />
@@ -216,6 +217,9 @@
   <ItemGroup>
     <None Include="res\shaders\basic.fs" />
     <None Include="res\shaders\basic.vs" />
+    <None Include="res\shaders\colorquad.fs" />
+    <None Include="res\shaders\colorquad.gs" />
+    <None Include="res\shaders\colorquad.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
