@@ -8,7 +8,7 @@ class Shader
 	const std::string	_filepath;
 	std::unordered_map < std::string, int> _uniformLocations;
 public:
-	Shader(const std::string& filepath);
+	Shader(const std::string& filepath, bool inclGeometryShader = false);
 	~Shader();
 	void bind() const;
 	void unbind() const;

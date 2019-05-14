@@ -12,5 +12,5 @@ extern VertexArray* vao;
 extern BufferLayout tileLayout;
 extern Buffer* texCoordBuffer;
 extern BufferLayout texCoordLayout;
-extern Buffer* tileVertices;
+extern VertexArray* tileVertices;
 extern IndexBuffer* tileIndices;

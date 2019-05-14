@@ -13,6 +13,7 @@
 #include "../graphics/shader.h"
 #include "../graphics/texture.h"
 #include "../graphics/renderers/simple2drenderer.h"
+#include "../graphics/renderers/quadrenderer.h"
 
 Log gameLog;
 
@@ -23,14 +24,13 @@ VertexArray* vao;
 BufferLayout tileLayout;
 BufferLayout texCoordLayout;
 Buffer* texCoordBuffer;
-Buffer* tileVertices;
+VertexArray* tileVertices;
 IndexBuffer* tileIndices;
 
 void loadGlobalData()
 {
-	vao = new VertexArray();
 	texCoordBuffer = new Buffer();
-	tileVertices = new Buffer();
+	tileVertices = new VertexArray();
 	tileIndices = new IndexBuffer();
 	tileLayout.push<float>(2);
 
@@ -50,16 +50,17 @@ void loadGlobalData()
 	};
 
 
-
-	tileVertices->push(&tileVertData[0], sizeof(tileVertData));
+	Buffer* tileVertexBuffer = new Buffer();
+	tileVertexBuffer->push(&tileVertData[0], 4 * sizeof(Vec2));
 	tileIndices->push(&tileIndexData[0], 6);
-	vao->push(tileVertices, tileLayout);
+	tileVertices->push(tileVertexBuffer, tileLayout);
 
 	texCoordBuffer->push(&texCoords[0], 4 * sizeof(Vec2));
 	texCoordLayout.push<float>(2);
-	vao->push(texCoordBuffer, texCoordLayout);
-	Buffer* tileVertices = new Buffer();
-	defaultSprite.vbo = tileVertices;
+	tileVertices->push(texCoordBuffer, texCoordLayout);
+	tileVertices->push(tileVertexBuffer, tileLayout);
+	vao = tileVertices;
+	defaultSprite.vao = vao;
 	defaultSprite.indices = tileIndices;
 
 
@@ -68,7 +69,6 @@ void loadGlobalData()
 
 	defTile.texture = snowman;
 	defTile.barrier = false;
-	defaultSprite.vbo->push(&tileVertices[0], 4 * sizeof(Vec2));
 
 
 
@@ -78,7 +78,6 @@ void deleteGlobalData()
 {
 	delete texCoordBuffer;
 	delete snowman;
-	delete vao;
 	delete tileVertices;
 	delete tileIndices;
 }
@@ -111,6 +110,7 @@ void Application::run()
 	//Shaders
 
 	Shader shader("res/shaders/basic");
+
 	shader.bind();
 
 	shader.setUniform1i("u_Texture", 0);
@@ -123,7 +123,7 @@ void Application::run()
 	defaultSprite.name = "snowman";
 	
 	
-	vao->push(defaultSprite.vbo, tileLayout);
+	//vao->push(defaultSprite.vao, tileLayout);
 
 
 
@@ -142,7 +142,6 @@ void Application::run()
 	vao->push(&colorBuffer, colorLayout);
 	shader.setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
 	bool running = true;
-	Vec2 pos(10, 10);
 
 	Input& in = Input::instance();
 
@@ -154,8 +153,13 @@ void Application::run()
 	unsigned int frames = 0;
 	clock_t lastTime = clock();
 	float runningTime = 0;
+	QuadRenderer quadRenderer;
+	bool menu = false;
+	QuadRenderable bg = { Vec2(-0.0, 0.0), Vec2(1.0f, 1.0f), Vec4(0.2f, 0.2f, 0.8f, 1) };
+	QuadRenderable fg = { Vec2(0, 0), Vec2(0.8f, 0.8f), Vec4(0.7f, 0.6f, 0, 1) };
 	while (running)
 	{
+		shader.bind();
 		if (r < 0)
 		{
 			dir = 1;
@@ -175,7 +179,10 @@ void Application::run()
 		{
 			running = false;
 		}
-
+		if (in.poll(KEY_M, KEYSTATE_TYPED))
+		{
+			menu = !menu;
+		}
 
 		shader.setUniform1f("u_Zoom", camera.getZoom());
 		updateZoom = false;
@@ -189,13 +196,23 @@ void Application::run()
 		_window.clear();
 
 		_renderer->flush();
+
+		if (menu)
+		{
+			quadRenderer.submit(bg.pos, bg.dimensions, bg.color);
+			quadRenderer.submit(fg.pos, fg.dimensions, fg.color);
+		}
+		quadRenderer.flush();
 		_window.update();
 
 		++frames;
 		if (runningTime >= 1.0f)
 		{
 			--runningTime;
-			MSG("FPS: " << frames);
+			//MSG("FPS: " << frames);
+			std::string title = "GE0101 | FPS: ";
+			title.append(std::to_string(frames));
+			_window.setTitle(title.c_str());
 			frames = 0;
 		}
 	}

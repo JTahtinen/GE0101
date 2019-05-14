@@ -17,4 +17,5 @@ public:
 	void setClearColor(GLclampf r, GLclampf g, GLclampf b);
 	void clear() const;
 	void update() const;
+	void setTitle(const char* title);
 };

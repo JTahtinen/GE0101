@@ -33,7 +33,7 @@ Game::Game(Renderer* renderer)
 	conv.push(&node2);
 	conv.push(&node3);
 	conv.push(&node4);
-	conv.start();
+//	conv.start();
 	ASSERT(renderer);
 	_map = Map::createMap(5, 5);
 	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, new InputController());

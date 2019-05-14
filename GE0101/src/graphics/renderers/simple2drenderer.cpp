@@ -18,14 +18,14 @@ void Simple2DRenderer::submit(const Sprite* sprite, const Vec2& pos)
 		return;
 	}
 
-	submit(sprite->vbo, sprite->indices, sprite->texture, pos);
+	submit(sprite->vao, sprite->indices, sprite->texture, pos);
 }
 
-void Simple2DRenderer::submit(const Buffer* vbo, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos)
+void Simple2DRenderer::submit(const VertexArray* vao, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos)
 {
-	if (vbo && ibo && texture && _shader)
+	if (vao && ibo && texture && _shader)
 	{
-		_renderables.push_back(Renderable{ vbo, ibo, texture, pos });
+		_renderables.push_back(Renderable{ vao, ibo, texture, pos });
 	}
 }
 
@@ -34,8 +34,9 @@ void Simple2DRenderer::flush()
 	for (auto& renderable : _renderables)
 	{
 		const Vec2& pos = renderable.pos;
+		_shader->bind();
 		_shader->setUniform2f("u_Offset", pos.x, pos.y);
-		renderable.vbo->bind();
+		renderable.vao->bind();
 		renderable.ibo->bind();
 		renderable.texture->bind();
 		glDrawElements(GL_TRIANGLES, renderable.ibo->getSize(), GL_UNSIGNED_INT, NULL);

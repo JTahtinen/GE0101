@@ -5,13 +5,15 @@
 
 #define U_LOCATION getUniformLocation(u_name)
 
-Shader::Shader(const std::string& filepath)
+Shader::Shader(const std::string& filepath, bool inclGeometryShader)
 	: 
 	_id(glCreateProgram())
 	, _filepath(filepath)
 {
 	std::string vsSource = load_text_file(filepath + ".vs");
 	std::string fsSource = load_text_file(filepath + ".fs");
+	std::string gsSource;
+
 
 	if (vsSource == "")
 	{
@@ -24,9 +26,13 @@ Shader::Shader(const std::string& filepath)
 
 	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	unsigned int geometryShader;
 
 	const char* vsC = vsSource.c_str();
 	const char* fsC = fsSource.c_str();
+	const char* gsC;
+
+	
 
 	glShaderSource(vertexShader, 1, &vsC, NULL);
 	glShaderSource(fragmentShader, 1, &fsC, NULL);
@@ -37,11 +43,29 @@ Shader::Shader(const std::string& filepath)
 	glAttachShader(_id, vertexShader);
 	glAttachShader(_id, fragmentShader);
 
+	if (inclGeometryShader)
+	{
+		gsSource = load_text_file(filepath + ".gs");
+		if (gsSource == "")
+		{
+			ERR("Could not open geometry shader: " << filepath << ".gs");
+		}
+			gsC = gsSource.c_str();
+			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+			glShaderSource(geometryShader, 1, &gsC, NULL);
+			glCompileShader(geometryShader);
+			glAttachShader(_id, geometryShader);
+	}
+
 	glLinkProgram(_id);
 	glValidateProgram(_id);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	if (inclGeometryShader)
+	{
+		glDeleteShader(geometryShader);
+	}
 }
 
 Shader::~Shader()

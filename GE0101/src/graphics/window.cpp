@@ -70,3 +70,8 @@ void Window::clear() const
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glClear(GL_COLOR_BUFFER_BIT);
 }
+
+void Window::setTitle(const char* title)
+{
+	SDL_SetWindowTitle(_win, title);
+}
