@@ -152,12 +152,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\graphics\renderers\quadrenderer.cpp" />
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\game\actor.cpp" />
     <ClCompile Include="src\game\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\conversation.cpp" />
+    <ClCompile Include="src\graphics\renderers\renderer2d.cpp" />
+    <ClCompile Include="src\graphics\renderers\textrenderer.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
@@ -185,7 +188,10 @@
     <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
+    <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\renderers\quadrenderer.h" />
+    <ClInclude Include="src\graphics\renderers\renderer2d.h" />
+    <ClInclude Include="src\graphics\renderers\textrenderer.h" />
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />
     <ClInclude Include="src\game\entity.h" />
@@ -221,6 +227,9 @@
     <None Include="res\shaders\colorquad.fs" />
     <None Include="res\shaders\colorquad.gs" />
     <None Include="res\shaders\colorquad.vs" />
+    <None Include="res\shaders\letter.fs" />
+    <None Include="res\shaders\letter.gs" />
+    <None Include="res\shaders\letter.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

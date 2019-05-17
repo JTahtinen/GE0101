@@ -10,7 +10,7 @@
 
 float Game::frameTime = 0.0f;
 
-Game::Game(Renderer* renderer)
+Game::Game(Renderer2D* renderer)
 	: _camera(Camera(16.0f, 9.0f))
 	, _renderer(renderer)
 {

@@ -4,9 +4,10 @@
 
 static VertexArray*	_vao;
 static Buffer*		_vbo;
+
 QuadRenderer::QuadRenderer()
 {
-	_shader = new Shader("res/shaders/colorquad", true);
+	setShader(new Shader("res/shaders/colorquad", true));
 	_vao = new VertexArray();
 	_vao->bind();
 	_vbo = new Buffer();
@@ -22,7 +23,6 @@ QuadRenderer::QuadRenderer()
 
 QuadRenderer::~QuadRenderer()
 {
-	delete _shader;
 	delete _vao;
 	delete _vbo;
 	_vao = nullptr;
@@ -36,10 +36,10 @@ void QuadRenderer::submit(const Vec2& pos, const Vec2& dimensions, const Vec4& c
 
 void QuadRenderer::flush()
 {
+	_shader->bind();
+	_vao->bind();
 	for (auto& renderable : _renderables)
 	{
-		_shader->bind();
-		_vao->bind();
 		const Vec2& pos = renderable.pos;
 		const Vec2& dimensions = renderable.dimensions;
 		const Vec4& color = renderable.color;
@@ -47,6 +47,6 @@ void QuadRenderer::flush()
 		_shader->setUniform2f("u_Position", pos.x, pos.y);
 		_shader->setUniform4f("u_Color", color.r, color.g, color.b, color.a);
 		glDrawArrays(GL_POINTS, 0, 1);
-		_renderables.clear();
 	}
+	_renderables.clear();
 }

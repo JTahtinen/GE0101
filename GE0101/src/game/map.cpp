@@ -33,7 +33,7 @@ void Map::update(Game* game)
 {
 }
 
-void Map::render(Renderer* renderer, const Camera* camera) const
+void Map::render(Renderer2D* renderer, const Camera* camera) const
 {
 	float halfTileSize = TILE_SIZE / 2.0f;
 

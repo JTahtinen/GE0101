@@ -5,8 +5,8 @@
 #define TILE_SIZE 0.2f
 
 class Game;
-class Renderer;
 class Camera;
+class Renderer2D;
 
 struct Tile
 {
@@ -24,7 +24,7 @@ class Map
 public:
 	~Map();
 	void update(Game* game);
-	void render(Renderer* renderer, const Camera* camera) const;
+	void render(Renderer2D* renderer, const Camera* camera) const;
 	static Map* createMap(int width, int height);
 private:
 	Map(int width, int height);

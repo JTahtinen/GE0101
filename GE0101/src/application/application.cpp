@@ -14,6 +14,7 @@
 #include "../graphics/texture.h"
 #include "../graphics/renderers/simple2drenderer.h"
 #include "../graphics/renderers/quadrenderer.h"
+#include "../graphics/renderers/textrenderer.h"
 
 Log gameLog;
 
@@ -86,15 +87,22 @@ Application::Application()
 	: _window(1280, 720, "GE0101")
 {
 	loadGlobalData();
-	_renderer = new Simple2DRenderer();
-	_game = new Game(_renderer);
+	_renderer2D = new Simple2DRenderer();
+	_quadRenderer = new QuadRenderer();
+	_renderers.push_back(_renderer2D);
+	_renderers.push_back(_quadRenderer);
+
+	_game = new Game(_renderer2D);
 }
 
 Application::~Application()
 {
 	deleteGlobalData();
-	delete _renderer;
-	_renderer = nullptr;
+	for (auto& renderer : _renderers)
+	{
+		delete renderer;
+	}
+	_renderers.empty();
 }
 
 void Application::run()
@@ -109,15 +117,15 @@ void Application::run()
 	
 	//Shaders
 
-	Shader shader("res/shaders/basic");
+	Shader* shader = new Shader("res/shaders/basic");
 
-	shader.bind();
+	shader->bind();
 
-	shader.setUniform1i("u_Texture", 0);
-	shader.setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
-	shader.setUniform1f("u_Zoom", camera.getZoom());
+	shader->setUniform1i("u_Texture", 0);
+	shader->setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
+	shader->setUniform1f("u_Zoom", camera.getZoom());
 
-	_renderer->setShader(&shader);
+	_renderer2D->setShader(shader);
 
 	defaultSprite.texture = snowman;
 	defaultSprite.name = "snowman";
@@ -140,7 +148,7 @@ void Application::run()
 	BufferLayout colorLayout;
 	colorLayout.push<float>(4);
 	vao->push(&colorBuffer, colorLayout);
-	shader.setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
+	shader->setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
 	bool running = true;
 
 	Input& in = Input::instance();
@@ -153,13 +161,16 @@ void Application::run()
 	unsigned int frames = 0;
 	clock_t lastTime = clock();
 	float runningTime = 0;
-	QuadRenderer quadRenderer;
 	bool menu = false;
 	QuadRenderable bg = { Vec2(-0.0, 0.0), Vec2(1.0f, 1.0f), Vec4(0.2f, 0.2f, 0.8f, 1) };
 	QuadRenderable fg = { Vec2(0, 0), Vec2(0.8f, 0.8f), Vec4(0.7f, 0.6f, 0, 1) };
+	
+	Font* font = Font::loadFont("res/fonts/arial");
+	TextRenderer textRenderer(font);
+
 	while (running)
 	{
-		shader.bind();
+		shader->bind();
 		if (r < 0)
 		{
 			dir = 1;
@@ -171,7 +182,7 @@ void Application::run()
 
 		r += (float)dir * frameTime;
 
-		shader.setUniform4f("u_Color", 0.0f, 0.2f * r, 0.3f * r, 1.0f);
+		shader->setUniform4f("u_Color", 0.0f, 0.2f * r, 0.3f * r, 1.0f);
 
 
 		in.update();
@@ -184,7 +195,13 @@ void Application::run()
 			menu = !menu;
 		}
 
-		shader.setUniform1f("u_Zoom", camera.getZoom());
+		if (menu)
+		{
+			_quadRenderer->submit(bg.pos, bg.dimensions, bg.color);
+			_quadRenderer->submit(fg.pos, fg.dimensions, fg.color);
+		}
+
+		shader->setUniform1f("u_Zoom", camera.getZoom());
 		updateZoom = false;
 		
 		clock_t currentTime = clock();
@@ -195,14 +212,15 @@ void Application::run()
 
 		_window.clear();
 
-		_renderer->flush();
+		textRenderer.submit("Hello There, honeypie", Vec2(-1.0f, 0));
 
-		if (menu)
+		for (auto& renderer : _renderers)
 		{
-			quadRenderer.submit(bg.pos, bg.dimensions, bg.color);
-			quadRenderer.submit(fg.pos, fg.dimensions, fg.color);
+			renderer->flush();
 		}
-		quadRenderer.flush();
+
+		textRenderer.flush();
+
 		_window.update();
 
 		++frames;

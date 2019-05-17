@@ -1,7 +1,7 @@
 #pragma once
 #include "../math/vec2.h"
 #include "../graphics/sprite.h"
-#include "../graphics/renderers/renderer.h"
+#include "../graphics/renderers/renderer2D.h"
 #include "../physics/physicsobject.h"
 
 class Game;
@@ -27,7 +27,7 @@ public:
 	inline const Vec2& getDimensions() const { return _object.location.dimensions; }
 	inline bool isMoving() const { return _object.force.length() != 0; }
 	virtual void update(Game* game);
-	void render(Renderer* renderer, const Camera* camera) const;
+	void render(Renderer2D* renderer, const Camera* camera) const;
 private:
 	static GUID nextId();
 };

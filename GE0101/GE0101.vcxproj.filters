@@ -90,6 +90,15 @@
     <ClCompile Include="src\graphics\renderers\quadrenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderers\renderer2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderers\textrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h">
@@ -197,6 +206,15 @@
     <ClInclude Include="src\graphics\renderers\quadrenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\graphics\font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderers\textrenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderers\renderer2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\basic.vs" />
@@ -204,5 +222,8 @@
     <None Include="res\shaders\colorquad.vs" />
     <None Include="res\shaders\colorquad.gs" />
     <None Include="res\shaders\colorquad.fs" />
+    <None Include="res\shaders\letter.vs" />
+    <None Include="res\shaders\letter.gs" />
+    <None Include="res\shaders\letter.fs" />
   </ItemGroup>
 </Project>

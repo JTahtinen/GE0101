@@ -23,6 +23,9 @@ Texture::Texture(const std::string& filepath)
 		WARN("Could not open texture: " << filepath);
 		__debugbreak();
 	}
+
+	_widthInPixels = texImage->w;
+	_heightInPixels = texImage->h;
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, texImage->w, texImage->h,
 		0, GL_RGBA, GL_UNSIGNED_BYTE, texImage->pixels);
 	unbind();

@@ -3,12 +3,6 @@
 #include "../../defs.h"
 #include "../buffers/vertexarray.h"
 
-#define MAX_RENDERABLES 100
-
-Simple2DRenderer::Simple2DRenderer()
-{
-	_renderables.reserve(MAX_RENDERABLES);
-}
 
 void Simple2DRenderer::submit(const Sprite* sprite, const Vec2& pos)
 {
@@ -29,17 +23,3 @@ void Simple2DRenderer::submit(const VertexArray* vao, const IndexBuffer* ibo, co
 	}
 }
 
-void Simple2DRenderer::flush()
-{
-	for (auto& renderable : _renderables)
-	{
-		const Vec2& pos = renderable.pos;
-		_shader->bind();
-		_shader->setUniform2f("u_Offset", pos.x, pos.y);
-		renderable.vao->bind();
-		renderable.ibo->bind();
-		renderable.texture->bind();
-		glDrawElements(GL_TRIANGLES, renderable.ibo->getSize(), GL_UNSIGNED_INT, NULL);
-	}
-	_renderables.clear();
-}

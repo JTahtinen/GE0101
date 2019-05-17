@@ -1,4 +1,2 @@
-This is a line
-This is a second line
-
-This is a third line after a space
+variable: 4
+another variable: 7

@@ -1,8 +1,8 @@
 #pragma once
 #include "../../math/vec2.h"
 #include "../../math/vec4.h"
-#include "../shader.h"
 #include <vector>
+#include "renderer.h"
 
 struct QuadRenderable
 {
@@ -11,13 +11,12 @@ struct QuadRenderable
 	Vec4 color;
 };
 
-class QuadRenderer
+class QuadRenderer : public Renderer
 {
-	Shader*							_shader;
 	std::vector<QuadRenderable>		_renderables;
 public:
 	QuadRenderer();
-	~QuadRenderer();
+	virtual ~QuadRenderer() override;
 	void submit(const Vec2& pos, const Vec2& dimensions, const Vec4& color);
-	void flush();
+	virtual void flush() override;
 };

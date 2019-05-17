@@ -54,7 +54,7 @@ void Entity::update(Game* game)
 	Collider::instance().push(&_object);
 }
 
-void Entity::render(Renderer* renderer, const Camera* camera) const
+void Entity::render(Renderer2D* renderer, const Camera* camera) const
 {
 	if (renderer && _sprite)
 	{

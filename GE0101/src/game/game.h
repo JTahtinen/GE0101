@@ -5,6 +5,7 @@
 #include "entity.h"
 #include "actor.h"
 #include "camera.h"
+#include "../graphics/renderers/renderer2d.h"
 
 class Game
 {
@@ -13,11 +14,11 @@ class Game
 	std::vector<Actor*>		_actors;
 	Actor*					_player;
 	Camera					_camera;
-	Renderer*				_renderer;
+	Renderer2D*				_renderer;
 public:
 	static float frameTime;
 public:
-	Game(Renderer* renderer);
+	Game(Renderer2D* renderer);
 	~Game();
 	void update(float frameTime);
 	void addEntity(Entity* e);

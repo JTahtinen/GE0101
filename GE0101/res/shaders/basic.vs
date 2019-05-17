@@ -16,7 +16,6 @@ uniform float u_Zoom;
 void main()
 {
 	gl_Position = vec4(u_Offset.x * u_Zoom, u_Offset.y * u_Zoom * u_ScrRatio, 0, 0) + vec4(position.x * u_Zoom, position.y * u_Zoom * u_ScrRatio, 0, 1);
-	//gl_Position = vec4(position.x * u_Zoom, position.y * u_Zoom * u_ScrRatio, 1, 1);
 	v_color = u_Color;
 	v_texCoord = texCoord;
 }
