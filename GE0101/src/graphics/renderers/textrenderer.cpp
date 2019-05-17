@@ -37,14 +37,15 @@ void TextRenderer::submit(const std::string& text, const Vec2& pos)
 		ERR("Could not render text - Font not loaded");
 		return;
 	}
-	_cursor = pos;
+	_renderables.emplace_back(Word{ pos });
+	auto& letters = _renderables.back().letters;
 	for (unsigned int i = 0; i < text.size(); ++i)
 	{
 		const Letter* letter = _font->getLetter(text[i]);
 		if (letter)
 		{
 			
-			_renderables.push_back(_font->getLetter(text[i]));
+			letters.push_back(_font->getLetter(text[i]));
 		}
 	}
 }
@@ -55,14 +56,19 @@ void TextRenderer::flush()
 	_vao->bind();
 	for (auto& renderable : _renderables)
 	{
-		_shader->setUniform2f("u_Position", _cursor.x, _cursor.y);
-		_shader->setUniform2f("u_Dimensions", renderable->width, renderable->height);
-		_shader->setUniform2f("u_Offset", renderable->xOffset, renderable->yOffset);
-		_shader->setUniform2f("u_TexCoord", renderable->x, renderable->y);
-		_shader->setUniform1i("u_Texture", 1);
-		glDrawArrays(GL_POINTS, 0, 1);
-		
-		_cursor.x += renderable->xAdvance;
+		_cursor = renderable.pos;
+		auto& letters = renderable.letters;
+		for (auto& letter : letters)
+		{
+			_shader->setUniform2f("u_Position", _cursor.x, _cursor.y);
+			_shader->setUniform2f("u_Dimensions", letter->width, letter->height);
+			_shader->setUniform2f("u_Offset", letter->xOffset, letter->yOffset);
+			_shader->setUniform2f("u_TexCoord", letter->x, letter->y);
+			_shader->setUniform1i("u_Texture", 1);
+			glDrawArrays(GL_POINTS, 0, 1);
+
+			_cursor.x += letter->xAdvance;
+		}
 
 	}
 	_renderables.clear();

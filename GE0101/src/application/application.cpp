@@ -212,7 +212,8 @@ void Application::run()
 
 		_window.clear();
 
-		textRenderer.submit("Hello There, honeypie", Vec2(-1.0f, 0));
+		textRenderer.submit("Tuun sinne sitten kuuden maissa", Vec2(-1.0f, 0.5f));
+		textRenderer.submit("Mut ensin salille", Vec2(0.0f, -0.5f));
 
 		for (auto& renderer : _renderers)
 		{

@@ -5,9 +5,15 @@
 #include "../font.h"
 #include "../../math/vec2.h"
 
+struct Word
+{
+	Vec2 pos;
+	std::vector<const Letter*> letters;
+};
+
 class TextRenderer : public Renderer
 {
-	std::vector<const Letter*>			_renderables;
+	std::vector<Word>					_renderables;
 	const Font*							_font;
 	Vec2								_cursor;
 public:
