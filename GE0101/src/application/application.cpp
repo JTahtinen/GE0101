@@ -12,9 +12,7 @@
 #include "../graphics/buffers/indexbuffer.h"
 #include "../graphics/shader.h"
 #include "../graphics/texture.h"
-#include "../graphics/renderers/simple2drenderer.h"
-#include "../graphics/renderers/quadrenderer.h"
-#include "../graphics/renderers/textrenderer.h"
+#include "../graphics/textbox.h"
 
 Log gameLog;
 
@@ -27,13 +25,18 @@ BufferLayout texCoordLayout;
 Buffer* texCoordBuffer;
 VertexArray* tileVertices;
 IndexBuffer* tileIndices;
+Shader* basicShader;
 
 void loadGlobalData()
 {
+
+	basicShader = new Shader("res/shaders/basic");
+
 	texCoordBuffer = new Buffer();
 	tileVertices = new VertexArray();
 	tileIndices = new IndexBuffer();
 	tileLayout.push<float>(2);
+
 
 	Vec2 texCoords[] = {
 		Vec2(0, 1),
@@ -72,37 +75,31 @@ void loadGlobalData()
 	defTile.barrier = false;
 
 
-
+	initRenderables();
 }
 
 void deleteGlobalData()
 {
+	delete basicShader;
 	delete texCoordBuffer;
 	delete snowman;
 	delete tileVertices;
 	delete tileIndices;
+
+	destroyRenderables();
 }
 
 Application::Application()
 	: _window(1280, 720, "GE0101")
 {
 	loadGlobalData();
-	_renderer2D = new Simple2DRenderer();
-	_quadRenderer = new QuadRenderer();
-	_renderers.push_back(_renderer2D);
-	_renderers.push_back(_quadRenderer);
 
-	_game = new Game(_renderer2D);
+	_game = new Game(&_renderer);
 }
 
 Application::~Application()
 {
 	deleteGlobalData();
-	for (auto& renderer : _renderers)
-	{
-		delete renderer;
-	}
-	_renderers.empty();
 }
 
 void Application::run()
@@ -117,15 +114,12 @@ void Application::run()
 	
 	//Shaders
 
-	Shader* shader = new Shader("res/shaders/basic");
+	basicShader->bind();
 
-	shader->bind();
+	basicShader->setUniform1i("u_Texture", 0);
+	basicShader->setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
+	basicShader->setUniform1f("u_Zoom", camera.getZoom());
 
-	shader->setUniform1i("u_Texture", 0);
-	shader->setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
-	shader->setUniform1f("u_Zoom", camera.getZoom());
-
-	_renderer2D->setShader(shader);
 
 	defaultSprite.texture = snowman;
 	defaultSprite.name = "snowman";
@@ -148,7 +142,7 @@ void Application::run()
 	BufferLayout colorLayout;
 	colorLayout.push<float>(4);
 	vao->push(&colorBuffer, colorLayout);
-	shader->setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
+	basicShader->setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
 	bool running = true;
 
 	Input& in = Input::instance();
@@ -162,15 +156,19 @@ void Application::run()
 	clock_t lastTime = clock();
 	float runningTime = 0;
 	bool menu = false;
-	QuadRenderable bg = { Vec2(-0.0, 0.0), Vec2(1.0f, 1.0f), Vec4(0.2f, 0.2f, 0.8f, 1) };
-	QuadRenderable fg = { Vec2(0, 0), Vec2(0.8f, 0.8f), Vec4(0.7f, 0.6f, 0, 1) };
-	
-	Font* font = Font::loadFont("res/fonts/arial");
-	TextRenderer textRenderer(font);
 
+	Font* font = Font::loadFont("res/fonts/liberation_serif");
+	
+	TextRenderable* text = TextRenderable::createTextRenderable("Hello there!", font, Vec2(0, 0));
+
+	TextBox textBox("Testi", Vec2(0.01f, 0.01f), font);
+
+	int fps = 0;
+	Vec2 fpsScreenPos(-1.5f, 0.9f);
 	while (running)
 	{
-		shader->bind();
+		
+		basicShader->bind();
 		if (r < 0)
 		{
 			dir = 1;
@@ -182,7 +180,7 @@ void Application::run()
 
 		r += (float)dir * frameTime;
 
-		shader->setUniform4f("u_Color", 0.0f, 0.2f * r, 0.3f * r, 1.0f);
+		basicShader->setUniform4f("u_Color", 0.0f, 0.2f * r, 0.3f * r, 1.0f);
 
 
 		in.update();
@@ -195,13 +193,9 @@ void Application::run()
 			menu = !menu;
 		}
 
-		if (menu)
-		{
-			_quadRenderer->submit(bg.pos, bg.dimensions, bg.color);
-			_quadRenderer->submit(fg.pos, fg.dimensions, fg.color);
-		}
 
-		shader->setUniform1f("u_Zoom", camera.getZoom());
+		//textBox.render(_quadRenderer, &textRenderer, Vec2(0.3f, 0.3f));
+		basicShader->setUniform1f("u_Zoom", camera.getZoom());
 		updateZoom = false;
 		
 		clock_t currentTime = clock();
@@ -210,18 +204,20 @@ void Application::run()
 		_game->update(frameTime);
 		runningTime += frameTime;
 
+		textBox.render(&_renderer, Vec2());
+		if (menu)
+		{
+			QuadRenderable* bg = QuadRenderable::createQuadRenderable(Vec2(-0.0, 0.0), Vec2(1.0f, 1.0f), Vec4(0.2f, 0.2f, 0.8f, 1));
+			QuadRenderable* fg = QuadRenderable::createQuadRenderable(Vec2(0, 0), Vec2(0.8f, 0.8f), Vec4(0.7f, 0.6f, 0, 1));
+			bg->addChild(fg);
+
+			_renderer.submit(bg);
+		}
 		_window.clear();
 
-		textRenderer.submit("Tuun sinne sitten kuuden maissa", Vec2(-1.0f, 0.5f));
-		textRenderer.submit("Mut ensin salille", Vec2(0.0f, -0.5f));
+		//textRenderer.submit("FPS: " + std::to_string(fps), fpsScreenPos);
 
-		for (auto& renderer : _renderers)
-		{
-			renderer->flush();
-		}
-
-		textRenderer.flush();
-
+		_renderer.flush();
 		_window.update();
 
 		++frames;
@@ -229,11 +225,13 @@ void Application::run()
 		{
 			--runningTime;
 			//MSG("FPS: " << frames);
-			std::string title = "GE0101 | FPS: ";
-			title.append(std::to_string(frames));
-			_window.setTitle(title.c_str());
+			//std::string title = "GE0101 | FPS: ";
+
+			//title.append(std::to_string(frames));
+			fps = frames;
+			//_window.setTitle(title.c_str());
 			frames = 0;
 		}
 	}
-
+	delete font;
 }

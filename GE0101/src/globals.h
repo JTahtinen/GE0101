@@ -3,6 +3,9 @@
 #include "graphics/sprite.h"
 #include "game/map.h"
 #include "graphics/buffers/vertexarray.h"
+#include "graphics/shader.h"
+#include "graphics/renderers/renderable.h"
+
 
 extern Log gameLog;
 extern Sprite defaultSprite;
@@ -14,3 +17,5 @@ extern Buffer* texCoordBuffer;
 extern BufferLayout texCoordLayout;
 extern VertexArray* tileVertices;
 extern IndexBuffer* tileIndices;
+extern Shader* basicShader;
+

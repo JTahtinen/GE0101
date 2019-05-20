@@ -153,14 +153,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\font.cpp" />
-    <ClCompile Include="src\graphics\renderers\quadrenderer.cpp" />
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\game\actor.cpp" />
     <ClCompile Include="src\game\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\conversation.cpp" />
-    <ClCompile Include="src\graphics\renderers\renderer2d.cpp" />
-    <ClCompile Include="src\graphics\renderers\textrenderer.cpp" />
+    <ClCompile Include="src\graphics\renderers\renderable.cpp" />
+    <ClCompile Include="src\graphics\renderers\renderer.cpp" />
+    <ClCompile Include="src\graphics\textbox.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
@@ -172,7 +172,6 @@
     <ClCompile Include="src\graphics\buffers\indexbuffer.cpp" />
     <ClCompile Include="src\graphics\buffers\vertexarray.cpp" />
     <ClCompile Include="src\graphics\shader.cpp" />
-    <ClCompile Include="src\graphics\renderers\simple2drenderer.cpp" />
     <ClCompile Include="src\graphics\texture.cpp" />
     <ClCompile Include="src\graphics\window.cpp" />
     <ClCompile Include="src\input\input.cpp" />
@@ -189,9 +188,7 @@
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
     <ClInclude Include="src\graphics\font.h" />
-    <ClInclude Include="src\graphics\renderers\quadrenderer.h" />
-    <ClInclude Include="src\graphics\renderers\renderer2d.h" />
-    <ClInclude Include="src\graphics\renderers\textrenderer.h" />
+    <ClInclude Include="src\graphics\textbox.h" />
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />
     <ClInclude Include="src\game\entity.h" />
@@ -206,7 +203,6 @@
     <ClInclude Include="src\graphics\buffers\vertexarray.h" />
     <ClInclude Include="src\graphics\renderers\renderable.h" />
     <ClInclude Include="src\graphics\renderers\renderer.h" />
-    <ClInclude Include="src\graphics\renderers\simple2drenderer.h" />
     <ClInclude Include="src\graphics\shader.h" />
     <ClInclude Include="src\graphics\sprite.h" />
     <ClInclude Include="src\graphics\texture.h" />

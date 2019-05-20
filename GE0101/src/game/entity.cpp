@@ -54,11 +54,12 @@ void Entity::update(Game* game)
 	Collider::instance().push(&_object);
 }
 
-void Entity::render(Renderer2D* renderer, const Camera* camera) const
+void Entity::render(Renderer* renderer, const Camera* camera) const
 {
 	if (renderer && _sprite)
 	{
-		renderer->submit(_sprite, _object.location.pos - camera->getPos());
+		Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, _object.location.pos - camera->getPos());
+		renderer->submit(renderable);
 	}
 }
 

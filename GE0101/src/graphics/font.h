@@ -14,7 +14,7 @@ struct Letter
 class Font
 {
 	std::vector<Letter> _letters;
-	Texture*			_atlas;
+	Texture*			_atlas{ nullptr };
 public:
 	~Font();
 	static Font* loadFont(const std::string& filepath);

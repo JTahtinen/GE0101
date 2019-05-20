@@ -1,15 +1,12 @@
 #pragma once
 #include "../graphics/window.h"
 #include "../game/game.h"
-#include "../graphics/renderers/renderer2D.h"
-#include "../graphics/renderers/quadrenderer.h"
+#include "../graphics/renderers/renderer.h"
 #include <vector>
 
 class Application
 {
-	std::vector<Renderer*>	_renderers;
-	Renderer2D*				_renderer2D;
-	QuadRenderer*			_quadRenderer;
+	Renderer				_renderer;
 	Game*					_game;
 	Window					_window;
 public:

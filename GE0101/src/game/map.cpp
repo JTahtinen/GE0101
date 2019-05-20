@@ -5,6 +5,8 @@
 #include "../defs.h"
 #include "../math/vec2.h"
 #include "../math/math.h"
+#include "../graphics/renderers/renderer.h"
+#include "../globals.h"
 
 
 Map* Map::_instance;
@@ -33,7 +35,7 @@ void Map::update(Game* game)
 {
 }
 
-void Map::render(Renderer2D* renderer, const Camera* camera) const
+void Map::render(Renderer* renderer, const Camera* camera) const
 {
 	float halfTileSize = TILE_SIZE / 2.0f;
 
@@ -61,11 +63,12 @@ void Map::render(Renderer2D* renderer, const Camera* camera) const
 	{
 		for (int x = xStartTile; x < xEndTile; ++x)
 		{
-			renderer->submit(tileVertices, tileIndices, 
-				_tiles[x + y * _width]->texture, 
+			Renderable2D* tile = 
+				Renderable2D::createRenderable2D(tileVertices, tileIndices, _tiles[x + y * _width]->texture,
 				Vec2(
-					-camPos.x + x * TILE_SIZE, 
+					-camPos.x + x * TILE_SIZE,
 					-camPos.y + y * TILE_SIZE));
+			renderer->submit(tile);
 		}
 	}
 }
