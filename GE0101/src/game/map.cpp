@@ -58,7 +58,8 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 	if (yEndTile > _height) yEndTile = _height;
 
 	const Vec2& camPos = camera->getPos();
-	
+	const float zoom = camera->getZoom();
+
 	for (int y = yStartTile; y < yEndTile; ++y)
 	{
 		for (int x = xStartTile; x < xEndTile; ++x)
@@ -67,7 +68,7 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 				Renderable2D::createRenderable2D(tileVertices, tileIndices, _tiles[x + y * _width]->texture,
 				Vec2(
 					-camPos.x + x * TILE_SIZE,
-					-camPos.y + y * TILE_SIZE));
+					-camPos.y + y * TILE_SIZE), zoom);
 			renderer->submit(tile);
 		}
 	}

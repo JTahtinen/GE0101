@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL2\SDL.h>
 #include <GLEW/glew.h>
-
+#include "../math/vec2.h"
 
 class Window
 {
@@ -18,4 +18,17 @@ public:
 	void clear() const;
 	void update() const;
 	void setTitle(const char* title);
+	inline Vec2 getScreenCoords(int x, int y) const
+	{
+		float halfW = _width * 0.5f;
+		float halfH = _height * 0.5f;
+		return Vec2((float)(x - halfW) / halfW, (float)(y - halfH) / halfH);
+	}
+
+	inline Vec2 getScreenCoordsRatioCorrected(int x, int y) const
+	{
+		Vec2 vec = getScreenCoords(x, y);
+		
+		return Vec2(vec.x, vec.y * ((float)_height / (float)_width));
+	}
 };

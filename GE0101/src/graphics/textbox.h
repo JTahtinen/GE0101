@@ -5,11 +5,9 @@
 
 class TextBox
 {
-	Vec2			_offset;
 	std::string		_content;
 	const Font*		_font;
 public:
-	TextBox(const std::string& content, const Vec2& offset, const Font* font);
 	TextBox(const std::string& content, const Font* font);
 	TextBox(const Font* font);
 	void setContent(const std::string& content);

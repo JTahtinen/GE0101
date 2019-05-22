@@ -117,7 +117,7 @@ int Shader::getUniformLocation(const std::string& u_name)
 	int location = glGetUniformLocation(_id, u_name.c_str());
 	if (location == -1)
 	{
-		WARN("Could not find uniform: " << u_name);
+		WARN("Could not find uniform: " << u_name << " from shader: " << _filepath);
 	}
 	_uniformLocations[u_name] = location;
 	return location;

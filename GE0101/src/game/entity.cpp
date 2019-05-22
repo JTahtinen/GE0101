@@ -58,7 +58,7 @@ void Entity::render(Renderer* renderer, const Camera* camera) const
 {
 	if (renderer && _sprite)
 	{
-		Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, _object.location.pos - camera->getPos());
+		Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, _object.location.pos - camera->getPos(), camera->getZoom());
 		renderer->submit(renderable);
 	}
 }

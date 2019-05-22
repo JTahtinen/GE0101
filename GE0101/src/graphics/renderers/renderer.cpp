@@ -21,8 +21,11 @@ void Renderer::flush()
 {
 	for (auto& renderable : _renderables)
 	{
-		renderable->render();
-		renderable->destroy();
+		renderable->render(Vec2(0, 0));
+		if (!renderable->isStreaming())
+		{
+			renderable->destroy();
+		}
 	}
 	_renderables.clear();
 }

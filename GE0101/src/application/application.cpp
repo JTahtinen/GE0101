@@ -27,6 +27,7 @@ VertexArray* tileVertices;
 IndexBuffer* tileIndices;
 Shader* basicShader;
 
+
 void loadGlobalData()
 {
 
@@ -74,8 +75,16 @@ void loadGlobalData()
 	defTile.texture = snowman;
 	defTile.barrier = false;
 
+	
 
 	initRenderables();
+	basicShader->bind();
+
+	basicShader->setUniform1i("u_Texture", 0);
+	basicShader->setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
+
+	defaultSprite.texture = snowman;
+	defaultSprite.name = "snowman";
 }
 
 void deleteGlobalData()
@@ -114,20 +123,8 @@ void Application::run()
 	
 	//Shaders
 
-	basicShader->bind();
-
-	basicShader->setUniform1i("u_Texture", 0);
-	basicShader->setUniform4f("u_Color", 1.0f, 0, 1.0f, 1.0f);
-	basicShader->setUniform1f("u_Zoom", camera.getZoom());
-
-
-	defaultSprite.texture = snowman;
-	defaultSprite.name = "snowman";
 	
 	
-	//vao->push(defaultSprite.vao, tileLayout);
-
-
 
 	std::vector<Vec4> colors;
 	colors.reserve(4);
@@ -150,7 +147,6 @@ void Application::run()
 	float r = 0;
 	int dir = 1;
 	float zoom = 1;
-	bool updateZoom = false;
 	float frameTime = 0;
 	unsigned int frames = 0;
 	clock_t lastTime = clock();
@@ -159,15 +155,27 @@ void Application::run()
 
 	Font* font = Font::loadFont("res/fonts/liberation_serif");
 	
-	TextRenderable* text = TextRenderable::createTextRenderable("Hello there!", font, Vec2(0, 0));
+	TextRenderable* text = TextRenderable::createTextRenderable("Lord Engine, v0.1", font, Vec2(0.35, -0.45f), 0.4f, true);
 
-	TextBox textBox("Testi", Vec2(0.01f, 0.01f), font);
+	TextBox textBox("FPS: ", font);
+
+	Texture crosshairTex("res/textures/cursor.png");
+	Sprite crosshair;
+	crosshair.vao = tileVertices;
+	crosshair.indices = tileIndices;
+	crosshair.texture = &crosshairTex;
+	crosshair.name = "Crosshair";
+
 
 	int fps = 0;
 	Vec2 fpsScreenPos(-1.5f, 0.9f);
+	Vec2 mouse;
+	bool updateFPS = true;
 	while (running)
 	{
-		
+		//mouse = getWorldCoordsFromScreenPos(in.getMouseX(), 720 - in.getMouseY());
+		mouse = _window.getScreenCoordsRatioCorrected(in.getMouseX(), _window.getHeight() - in.getMouseY());
+	//	mouse.print();
 		basicShader->bind();
 		if (r < 0)
 		{
@@ -182,7 +190,6 @@ void Application::run()
 
 		basicShader->setUniform4f("u_Color", 0.0f, 0.2f * r, 0.3f * r, 1.0f);
 
-
 		in.update();
 		if (in.poll(KEY_ESCAPE))
 		{
@@ -194,28 +201,34 @@ void Application::run()
 		}
 
 
-		//textBox.render(_quadRenderer, &textRenderer, Vec2(0.3f, 0.3f));
-		basicShader->setUniform1f("u_Zoom", camera.getZoom());
-		updateZoom = false;
+		
 		
 		clock_t currentTime = clock();
 		frameTime = (float)(currentTime - lastTime) / CLOCKS_PER_SEC;
 		lastTime = currentTime;
 		_game->update(frameTime);
 		runningTime += frameTime;
-
-		textBox.render(&_renderer, Vec2());
+		//textRenderer.submit("FPS: " + std::to_string(fps), fpsScreenPos);
+		if (updateFPS)
+		{
+			textBox.setContent("FPS: " + std::to_string(fps));
+			updateFPS = false;
+		}
+		textBox.render(&_renderer, Vec2(-0.95f, 0.2f));
+		_renderer.submit(text);
 		if (menu)
 		{
-			QuadRenderable* bg = QuadRenderable::createQuadRenderable(Vec2(-0.0, 0.0), Vec2(1.0f, 1.0f), Vec4(0.2f, 0.2f, 0.8f, 1));
-			QuadRenderable* fg = QuadRenderable::createQuadRenderable(Vec2(0, 0), Vec2(0.8f, 0.8f), Vec4(0.7f, 0.6f, 0, 1));
+			QuadRenderable* bg = QuadRenderable::createQuadRenderable(Vec2(0.0f, 0.0f), Vec2(1.0f, 1.0f), Vec4(0.2f, 0.2f, 0.8f, 1.0f));
+			QuadRenderable* fg = QuadRenderable::createQuadRenderable(Vec2(0.1f, 0.1f), Vec2(0.8f, 0.8f), Vec4(0.7f, 0.6f, 0, 1.0f));
 			bg->addChild(fg);
 
 			_renderer.submit(bg);
 		}
+
+		Renderable2D* crosshairRenderable = Renderable2D::createRenderable2D(&crosshair, mouse, 1.0f);
+		_renderer.submit(crosshairRenderable);
 		_window.clear();
 
-		//textRenderer.submit("FPS: " + std::to_string(fps), fpsScreenPos);
 
 		_renderer.flush();
 		_window.update();
@@ -224,13 +237,9 @@ void Application::run()
 		if (runningTime >= 1.0f)
 		{
 			--runningTime;
-			//MSG("FPS: " << frames);
-			//std::string title = "GE0101 | FPS: ";
-
-			//title.append(std::to_string(frames));
 			fps = frames;
-			//_window.setTitle(title.c_str());
 			frames = 0;
+			updateFPS = true;
 		}
 	}
 	delete font;

@@ -4,20 +4,19 @@ layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
 uniform vec2 u_Dimensions;
+uniform float u_ScreenRatio;
 
 void main()
 {
 	vec4 pos = gl_in[0].gl_Position;
-	float halfX = u_Dimensions.x / 2.0;
-	float halfY = u_Dimensions.y / 2.0;
 
-	gl_Position = pos + vec4(-halfX, -halfY, 0, 0);
+	gl_Position = pos;
 	EmitVertex();
-	gl_Position = pos + vec4(-halfX, halfY, 0, 0);
+	gl_Position = pos + vec4(0, u_Dimensions.y * u_ScreenRatio, 0, 0);
 	EmitVertex();
-	gl_Position = pos + vec4(halfX, -halfY, 0, 0);
+	gl_Position = pos + vec4(u_Dimensions.x, 0, 0, 0);
 	EmitVertex();
-	gl_Position = pos + vec4(halfX, halfY, 0, 0);
+	gl_Position = pos + vec4(u_Dimensions.x, u_Dimensions.y * u_ScreenRatio, 0, 0);
 	EmitVertex();
 	EndPrimitive();
 }

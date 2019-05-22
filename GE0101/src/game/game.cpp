@@ -55,7 +55,6 @@ Game::~Game()
 void Game::update(float frameTime)
 {
 	Game::frameTime = frameTime;
-	//MSG(frameTime);
 	static Input& in = Input::instance();
 	if (in.poll(KEY_Z, KEYSTATE_TYPED))
 	{
@@ -73,7 +72,6 @@ void Game::update(float frameTime)
 	}
 
 	Collider::instance().update();
-//	_player->getPos().print();
 
  	_camera.setPos(_player->getPos());
 	_camera.update();

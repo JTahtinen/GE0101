@@ -18,7 +18,7 @@ void AIController::update(Actor* e)
 		if (distanceFromPlayer > 0.3f)
 		{
 			_task = AI_FOLLOW;
-			MSG("AI TASK: Follow");
+	//		MSG("AI TASK: Follow");
 		}
 	} else if (_task == AI_FOLLOW)
 	{
@@ -27,12 +27,12 @@ void AIController::update(Actor* e)
 		{
 			e->setForce(Vec2(0, 0));
 			_task = AI_IDLE;
-			MSG("AI TASK: Idle");
+	//		MSG("AI TASK: Idle");
 		}
 		else if (distanceFromPlayer > 1.0f)
 		{
 			_task = AI_HOSTILE;
-			MSG("AI TASK: Hostile");
+		//	MSG("AI TASK: Hostile");
 		}
 	}
 	else if (_task == AI_HOSTILE)
@@ -42,7 +42,7 @@ void AIController::update(Actor* e)
 		{
 			e->setForce(Vec2(0, 0));
 			_task = AI_IDLE;
-			MSG("AI TASK: Idle");
+	//		MSG("AI TASK: Idle");
 		}
 	}
 }

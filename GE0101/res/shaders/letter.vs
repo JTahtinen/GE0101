@@ -5,10 +5,10 @@ layout (location = 0) in vec2 position;
 uniform vec2 u_Position;
 uniform vec2 u_Offset;
 uniform vec2 u_Dimensions;
-
+uniform float u_ScreenRatio;
+uniform float u_Scale;
 
 void main()
 {
-	float ratio = 9.0f / 16.0f;
-	gl_Position = 0.2f * (vec4(u_Position.x * ratio, u_Position.y, 0, 1) + vec4(u_Offset.x * ratio, -u_Dimensions.y - u_Offset.y, 0, 0));
+	gl_Position = vec4(u_Position.x, u_Position.y * u_ScreenRatio, 0, 1) + vec4(u_Offset.x, (-u_Dimensions.y - u_Offset.y) * u_Scale * u_ScreenRatio, 0, 0);
 }
