@@ -28,19 +28,70 @@ Game::Game(Renderer* renderer)
 	node3.addOption("I'm sorry. Ask me again.", &node1);
 	node3.addOption("Deal with it!", &node4);
 	node4.setText("No need to be an asshole!");
-	
+
 	conv.push(&node1);
 	conv.push(&node2);
 	conv.push(&node3);
 	conv.push(&node4);
+
+
+	//_assetData.geometryData.pushGeometry()
+	TextureData& texData = _assetData.textureData;
+
+	Mesh* eMesh = new Mesh("defEntityMesh");
+	eMesh->bind();
+	_assetData.geometryData.pushGeometry(eMesh);
+
+	Vec2 vertData[] = {
+		Vec2(-1.0f, -1.0f),
+		Vec2(-1.0f,  1.0f),
+		Vec2(1.0f, -1.0f),
+		Vec2(1.0f, 1.0f)
+	};
+
+	Vec2 texCoordData[] = {
+		Vec2(0, 0),
+		Vec2(0, 1),
+		Vec2(1, 1),
+		Vec2(1, 0)
+	};
+
+	Vec4 colorData[]{
+		Vec4(1, 0, 0, 0),
+		Vec4(1, 0, 0, 0),
+		Vec4(1, 0, 0, 0),
+		Vec4(1, 0, 0, 0)
+	};
+
+	std::vector<unsigned int> indexData;
+	indexData.push_back(0);
+	indexData.push_back(1);
+	indexData.push_back(2);
+	indexData.push_back(2);
+	indexData.push_back(3);
+	indexData.push_back(1);
+
+
+	Buffer vertices;
+	vertices.push(&vertData[0], sizeof(vertData));
+	vertices.push(&texCoordData[0], sizeof(texCoordData));
+	vertices.push(&colorData[0], sizeof(colorData));
+	BufferLayout layout;
+	layout.push<float>(2);
+	layout.push<float>(2);
+	layout.push<float>(4);
+	eMesh->pushData(&vertices, layout, indexData);
+	texData.loadTexture("res/textures/IMG_2086.png");
+	Sprite* snowman = new Sprite(eMesh, texData.getTexture("res/textures/IMG_2086.png"), "snowman");
+	_gameData.pushSprite(snowman);
 //	conv.start();
 	ASSERT(renderer);
-	_map = Map::createMap(5, 5);
-	Actor* player = new Actor(Vec2(0.0f, 0.0f), &defaultSprite, new InputController());
+	_map = Map::createMap(5, 5, &_gameData);
+	Actor* player = new Actor(Vec2(0.0f, 0.0f), snowman, new InputController());
 	addActor(player);
 	_player = player;
-	addActor(new Actor(Vec2(-0.5f, -0.5f), &defaultSprite, new AIController(this)));
-	addActor(new Actor(Vec2(0.5f, 0.5f), &defaultSprite));
+	addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(this)));
+	addActor(new Actor(Vec2(0.5f, 0.5f), snowman));
 }
 
 Game::~Game()
@@ -80,6 +131,10 @@ void Game::update(float frameTime)
 	{
 		entity->render(_renderer, &_camera);
 	}
+
+	//QuadRenderable* cursor = QuadRenderable::createQuadRenderable(Vec2(0, 0), Vec2(0.2f, 0.2f));
+	Renderable2D* cursor = Renderable2D::createRenderable2D(_gameData.getSprite("snowman"), Vec2(0, 0), 1.0f);
+	_renderer->submit(cursor);
 }
 
 void Game::addEntity(Entity* e)

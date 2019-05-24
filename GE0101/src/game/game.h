@@ -5,6 +5,8 @@
 #include "entity.h"
 #include "actor.h"
 #include "camera.h"
+#include "assets/assetdata.h"
+#include "gamedata.h"
 
 class Renderer;
 
@@ -16,6 +18,8 @@ class Game
 	Actor*					_player;
 	Camera					_camera;
 	Renderer*				_renderer;
+	GameData				_gameData;
+	AssetData				_assetData;
 public:
 	static float frameTime;
 public:

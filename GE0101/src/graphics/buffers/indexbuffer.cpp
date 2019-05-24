@@ -1,26 +1,28 @@
 #include "indexbuffer.h"
 #include <GLEW/glew.h>
+#include "../../defs.h"
 
 IndexBuffer::IndexBuffer()
 	:
 	_numIndices(0)
 {
-	glGenBuffers(1, &_id);
+	GLCALL(glGenBuffers(1, &_id));
+	bind();
 }
 
 void IndexBuffer::push(const void* data, unsigned int count)
 {
 	_numIndices = count;
 	bind();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+	GLCALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
 }
 
 void IndexBuffer::bind() const
 {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id);
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _id));
 }
 
 void IndexBuffer::unbind() const
 {
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	GLCALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }

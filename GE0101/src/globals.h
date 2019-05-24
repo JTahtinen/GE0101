@@ -8,14 +8,5 @@
 
 
 extern Log gameLog;
-extern Sprite defaultSprite;
-extern Texture* snowman;
-extern Tile defTile;
-extern VertexArray* vao;
-extern BufferLayout tileLayout;
-extern Buffer* texCoordBuffer;
-extern BufferLayout texCoordLayout;
-extern VertexArray* tileVertices;
-extern IndexBuffer* tileIndices;
 extern Shader* basicShader;
 

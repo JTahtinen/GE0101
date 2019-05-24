@@ -24,8 +24,8 @@ Shader::Shader(const std::string& filepath, bool inclGeometryShader)
 		ERR("Could not open fragment shader: " << filepath << ".fs");
 	}
 
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	GLCALL(unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER));
+	GLCALL(unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER));
 	unsigned int geometryShader;
 
 	const char* vsC = vsSource.c_str();
@@ -34,14 +34,14 @@ Shader::Shader(const std::string& filepath, bool inclGeometryShader)
 
 	
 
-	glShaderSource(vertexShader, 1, &vsC, NULL);
-	glShaderSource(fragmentShader, 1, &fsC, NULL);
+	GLCALL(glShaderSource(vertexShader, 1, &vsC, NULL));
+	GLCALL(glShaderSource(fragmentShader, 1, &fsC, NULL));
 
-	glCompileShader(vertexShader);
-	glCompileShader(fragmentShader);
+	GLCALL(glCompileShader(vertexShader));
+	GLCALL(glCompileShader(fragmentShader));
 
-	glAttachShader(_id, vertexShader);
-	glAttachShader(_id, fragmentShader);
+	GLCALL(glAttachShader(_id, vertexShader));
+	GLCALL(glAttachShader(_id, fragmentShader));
 
 	if (inclGeometryShader)
 	{
@@ -51,61 +51,61 @@ Shader::Shader(const std::string& filepath, bool inclGeometryShader)
 			ERR("Could not open geometry shader: " << filepath << ".gs");
 		}
 			gsC = gsSource.c_str();
-			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-			glShaderSource(geometryShader, 1, &gsC, NULL);
-			glCompileShader(geometryShader);
-			glAttachShader(_id, geometryShader);
+			GLCALL(geometryShader = glCreateShader(GL_GEOMETRY_SHADER));
+			GLCALL(glShaderSource(geometryShader, 1, &gsC, NULL));
+			GLCALL(glCompileShader(geometryShader));
+			GLCALL(glAttachShader(_id, geometryShader));
 	}
 
-	glLinkProgram(_id);
-	glValidateProgram(_id);
+	GLCALL(glLinkProgram(_id));
+	GLCALL(glValidateProgram(_id));
 
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	GLCALL(glDeleteShader(vertexShader));
+	GLCALL(glDeleteShader(fragmentShader));
 	if (inclGeometryShader)
 	{
-		glDeleteShader(geometryShader);
+		GLCALL(glDeleteShader(geometryShader));
 	}
 }
 
 Shader::~Shader()
 {
-	glDeleteProgram(_id);
+	GLCALL(glDeleteProgram(_id));
 }
 
 void Shader::bind() const
 {
-	glUseProgram(_id);
+	GLCALL(glUseProgram(_id));
 }
 
 void Shader::unbind() const
 {
-	glUseProgram(0);
+	GLCALL(glUseProgram(0));
 }
 
 void Shader::setUniform1f(const std::string& u_name, float v0)
 {
-	glUniform1f(U_LOCATION, v0);
+	GLCALL(glUniform1f(U_LOCATION, v0));
 }
 
 void Shader::setUniform2f(const std::string& u_name, float v0, float v1)
 {
-	glUniform2f(U_LOCATION, v0, v1);
+	GLCALL(glUniform2f(U_LOCATION, v0, v1));
 }
 
 void Shader::setUniform3f(const std::string& u_name, float v0, float v1, float v2)
 {
-	glUniform3f(U_LOCATION, v0, v1, v2);
+	GLCALL(glUniform3f(U_LOCATION, v0, v1, v2));
 }
 
 void Shader::setUniform4f(const std::string& u_name, float v0, float v1, float v2, float v3)
 {
-	glUniform4f(U_LOCATION, v0, v1, v2, v3);
+	GLCALL(glUniform4f(U_LOCATION, v0, v1, v2, v3));
 }
 
 void Shader::setUniform1i(const std::string& u_name, int v0)
 {
-	glUniform1i(U_LOCATION, v0);
+	GLCALL(glUniform1i(U_LOCATION, v0));
 }
 
 int Shader::getUniformLocation(const std::string& u_name)
@@ -114,7 +114,7 @@ int Shader::getUniformLocation(const std::string& u_name)
 	{
 		return _uniformLocations[u_name];
 	}
-	int location = glGetUniformLocation(_id, u_name.c_str());
+	GLCALL(int location = glGetUniformLocation(_id, u_name.c_str()));
 	if (location == -1)
 	{
 		WARN("Could not find uniform: " << u_name << " from shader: " << _filepath);

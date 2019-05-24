@@ -3,6 +3,8 @@
 #include "../graphics/sprite.h"
 #include "../graphics/renderers/renderer.h"
 #include "../physics/physicsobject.h"
+#include <string>
+#include <sstream>
 
 class Camera;
 class Game;
@@ -29,6 +31,13 @@ public:
 	inline bool isMoving() const { return _object.force.length() != 0; }
 	virtual void update(Game* game);
 	void render(Renderer* renderer, const Camera* camera) const;
+	inline GUID getId() const { return _id; }
+	inline std::string getName() const 
+	{
+		std::stringstream ss;
+		ss << _id;
+		return ss.str();
+	}
 private:
 	static GUID nextId();
 };

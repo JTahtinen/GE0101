@@ -1,16 +1,18 @@
 #include "vertexarray.h"
 #include <GLEW/glew.h>
 #include "../../util/glutil.h"
+#include "../../defs.h"
 
-VertexArray::VertexArray()
+VertexArray::VertexArray(const std::string& name)
+	: _name(name)
 {
-	glGenVertexArrays(1, &_id);
+	GLCALL(glGenVertexArrays(1, &_id));
 	bind();
 }
 
 VertexArray::~VertexArray()
 {
-	glDeleteVertexArrays(1, &_id);
+	GLCALL(glDeleteVertexArrays(1, &_id));
 }
 
 void VertexArray::push(Buffer* buffer, const BufferLayout& layout)
@@ -22,8 +24,8 @@ void VertexArray::push(Buffer* buffer, const BufferLayout& layout)
 	for (unsigned int i = 0; i < elements.size(); ++i)
 	{
 		const auto& element = elements[i];
-		glEnableVertexAttribArray(_numAttributes);
-		glVertexAttribPointer(_numAttributes++, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset);
+		GLCALL(glEnableVertexAttribArray(_numAttributes));
+		GLCALL(glVertexAttribPointer(_numAttributes++, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset));
 		offset += element.count * GLutil::sizeOfType(element.type);
 	}
 	_buffers.push_back(buffer);
@@ -31,10 +33,16 @@ void VertexArray::push(Buffer* buffer, const BufferLayout& layout)
 
 void VertexArray::bind() const
 {
-	glBindVertexArray(_id);
+	GLCALL(glBindVertexArray(_id));
 }
 
 void VertexArray::unbind() const
 {
-	glBindVertexArray(0);
+	GLCALL(glBindVertexArray(0));
+}
+
+VertexArray* VertexArray::loadVertexArray(const std::string& filepath)
+{
+	//TODO: Vao loading
+	return new VertexArray(filepath);
 }

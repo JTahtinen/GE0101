@@ -1,12 +1,16 @@
 #pragma once
 #include "texture.h"
-#include "../graphics/buffers/vertexarray.h"
-#include "../graphics/buffers/indexbuffer.h"
+#include "mesh.h"
 
-struct Sprite
+class Sprite
 {
-	VertexArray*			vao;
-	const IndexBuffer*		indices;
-	const Texture*			texture;
-	std::string				name;
+	const Mesh*				_mesh;
+	const Texture*			_texture;
+	std::string				_name;
+public:
+	Sprite(const Mesh* mesh, const Texture* texture, const std::string& name);
+	void bind() const;
+	void unbind() const;
+	inline unsigned int getElementCount() const { return _mesh->getElementCount(); }
+	inline const std::string& getName() const { return _name; }
 };

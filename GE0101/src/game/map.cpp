@@ -6,29 +6,28 @@
 #include "../math/vec2.h"
 #include "../math/math.h"
 #include "../graphics/renderers/renderer.h"
-#include "../globals.h"
 
 
 Map* Map::_instance;
+static Tile* defTile;
 
 Map::Map(int width, int height)
 	: _width(width)
 	, _height(height)
 {
-	ASSERT(width * height > 0)
-
+	ASSERT(width * height > 0);
+	
 	
 	_tiles.reserve(width * height);
 	for (int i = 0; i < width * height; ++i)
 	{
-		_tiles.push_back(&defTile);
+		_tiles.push_back(defTile);
 	}
 }
 
 Map::~Map()
 {
-	delete tileVertices;
-	delete tileIndices;
+	delete defTile;
 }
 
 void Map::update(Game* game)
@@ -65,7 +64,7 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 		for (int x = xStartTile; x < xEndTile; ++x)
 		{
 			Renderable2D* tile = 
-				Renderable2D::createRenderable2D(tileVertices, tileIndices, _tiles[x + y * _width]->texture,
+				Renderable2D::createRenderable2D(_tiles[x + y * _width]->sprite,
 				Vec2(
 					-camPos.x + x * TILE_SIZE,
 					-camPos.y + y * TILE_SIZE), zoom);
@@ -74,12 +73,16 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 	}
 }
 
-Map* Map::createMap(int width, int height)
+Map* Map::createMap(int width, int height, GameData* gameData)
 {
 	if (Map::_instance)
 	{
 		delete Map::_instance;
-	}
+	}		
+
+	defTile = new Tile();
+	defTile->barrier = false;
+	defTile->sprite = gameData->getSprite("snowman");
 
 	Map::_instance = new Map(width, height);
 

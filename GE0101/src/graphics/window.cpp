@@ -1,5 +1,6 @@
 #include "window.h"
 #include <iostream>
+#include "../defs.h"
 
 Window::Window(int width, int height, const char* title)
 	: _width(width)
@@ -62,13 +63,13 @@ void Window::update() const
 
 void Window::setClearColor(GLclampf r, GLclampf g, GLclampf b)
 {
-	glClearColor(r, g, b, 1.0f);
+	GLCALL(glClearColor(r, g, b, 1.0f));
 }
 
 void Window::clear() const
 {
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glClear(GL_COLOR_BUFFER_BIT);
+	GLCALL(glClear(GL_DEPTH_BUFFER_BIT));
+	GLCALL(glClear(GL_COLOR_BUFFER_BIT));
 }
 
 void Window::setTitle(const char* title)

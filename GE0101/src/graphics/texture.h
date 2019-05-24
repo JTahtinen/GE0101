@@ -20,4 +20,8 @@ public:
 	{
 		return _heightInPixels;
 	}
+	inline const std::string& getFilePath() const
+	{
+		return _filepath;
+	}
 };

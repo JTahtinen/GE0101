@@ -152,14 +152,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\game\assets\geometrydata.cpp" />
+    <ClCompile Include="src\game\assets\texturedata.cpp" />
+    <ClCompile Include="src\game\gamedata.cpp" />
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\game\actor.cpp" />
     <ClCompile Include="src\game\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\conversation.cpp" />
+    <ClCompile Include="src\graphics\mesh.cpp" />
     <ClCompile Include="src\graphics\renderers\renderable.cpp" />
     <ClCompile Include="src\graphics\renderers\renderer.cpp" />
+    <ClCompile Include="src\graphics\sprite.cpp" />
     <ClCompile Include="src\graphics\textbox.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\game\entity.cpp" />
@@ -185,10 +190,15 @@
     <ClInclude Include="src\application\observer.h" />
     <ClInclude Include="src\defs.h" />
     <ClInclude Include="src\game\actor.h" />
+    <ClInclude Include="src\game\assets\assetdata.h" />
+    <ClInclude Include="src\game\assets\geometrydata.h" />
+    <ClInclude Include="src\game\assets\texturedata.h" />
     <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
+    <ClInclude Include="src\game\gamedata.h" />
     <ClInclude Include="src\graphics\font.h" />
+    <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\textbox.h" />
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />

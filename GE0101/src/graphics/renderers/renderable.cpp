@@ -1,6 +1,7 @@
 #include "renderable.h"
 #include "../../defs.h"
 #include "../../globals.h"
+#include "../buffers/vertexarray.h"
 
 #define RENDER_CHILDREN() for (auto& child : _children) { if (child) {child->render(_pos + offset);} }
 #define RENDERABLE_POOL_SIZE 100
@@ -40,7 +41,7 @@ void initRenderables()
 {
 	for (unsigned int i = 0; i < RENDERABLE_POOL_SIZE; ++i)
 	{
-		renderable2DPool[i] = new Renderable2D(nullptr, nullptr, nullptr, Vec2(), 0.0f);
+		renderable2DPool[i] = new Renderable2D(nullptr, Vec2(), 0.0f);
 		textRenderablePool[i] = new TextRenderable("", nullptr, Vec2(), 0.0f);
 		quadRenderablePool[i] = new QuadRenderable(Vec2(), Vec2());
 
@@ -52,7 +53,7 @@ void initRenderables()
 
 	}
 
-	textVao = new VertexArray();
+	textVao = new VertexArray("textVertices");
 	textVao->bind();
 	textVbo = new Buffer();
 	textVbo->bind();
@@ -68,7 +69,7 @@ void initRenderables()
 	quadShader = new Shader("res/shaders/colorquad", true);
 	quadShader->bind();
 	quadShader->setUniform1f("u_ScreenRatio", 16.0f / 9.0f);
-	quadVao = new VertexArray();
+	quadVao = new VertexArray("quadVertices");
 	quadVao->bind();
 	quadVbo = new Buffer();
 	quadVbo->bind();
@@ -126,17 +127,16 @@ void Renderable::freeRenderable()
 	_streaming = false;
 }
 
-Renderable2D::Renderable2D(const VertexArray* vao, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos, float scale, bool streaming)
-	: _vao(vao)
-	, _ibo(ibo)
-	, _texture(texture)
+Renderable2D::Renderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming)
+	: 
+	_sprite(sprite)
 	, _scale(scale)
 	, Renderable(pos, streaming)
 {
 }
 
 
-Renderable2D* Renderable2D::createRenderable2D(const VertexArray* vao, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos, float scale, bool streaming)
+Renderable2D* Renderable2D::createRenderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming)
 {
 	unsigned int tag;
 	Renderable2D* renderable = createRenderable<Renderable2D>(renderable2DPool, availableRenderable2Ds, &tag);
@@ -145,25 +145,19 @@ Renderable2D* Renderable2D::createRenderable2D(const VertexArray* vao, const Ind
 		ERR("Could not create renderable2D - Limit reached!");
 		return nullptr;
 	}
-	*renderable = Renderable2D(vao, ibo, texture, pos, scale, streaming);
+	*renderable = Renderable2D(sprite, pos, scale, streaming);
 	renderable->setTag(tag);
 	return renderable;
-}
-
-Renderable2D* Renderable2D::createRenderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming)
-{
-	return createRenderable2D(sprite->vao, sprite->indices, sprite->texture, pos, scale, streaming);
 }
 
 void Renderable2D::render(const Vec2& offset) const
 {
 	basicShader->bind();
+	_sprite->bind();
 	basicShader->setUniform2f("u_Offset", _pos.x + offset.x, _pos.y + offset.y);
 	basicShader->setUniform1f("u_Scale", _scale);
-	_vao->bind();
-	_ibo->bind();
-	_texture->bind();
-	glDrawElements(GL_TRIANGLES, _ibo->getSize(), GL_UNSIGNED_INT, NULL);
+	basicShader->setUniform1i("u_Texture", 0);
+	GLCALL(glDrawElements(GL_TRIANGLES, _sprite->getElementCount(), GL_UNSIGNED_INT, NULL));
 
 	RENDER_CHILDREN();
 }
@@ -216,7 +210,7 @@ void TextRenderable::render(const Vec2& offset) const
 		textShader->setUniform2f("u_Offset", letter->xOffset, letter->yOffset);
 		textShader->setUniform2f("u_TexCoord", letter->x, letter->y);
 		textShader->setUniform1i("u_Texture", 1);
-		glDrawArrays(GL_POINTS, 0, 1);
+		GLCALL(glDrawArrays(GL_POINTS, 0, 1));
 
 		cursor.x += letter->xAdvance * _scale;
 	}
@@ -299,7 +293,7 @@ void QuadRenderable::render(const Vec2& offset) const
 	quadShader->setUniform2f("u_Dimensions", _dimensions.x, _dimensions.y);
 	quadShader->setUniform2f("u_Position", _pos.x + offset.x, _pos.y + offset.y);
 	quadShader->setUniform4f("u_Color", _color.x, _color.y, _color.z, _color.w);
-	glDrawArrays(GL_POINTS, 0, 1);
+	GLCALL(glDrawArrays(GL_POINTS, 0, 1));
 
 	RENDER_CHILDREN();
 }

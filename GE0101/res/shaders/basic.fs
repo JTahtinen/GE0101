@@ -9,7 +9,6 @@ uniform sampler2D u_Texture;
 
 void main()
 {
-
     vec4 fragcolor = (texture(u_Texture, v_texCoord));
     if (fragcolor.a == 0)
     {

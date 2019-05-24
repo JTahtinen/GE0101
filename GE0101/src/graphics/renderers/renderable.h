@@ -4,6 +4,7 @@
 #include "../font.h"
 #include <vector>
 #include "../shader.h"
+#include "../mesh.h"
 
 extern void initRenderables();
 extern void destroyRenderables();
@@ -40,13 +41,10 @@ protected:
 
 class Renderable2D : public Renderable
 {
-	const VertexArray*	_vao;
-	const IndexBuffer*	_ibo;
-	const Texture*		_texture;
+	const Sprite*		_sprite;
 	float				_scale;
 public:
-	Renderable2D(const VertexArray* vao, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos, float scale, bool streaming = false);
-	static Renderable2D* createRenderable2D(const VertexArray* vao, const IndexBuffer* ibo, const Texture* texture, const Vec2& pos, float scale, bool streaming = false);
+	Renderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming = false);
 	static Renderable2D* createRenderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming = false);
 	virtual void render(const Vec2& offset) const override;
 protected:
