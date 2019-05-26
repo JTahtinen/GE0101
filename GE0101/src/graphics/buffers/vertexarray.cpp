@@ -5,6 +5,7 @@
 
 VertexArray::VertexArray(const std::string& name)
 	: _name(name)
+	, _numAttributes(0)
 {
 	GLCALL(glGenVertexArrays(1, &_id));
 	bind();
@@ -21,11 +22,11 @@ void VertexArray::push(Buffer* buffer, const BufferLayout& layout)
 	bind();
 	buffer->bind();
 	int offset = 0;
-	for (unsigned int i = 0; i < elements.size(); ++i)
+	for (auto& element : elements)
 	{
-		const auto& element = elements[i];
 		GLCALL(glEnableVertexAttribArray(_numAttributes));
-		GLCALL(glVertexAttribPointer(_numAttributes++, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset));
+		GLCALL(glVertexAttribPointer
+		(_numAttributes++, element.count, element.type, element.normalized, layout.getStride(), (const void*)offset));
 		offset += element.count * GLutil::sizeOfType(element.type);
 	}
 	_buffers.push_back(buffer);

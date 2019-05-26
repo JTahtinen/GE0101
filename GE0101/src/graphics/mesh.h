@@ -10,7 +10,8 @@ class Mesh
 	IndexBuffer			_ibo;
 public:
 	Mesh(const std::string& name);
-	void pushData(Buffer* data, const BufferLayout& layout, std::vector<unsigned int>& indices);
+	void pushData(Buffer* data, const BufferLayout& layout);
+	void setIndices(const std::vector<unsigned int>& indices);
 	inline const std::string& getName() const { return _vao.getName(); }
 	inline unsigned int getElementCount() const { return _ibo.getSize(); }
 	void bind() const;

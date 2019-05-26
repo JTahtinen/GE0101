@@ -43,24 +43,24 @@ Game::Game(Renderer* renderer)
 	_assetData.geometryData.pushGeometry(eMesh);
 
 	Vec2 vertData[] = {
-		Vec2(-1.0f, -1.0f),
-		Vec2(-1.0f,  1.0f),
-		Vec2(1.0f, -1.0f),
-		Vec2(1.0f, 1.0f)
+		Vec2(-0.1f, -0.1f),
+		Vec2(-0.1f,  0.1f),
+		Vec2(0.1f, -0.1f),
+		Vec2(0.1f, 0.1f)
 	};
 
 	Vec2 texCoordData[] = {
-		Vec2(0, 0),
 		Vec2(0, 1),
+		Vec2(0, 0),
 		Vec2(1, 1),
 		Vec2(1, 0)
 	};
 
 	Vec4 colorData[]{
-		Vec4(1, 0, 0, 0),
-		Vec4(1, 0, 0, 0),
-		Vec4(1, 0, 0, 0),
-		Vec4(1, 0, 0, 0)
+		Vec4(0.0f, 0, 0, 0),
+		Vec4(0.0f, 0, 0, 0),
+		Vec4(0.0f, 0, 0, 0),
+		Vec4(0.0f, 0, 0, 0)
 	};
 
 	std::vector<unsigned int> indexData;
@@ -72,15 +72,29 @@ Game::Game(Renderer* renderer)
 	indexData.push_back(1);
 
 
-	Buffer vertices;
-	vertices.push(&vertData[0], sizeof(vertData));
-	vertices.push(&texCoordData[0], sizeof(texCoordData));
-	vertices.push(&colorData[0], sizeof(colorData));
+	Buffer* vertices = new Buffer();
+	Buffer* texCoords = new Buffer();
+	Buffer* colors = new Buffer();
+	
+	vertices->bind();
+	vertices->push(&vertData[0], sizeof(vertData));
+	
+	texCoords->bind();
+	texCoords->push(&texCoordData[0], sizeof(texCoordData));
+	
+	colors->bind();
+	colors->push(&colorData[0], sizeof(colorData));
+
 	BufferLayout layout;
+	BufferLayout texCoordLayout;
+	BufferLayout colorLayout;
 	layout.push<float>(2);
-	layout.push<float>(2);
-	layout.push<float>(4);
-	eMesh->pushData(&vertices, layout, indexData);
+	texCoordLayout.push<float>(2);
+	colorLayout.push<float>(4);
+	eMesh->pushData(vertices, layout);
+	eMesh->pushData(texCoords, texCoordLayout);
+	eMesh->pushData(colors, colorLayout);
+	eMesh->setIndices(indexData);
 	texData.loadTexture("res/textures/IMG_2086.png");
 	Sprite* snowman = new Sprite(eMesh, texData.getTexture("res/textures/IMG_2086.png"), "snowman");
 	_gameData.pushSprite(snowman);

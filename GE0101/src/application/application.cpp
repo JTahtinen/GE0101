@@ -44,7 +44,7 @@ Application::Application()
 	basicShader->bind();
 
 	basicShader->setUniform1i("u_Texture", 0);
-	basicShader->setUniform4f("u_Color", 0.0f, 0, 1.0f, 0.0f);
+	basicShader->setUniform4f("u_Color", 0.0f, 0, 0.0f, 0.0f);
 	basicShader->setUniform1f("u_ScrRatio", (float)_window.getWidth() / (float)_window.getHeight());
 }
 
@@ -72,7 +72,7 @@ void Application::run()
 	Font* font = Font::loadFont("res/fonts/liberation_serif");
 	
 	//TextRenderable* text = TextRenderable::createTextRenderable("Lord Engine, v0.1", font, Vec2(0.35, -0.45f), 0.4f, true);
-	TextRenderable* text = TextRenderable::createTextRenderable("Lord Engine, v0.1", font, Vec2(0.0f, 0.0f), 0.4f, true);
+	TextRenderable* text = TextRenderable::createTextRenderable("Lord Engine, v0.1", font, Vec2(0.0f, -0.4f), 0.4f, true);
 	TextBox textBox("FPS: ", font);
 
 	int fps = 0;

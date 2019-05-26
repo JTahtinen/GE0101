@@ -7,7 +7,7 @@ Mesh::Mesh(const std::string& name)
 	bind();
 }
 
-void Mesh::pushData(Buffer* data, const BufferLayout& layout, std::vector<unsigned int>& indices)
+void Mesh::pushData(Buffer* data, const BufferLayout& layout)
 {
 	if (!data)
 	{
@@ -16,7 +16,16 @@ void Mesh::pushData(Buffer* data, const BufferLayout& layout, std::vector<unsign
 	}
 	bind();
 	_vao.push(data, layout);
-	_ibo.push(&indices[0], indices.size());
+}
+
+void Mesh::setIndices(const std::vector<unsigned int>& indices)
+{
+	if (indices.empty())
+	{
+		WARN("Could not push index buffer for mesh - index vector was empty");
+		return;
+	}
+		_ibo.push(&indices[0], indices.size());
 }
 
 void Mesh::bind() const
