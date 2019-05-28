@@ -6,14 +6,12 @@ class Window;
 class Camera
 {
 	Vec2			_pos;
-	const float		_width;
-	const float		_height;
+	const float		_ratio;
 	float			_zoom{ 1.0f };
 	float			_zoomTarget{ 1.0f };
 public:
-	Camera(const Vec2& pos, float width, float height);
-	Camera(float width, float height);
-	Camera(const Window* win);
+	Camera(const Vec2& pos, float ratio);
+	Camera(float ratio);
 	void zoomIn();
 	void zoomOut();
 	void setZoom(float val);
@@ -21,11 +19,11 @@ public:
 	void update();
 	inline float getWidthToHeightRatio() const
 	{
-		return _width / _height;
+		return _ratio;
 	}
 	inline float getHeightToWidthRatio() const
 	{
-		return _height / _width;
+		return 1.0f / _ratio;
 	}
 	inline float getLeft() const
 	{

@@ -8,7 +8,6 @@ class Application
 {
 	Renderer				_renderer;
 	Game*					_game;
-	Window					_window;
 public:
 	Application();
 	~Application();

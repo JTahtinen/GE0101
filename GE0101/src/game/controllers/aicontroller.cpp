@@ -1,7 +1,7 @@
 #include "aicontroller.h"
 #include "../../defs.h"
 
-AIController::AIController(Game* game)
+AIController::AIController(GameState* game)
 	: _game(game)
 {
 	ASSERT(game);

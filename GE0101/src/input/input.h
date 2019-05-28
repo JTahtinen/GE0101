@@ -72,6 +72,9 @@ class Input
 	int			_mouseY;
 	int			_deltaX;
 	int			_deltaY;
+	bool		_mWheelUp;
+	bool		_mWheelDown;
+
 public:
 	static inline Input& instance()
 	{
@@ -87,6 +90,8 @@ public:
 	inline int getMouseY() const { return _mouseY; }
 	inline int getMouseDeltaX() const { return _deltaX; }
 	inline int getMouseDeltaY() const { return _deltaY; }
+	inline bool getMouseWheelUp() const { return _mWheelUp; }
+	inline bool getMouseWheelDown() const { return _mWheelDown; }
 private:
 	Input();
 	static Key translateSDLKey(SDL_Keycode key);

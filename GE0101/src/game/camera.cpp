@@ -2,22 +2,16 @@
 #include "../graphics/window.h"
 #include "game.h"
 
-Camera::Camera(const Vec2& pos, float width, float height)
+Camera::Camera(const Vec2& pos, float ratio)
 	:
 	_pos(pos)
-	, _width(1.0f)
-	, _height(height / width)
+	, _ratio(ratio)
 {
 }
 
-Camera::Camera(float width, float height)
+Camera::Camera(float ratio)
 	:
-	Camera(Vec2(0, 0), width, height)
-{
-}
-Camera::Camera(const Window* win)
-	: 
-	Camera((float)win->getWidth(), (float)win->getHeight())
+	Camera(Vec2(0, 0), ratio)
 {
 }
 

@@ -19,5 +19,5 @@ public:
 	const Entity* getTarget() const;
 	void addAlly(const Actor* ally);
 	void addEnemy(const Actor* enemy);
-	virtual void update(Game* game) override;
+	virtual void update(GameState* gamestate) override;
 };

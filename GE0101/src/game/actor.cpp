@@ -72,7 +72,7 @@ void Actor::addEnemy(const Actor* enemy)
 	}
 }
 
-void Actor::update(Game* game)
+void Actor::update(GameState* gamestate)
 {
 	setForce(Vec2(0, 0));
 
@@ -80,5 +80,5 @@ void Actor::update(Game* game)
 	{
 		_controller->update(this);
 	}
-	Entity::update(game);
+	Entity::update(gamestate);
 }

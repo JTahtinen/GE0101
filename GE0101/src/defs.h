@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "globals.h"
+#include <GLEW/glew.h>
 
 
 

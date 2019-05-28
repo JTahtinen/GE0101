@@ -73,16 +73,17 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 	}
 }
 
-Map* Map::createMap(int width, int height, GameData* gameData)
+Map* Map::createMap(int width, int height, const Game* game)
 {
 	if (Map::_instance)
 	{
 		delete Map::_instance;
 	}		
 
+	const AssetData* data = game->getAssetData();
 	defTile = new Tile();
 	defTile->barrier = false;
-	defTile->sprite = gameData->getSprite("snowman");
+	defTile->sprite = data->spriteData.getSprite("snowman");
 
 	Map::_instance = new Map(width, height);
 

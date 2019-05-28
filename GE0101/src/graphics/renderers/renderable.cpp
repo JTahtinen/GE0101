@@ -2,9 +2,14 @@
 #include "../../defs.h"
 #include "../../globals.h"
 #include "../buffers/vertexarray.h"
+#include "renderer.h"
 
-#define RENDER_CHILDREN() for (auto& child : _children) { if (child) {child->render(_pos + offset);} }
+#define RENDER_CHILDREN() for (auto& child : _children)\
+{ if (child) {child->render(_pos + offset);} }
+#define DESTROY_CHILDREN() for (auto& child : _children)\
+{ if (child) {if (!child->isStreaming()) {child->destroy();}}} _children.clear();
 #define RENDERABLE_POOL_SIZE 100
+
 
 static VertexArray* textVao;
 static Buffer*		textVbo;
@@ -14,44 +19,51 @@ static VertexArray* quadVao;
 static Buffer*		quadVbo;
 static Shader*		quadShader;
 
+static Shader*		basicShader;
 
-static Renderable2D*	renderable2DPool[RENDERABLE_POOL_SIZE];
-static TextRenderable*	textRenderablePool[RENDERABLE_POOL_SIZE];
-static QuadRenderable*	quadRenderablePool[RENDERABLE_POOL_SIZE];
+
+static Renderable2D*	renderable2DPool;
+static TextRenderable*	textRenderablePool;
+static QuadRenderable*	quadRenderablePool;
 
 static std::vector<unsigned int>	availableRenderable2Ds;
 static std::vector<unsigned int>	availableTextRenderables;
 static std::vector<unsigned int>	availableQuadRenderables;
 
 template <typename T>
-T* createRenderable(T* pool[], std::vector<unsigned int>& availableRenderables, unsigned int* tag)
+T* createRenderable(T* pool, std::vector<unsigned int>& availableRenderables, unsigned int* tag)
 {
 	if (!availableRenderables.empty())
 	{
 		unsigned int i = availableRenderables.back();
 		availableRenderables.pop_back();
-		//*pool[i] = T(vao, ibo, texture, pos);
-		T* renderable = pool[i];
+		T* renderable = &pool[i];
 		*tag = i;
 		return renderable;
 	}
 	return nullptr;
 }
-void initRenderables()
+void initRenderables(const Renderer* renderer)
 {
+	renderable2DPool = new Renderable2D[RENDERABLE_POOL_SIZE];
+	textRenderablePool = new TextRenderable[RENDERABLE_POOL_SIZE];
+	quadRenderablePool = new QuadRenderable[RENDERABLE_POOL_SIZE];
+
+
 	for (unsigned int i = 0; i < RENDERABLE_POOL_SIZE; ++i)
 	{
-		renderable2DPool[i] = new Renderable2D(nullptr, Vec2(), 0.0f);
-		textRenderablePool[i] = new TextRenderable("", nullptr, Vec2(), 0.0f);
-		quadRenderablePool[i] = new QuadRenderable(Vec2(), Vec2());
-
-
-
 		availableRenderable2Ds.push_back(i);
 		availableTextRenderables.push_back(i);
 		availableQuadRenderables.push_back(i);
-
 	}
+
+	basicShader = new Shader("res/shaders/basic");
+	basicShader->bind();
+	basicShader->setUniform4f("u_Color", 0, 0, 0, 0);
+	basicShader->setUniform2f("u_Offset", 0, 0);
+	basicShader->setUniform1f("u_ScrRatio", renderer->getDisplayRatio());
+	basicShader->setUniform1f("u_Scale", 1.0f);
+	basicShader->setUniform1i("u_Texture", 0);
 
 	textVao = new VertexArray("textVertices");
 	textVao->bind();
@@ -64,11 +76,11 @@ void initRenderables()
 	textVao->push(textVbo, textLayout);
 	textShader = new Shader("res/shaders/letter", true);
 	textShader->bind();
-	textShader->setUniform1f("u_ScreenRatio", 16.0f / 9.0f);
+	textShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
 	textShader->setUniform1f("u_Scale", 0.3f);
 	quadShader = new Shader("res/shaders/colorquad", true);
 	quadShader->bind();
-	quadShader->setUniform1f("u_ScreenRatio", 16.0f / 9.0f);
+	quadShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
 	quadVao = new VertexArray("quadVertices");
 	quadVao->bind();
 	quadVbo = new Buffer();
@@ -87,16 +99,19 @@ void destroyRenderables()
 	delete quadVao;
 	delete quadShader;
 
-	for (unsigned int i = 0; i < RENDERABLE_POOL_SIZE; ++i)
-	{
-		delete renderable2DPool[i];
-		delete textRenderablePool[i];
-		delete quadRenderablePool[i];
+	textVao = nullptr;
+	textShader = nullptr;
+	quadVao = nullptr;
+	quadShader = nullptr;
 
-		renderable2DPool[i] = nullptr;
-		textRenderablePool[i] = nullptr;
-		quadRenderablePool[i] = nullptr;
-	}
+	delete[] renderable2DPool;
+	delete[] textRenderablePool;
+	delete[] quadRenderablePool;
+
+	renderable2DPool = nullptr;
+	textRenderablePool = nullptr;
+	quadRenderablePool = nullptr;
+
 }
 
 
@@ -165,14 +180,7 @@ void Renderable2D::render(const Vec2& offset) const
 void Renderable2D::destroy()
 {
 	availableRenderable2Ds.push_back(_tag);
-	for (auto& child : _children)
-	{
-		if (!child->isStreaming())
-		{
-			child->destroy();
-		}
-	}
-	_children.clear();
+	DESTROY_CHILDREN();
 }
 
 TextRenderable::TextRenderable(const std::string& text, const Font* font, const Vec2& pos, float scale, bool streaming)
@@ -236,7 +244,7 @@ void TextRenderable::setFont(const Font* font)
 {
 	if (!font)
 	{
-		ERR("Could not set font - nullptr exception");
+		//ERR("Could not set font - nullptr exception");
 		return;
 	}
 	_font = font;
@@ -246,11 +254,7 @@ void TextRenderable::setFont(const Font* font)
 void TextRenderable::destroy()
 {
 	availableTextRenderables.push_back(_tag);
-	for (auto& child : _children)
-	{
-		child->destroy();
-	}
-	_children.clear();
+	DESTROY_CHILDREN();
 }
 
 QuadRenderable::QuadRenderable(const Vec2& pos, const Vec2& dimensions, const Vec4& color, bool streaming)
@@ -301,9 +305,5 @@ void QuadRenderable::render(const Vec2& offset) const
 void QuadRenderable::destroy()
 {
 	availableQuadRenderables.push_back(_tag);
-	for (auto& child : _children)
-	{
-		child->destroy();
-	}
-	_children.clear();
+	DESTROY_CHILDREN();
 }

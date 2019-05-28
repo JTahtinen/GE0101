@@ -1,9 +1,16 @@
 #include "renderer.h"
 #include "../../defs.h"
 
-Renderer::Renderer()
+Renderer::Renderer(int width, int height, const std::string& title)
+	: _win(width, height, title.c_str())
 {
+	initRenderables(this);
 	_renderables.reserve(500);
+}
+
+Renderer::~Renderer()
+{
+	destroyRenderables();
 }
 
 void Renderer::submit(Renderable* renderable)
@@ -19,6 +26,7 @@ void Renderer::submit(Renderable* renderable)
 
 void Renderer::flush()
 {
+	_win.clear();
 	for (auto& renderable : _renderables)
 	{
 		renderable->render(Vec2(0, 0));
@@ -27,5 +35,6 @@ void Renderer::flush()
 			renderable->destroy();
 		}
 	}
+	_win.update();
 	_renderables.clear();
 }

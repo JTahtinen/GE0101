@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "game.h"
 #include "../physics/collider.h"
+#include "../defs.h"
 
 static std::vector<GUID> availableGUIDs;
 
@@ -14,6 +15,7 @@ Entity::Entity(const Vec2& pos, Sprite* sprite)
 	_sprite(sprite)
 	, _id(nextId())
 	, _object({{ pos, Vec2(0.2f, 0.2f) }, Vec2(0, 0)})
+	, _conversation(nullptr)
 {
 #ifdef _DEBUG
 	std::cout << "Created Entity GUID: " << _id << std::endl;
@@ -33,6 +35,10 @@ Entity::Entity()
 
 Entity::~Entity()
 {
+	if (_conversation)
+	{
+		delete _conversation;
+	}
 	availableGUIDs.push_back(_id);
 #ifdef _DEBUG
 	std::cout << "Deleted Entity GUID: " << _id << std::endl;
@@ -49,9 +55,24 @@ void Entity::addForce(const Vec2& force)
 	_object.force += force * Game::frameTime;
 }
 
-void Entity::update(Game* game)
+void Entity::setConversation(Conversation* conversation)
+{
+	if (!conversation)
+	{
+		WARN("Could not add conversation to entity: " << _id << " - nullptr exception");
+		return;
+	}
+	_conversation = conversation;
+}
+
+void Entity::update(GameState* gamestate)
 {
 	Collider::instance().push(&_object);
+}
+
+Conversation* Entity::engage()
+{
+	return _conversation;
 }
 
 void Entity::render(Renderer* renderer, const Camera* camera) const

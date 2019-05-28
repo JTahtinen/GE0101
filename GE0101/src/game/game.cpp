@@ -7,40 +7,42 @@
 #include "controllers/aicontroller.h"
 #include "../physics/collider.h"
 #include "conversation.h"
+#include "gamestate.h"
 
 float Game::frameTime = 0.0f;
 
 Game::Game(Renderer* renderer)
-	: _camera(Camera(16.0f, 9.0f))
-	, _renderer(renderer)
+	: _renderer(renderer)
 {
-	Conversation conv;
-	ConvNode node1;
-	ConvNode node2;
-	ConvNode node3;
-	ConvNode node4;
-	node1.setText("How are you?");
-	node1.addOption("I'm quite fine.", &node2);
-	node1.addOption("Go fuck yourself!", &node3);
-	node2.setText("It's such a nice evening!");
-	node2.addOption("Indeed it is. Goodbye!", nullptr);
-	node3.setText("Well, that's not very nice!");
-	node3.addOption("I'm sorry. Ask me again.", &node1);
-	node3.addOption("Deal with it!", &node4);
-	node4.setText("No need to be an asshole!");
+	ASSERT(renderer);
 
-	conv.push(&node1);
-	conv.push(&node2);
-	conv.push(&node3);
-	conv.push(&node4);
+	Conversation* conv = new Conversation();
+	ConvNode* node1 = new ConvNode();
+	ConvNode* node2 = new ConvNode();
+	ConvNode* node3 = new ConvNode();
+	ConvNode* node4 = new ConvNode();
+	node1->setText("How are you?");
+	node1->addOption("I'm quite fine.", node2);
+	node1->addOption("Go fuck yourself!", node3);
+	node2->setText("It's such a nice evening!");
+	node2->addOption("Indeed it is. Goodbye!", nullptr);
+	node3->setText("Well, that's not very nice!");
+	node3->addOption("I'm sorry. Ask me again.", node1);
+	node3->addOption("Deal with it!", node4);
+	node4->setText("No need to be an asshole!");
 
+	conv->push(node1);
+	conv->push(node2);
+	conv->push(node3);
+	conv->push(node4);
 
-	//_assetData.geometryData.pushGeometry()
-	TextureData& texData = _assetData.textureData;
 
 	Mesh* eMesh = new Mesh("defEntityMesh");
+	TextureData& texData = _assetData.textureData;
+
 	eMesh->bind();
-	_assetData.geometryData.pushGeometry(eMesh);
+
+
 
 	Vec2 vertData[] = {
 		Vec2(-0.1f, -0.1f),
@@ -75,13 +77,13 @@ Game::Game(Renderer* renderer)
 	Buffer* vertices = new Buffer();
 	Buffer* texCoords = new Buffer();
 	Buffer* colors = new Buffer();
-	
+
 	vertices->bind();
 	vertices->push(&vertData[0], sizeof(vertData));
-	
+
 	texCoords->bind();
 	texCoords->push(&texCoordData[0], sizeof(texCoordData));
-	
+
 	colors->bind();
 	colors->push(&colorData[0], sizeof(colorData));
 
@@ -91,94 +93,71 @@ Game::Game(Renderer* renderer)
 	layout.push<float>(2);
 	texCoordLayout.push<float>(2);
 	colorLayout.push<float>(4);
+
 	eMesh->pushData(vertices, layout);
 	eMesh->pushData(texCoords, texCoordLayout);
 	eMesh->pushData(colors, colorLayout);
 	eMesh->setIndices(indexData);
+	
 	texData.loadTexture("res/textures/IMG_2086.png");
+	texData.loadTexture("res/textures/cursor.png");
+
+	_assetData.geometryData.pushGeometry(eMesh);
+	
 	Sprite* snowman = new Sprite(eMesh, texData.getTexture("res/textures/IMG_2086.png"), "snowman");
-	_gameData.pushSprite(snowman);
-//	conv.start();
-	ASSERT(renderer);
-	_map = Map::createMap(5, 5, &_gameData);
-	Actor* player = new Actor(Vec2(0.0f, 0.0f), snowman, new InputController());
-	addActor(player);
-	_player = player;
-	addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(this)));
-	addActor(new Actor(Vec2(0.5f, 0.5f), snowman));
+	Sprite* cursorSprite = new Sprite(eMesh, texData.getTexture("res/textures/cursor.png"), "cursor");
+	_assetData.spriteData.pushSprite(snowman);
+	_assetData.spriteData.pushSprite(cursorSprite);
+	
+	GameState* gameState = new GameState(this, renderer);
+	Actor* player = new Actor(Vec2(), snowman, new InputController());
+	gameState->addActor(player);
+	gameState->setPlayer(player);
+	gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
+	Actor* a = new Actor(Vec2(0.5f, 0.5f), snowman);
+	a->setConversation(conv);
+	gameState->addActor(a);
+
+	_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec2(), 1.0f, true);
+	
+	_stateStack.push_back(gameState);
 }
 
 Game::~Game()
 {
-	delete _map;
-	for (auto* entity : _entities)
+	for (auto& state : _stateStack)
 	{
-		delete entity;
+		delete state;
 	}
+	_stateStack.clear();
+	_cursor->freeRenderable();
 }
+
 
 void Game::update(float frameTime)
 {
 	Game::frameTime = frameTime;
 	static Input& in = Input::instance();
-	if (in.poll(KEY_Z, KEYSTATE_TYPED))
-	{
-		_camera.zoomIn();
-	}
-	if (in.poll(KEY_X, KEYSTATE_TYPED))
-	{
-		_camera.zoomOut();
-	}
-	_map->update(this);
-	
-	for (auto& entity : _entities)
-	{
-		entity->update(this);
-	}
-
-	Collider::instance().update();
-
- 	_camera.setPos(_player->getPos());
-	_camera.update();
-	_map->render(_renderer, &_camera);
-	for (auto& entity : _entities)
-	{
-		entity->render(_renderer, &_camera);
-	}
-
-	//QuadRenderable* cursor = QuadRenderable::createQuadRenderable(Vec2(0, 0), Vec2(0.2f, 0.2f));
-	Renderable2D* cursor = Renderable2D::createRenderable2D(_gameData.getSprite("snowman"), Vec2(0, 0), 1.0f);
-	_renderer->submit(cursor);
+	static const Window* win = _renderer->getWindow();
+	static int winHeight = win->getHeight();
+	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
+	_cursor->setPos(mousePos);
+	State* state = _stateStack.back();
+	state->update(this);	
+	_renderer->submit(_cursor);
 }
 
-void Game::addEntity(Entity* e)
+void Game::pushState(State* state)
 {
-	if (e)
-	{
-		_entities.push_back(e);
-	}
+	_stateStack.push_back(state);
 }
 
-void Game::addActor(Actor* e)
+void Game::popState()
 {
-	if (e)
-	{
-		_actors.push_back(e);
-		addEntity(e);
-	}
+	_stateStack.pop_back();
 }
 
-const Camera& Game::getCamera() const
+const AssetData* Game::getAssetData() const
 {
-	return _camera;
-}
-
-const Actor* Game::getPlayer() const
-{
-	return _player;
-}
-
-const std::vector<Entity*>& Game::getEntities() const
-{
-	return _entities;
+	return &_assetData;
 }

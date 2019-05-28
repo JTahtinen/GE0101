@@ -1,6 +1,6 @@
 #pragma once
 #include "controller.h"
-#include "../game.h"
+#include "../gamestate.h"
 
 enum AITask
 {
@@ -12,9 +12,9 @@ enum AITask
 
 class AIController : public Controller
 {
-	const Game*		_game;
-	AITask			_task{ AI_IDLE };
+	const GameState*	_game;
+	AITask				_task{ AI_IDLE };
 public:
-	AIController(Game* game);
+	AIController(GameState* game);
 	virtual void update(Actor* e) override;
 };

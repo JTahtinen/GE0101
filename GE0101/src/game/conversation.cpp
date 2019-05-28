@@ -1,6 +1,7 @@
 #include "conversation.h"
 #include "../defs.h"
 #include "../input/input.h"
+#include "../graphics/textbox.h"
 
 void ConvNode::print() const
 {
@@ -10,6 +11,16 @@ void ConvNode::print() const
 	{
 		MSG(optionNum++ << ": " << option.text);
 	}
+}
+
+void ConvNode::render(Renderer* renderer) const
+{
+	TextBox box(_text);
+	for (auto& option : _options)
+	{
+		box.pushContent(option.text);
+	}
+	box.render(renderer, Vec2(0, 0));
 }
 
 void ConvNode::setText(const std::string& text)
@@ -36,30 +47,24 @@ unsigned int ConvNode::getNumOptions() const
 	return _options.size();
 }
 
-void ConvNode::activate()
+ConvNode* ConvNode::activate()
 {
 	static Input& in = Input::instance();
-	print();
-	MSG(std::endl);
+
 	unsigned int  numOptions = getNumOptions();
-	bool active = (numOptions != 0);
-	while (active)
+	if (numOptions == 0)
 	{
-		in.update();
-		for (unsigned int i = 0; i < numOptions; ++i)
+		return nullptr;
+	}
+	for (unsigned int i = 0; i < numOptions; ++i)
+	{
+		if (in.poll(KEY_1 + i, KEYSTATE_TYPED))
 		{
-			if (in.poll(KEY_1 + i, KEYSTATE_TYPED))
-			{
-				ConvNode* next = getNodeFromOption(i);
-				if (next)
-				{
-					next->activate();
-				}
-				active = false;
-				break;
-			}
+			return getNodeFromOption(i);
 		}
 	}
+	return this;
+
 }
 
 Conversation::Conversation()
@@ -77,10 +82,39 @@ void Conversation::push(ConvNode* node)
 
 void Conversation::start()
 {
+	reset();
+}
+
+Conversation_Status Conversation::update()
+{
+	if (Input::instance().poll(KEY_E, KEYSTATE_TYPED))
+	{
+		reset();
+		return CONVERSATION_FINISHED;
+	}
+	_activeNode = _activeNode->activate();
+	if (!_activeNode)
+	{
+		reset();
+		return CONVERSATION_FINISHED;
+	}
+	return CONVERSATION_RUNNING;
+}
+
+void Conversation::reset()
+{
 	if (_nodes.empty())
 	{
-		WARN("Could not start Conversation - No nodes!");
+		WARN("Could not reset Conversation - No nodes!");
 		return;
 	}
-	_nodes[0]->activate();
+	_activeNode = _nodes[0];
+}
+
+void Conversation::render(Renderer* renderer) const
+{
+	if (_activeNode)
+	{
+		_activeNode->render(renderer);
+	}
 }

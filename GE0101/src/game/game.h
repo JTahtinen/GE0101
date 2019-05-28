@@ -7,28 +7,23 @@
 #include "camera.h"
 #include "assets/assetdata.h"
 #include "gamedata.h"
-
-class Renderer;
+#include "state.h"
+#include "../graphics/renderers/renderer.h"
 
 class Game
 {
-	Map*					_map;
-	std::vector<Entity*>	_entities;
-	std::vector<Actor*>		_actors;
-	Actor*					_player;
-	Camera					_camera;
+	std::vector<State*>		_stateStack;
 	Renderer*				_renderer;
-	GameData				_gameData;
 	AssetData				_assetData;
+	Renderable2D*			_cursor;
 public:
 	static float frameTime;
 public:
 	Game(Renderer* renderer);
 	~Game();
+
 	void update(float frameTime);
-	void addEntity(Entity* e);
-	void addActor(Actor* e);
-	const Camera& getCamera() const;
-	const Actor* getPlayer() const;
-	const std::vector<Entity*>& getEntities() const;
+	void pushState(State* state);
+	void popState();
+	const AssetData* getAssetData() const;
 };

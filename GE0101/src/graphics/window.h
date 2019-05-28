@@ -18,6 +18,10 @@ public:
 	void clear() const;
 	void update() const;
 	void setTitle(const char* title);
+	inline float getRatio() const
+	{
+		return (float)_width / (float)_height;
+	}
 	inline Vec2 getScreenCoords(int x, int y) const
 	{
 		float halfW = _width * 0.5f;

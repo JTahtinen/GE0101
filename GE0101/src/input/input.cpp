@@ -1,6 +1,8 @@
 #include "input.h"
 
 Input::Input()
+	: _mWheelDown(false)
+	, _mWheelUp(false)
 {
 	SDL_GetMouseState(&_mouseX, &_mouseY);
 	int i;
@@ -15,8 +17,11 @@ Input::Input()
 
 void Input::update()
 {
+	_mWheelDown = false;
+	_mWheelUp = false;
+
 	static bool keyEventHappened = false;
-	
+
 	if (keyEventHappened)
 	{
 		for (int i = 0; i < KEY_AMOUNT; ++i)
@@ -52,12 +57,24 @@ void Input::update()
 				_keysPressed[key] = false;
 
 			}
-		}
+		} else
 		if (ev.type == SDL_MOUSEMOTION)
 		{
 			SDL_GetMouseState(&_mouseX, &_mouseY);
 			_deltaX = ev.motion.xrel; 
 			_deltaY = ev.motion.yrel;
+		}
+		else
+			if (ev.type == SDL_MOUSEWHEEL)
+		{
+				if (ev.wheel.y < 0)
+				{
+					_mWheelDown = true;
+				}
+				else
+				{
+					_mWheelUp = true;
+				}
 		}
 	}
 	

@@ -153,8 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\game\assets\geometrydata.cpp" />
+    <ClCompile Include="src\game\assets\spritedata.cpp" />
     <ClCompile Include="src\game\assets\texturedata.cpp" />
     <ClCompile Include="src\game\gamedata.cpp" />
+    <ClCompile Include="src\game\gamestate.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\game\actor.cpp" />
@@ -191,12 +195,16 @@
     <ClInclude Include="src\defs.h" />
     <ClInclude Include="src\game\actor.h" />
     <ClInclude Include="src\game\assets\assetdata.h" />
+    <ClInclude Include="src\game\assets\dataops.h" />
     <ClInclude Include="src\game\assets\geometrydata.h" />
+    <ClInclude Include="src\game\assets\spritedata.h" />
     <ClInclude Include="src\game\assets\texturedata.h" />
     <ClInclude Include="src\game\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
     <ClInclude Include="src\game\gamedata.h" />
+    <ClInclude Include="src\game\gamestate.h" />
+    <ClInclude Include="src\game\state.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\textbox.h" />
