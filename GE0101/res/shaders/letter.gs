@@ -15,17 +15,22 @@ void main()
 {	
 	vec2 dimensions = vec2(u_Dimensions.x * u_Scale, u_Dimensions.y * u_Scale * u_ScreenRatio);
 	vec4 pos = gl_in[0].gl_Position;
+	
 	gl_Position = pos;
-	v_TexCoord = u_TexCoord + vec2(0, u_Dimensions.y);
-	EmitVertex();
-	gl_Position = pos + vec4(0, dimensions.y, 0, 0);
 	v_TexCoord = u_TexCoord;
 	EmitVertex();
-	gl_Position = pos + vec4(dimensions.x, 0, 0, 0) ;
-	v_TexCoord = u_TexCoord + u_Dimensions;
+	
+	gl_Position = pos + vec4(0, -dimensions.y, 0, 0);
+	v_TexCoord = u_TexCoord + vec2(0, u_Dimensions.y);
 	EmitVertex();
-	gl_Position = pos + vec4(dimensions.x, dimensions.y, 0, 0);
+	
+	gl_Position = pos + vec4(dimensions.x, 0, 0, 0) ;
 	v_TexCoord = u_TexCoord + vec2(u_Dimensions.x, 0);
 	EmitVertex();
+	
+	gl_Position = pos + vec4(dimensions.x, -dimensions.y, 0, 0);
+	v_TexCoord = u_TexCoord + u_Dimensions;
+	EmitVertex();
+	
 	EndPrimitive();
 }

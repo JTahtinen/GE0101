@@ -21,6 +21,7 @@ protected:
 	PhysicsObject		_object;
 	Sprite*				_sprite;
 	Conversation*		_conversation;
+	bool				_engaged;
 public:
 	Entity(const Vec2& pos, Sprite* sprite);
 	Entity(const Vec2& pos);
@@ -34,7 +35,7 @@ public:
 	inline const Vec2& getDimensions() const { return _object.location.dimensions; }
 	inline bool isMoving() const { return _object.force.length() != 0; }
 	virtual void update(GameState* gamestate);
-	Conversation* engage();
+	void engage(GameState* gamestate);
 	void render(Renderer* renderer, const Camera* camera) const;
 	inline GUID getId() const { return _id; }
 	inline std::string getName() const 

@@ -31,8 +31,6 @@ Application::~Application()
 void Application::run()
 {
 
-//	const Camera& camera = _game->getCamera();
-
 
 	bool running = true;
 
@@ -44,24 +42,30 @@ void Application::run()
 	clock_t lastTime = clock();
 	float runningTime = 0;
 
-	Font* font = Font::loadFont("res/fonts/liberation_serif");
-	TextBox::setFont(font);
-	//TextRenderable* text = TextRenderable::createTextRenderable("Lord Engine, v0.1", font, Vec2(0.35, -0.45f), 0.4f, true);
-	TextRenderable* text = TextRenderable::createTextRenderable("Lord Engine, v0.1", font, Vec2(0.0f, -0.4f), 0.4f, true);
-	TextBox textBox("FPS: ");
+	Font* arialFont = Font::loadFont("res/fonts/arial");
+	Font* lsFont = Font::loadFont("res/fonts/liberation_serif");
+	TextBox::setDefaultFont(arialFont);
+	TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
+	TextBox textBox("FPS: ", 0.3f);
+	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 1.0f));
+	textBox.setFont(lsFont);
 
 	int fps = 0;
-	Vec2 fpsScreenPos(-0.9f, 0.35f);
+	Vec2 fpsScreenPos(-0.9f, 0.45f);
 	Vec2 mouse;
 	bool updateFPS = true;
+	bool toggleFPS = true;
 	while (running)
 	{
-		//mouse = _window.getScreenCoordsRatioCorrected(in.getMouseX(), _window.getHeight() - in.getMouseY());
-
 		in.update();
 		if (in.poll(KEY_ESCAPE))
 		{
 			running = false;
+		}
+
+		if (in.poll(KEY_F, KEYSTATE_TYPED))
+		{
+			toggleFPS = !toggleFPS;
 		}
 	
 		clock_t currentTime = clock();
@@ -74,12 +78,13 @@ void Application::run()
 			textBox.setContent("FPS: " + std::to_string(fps));
 			updateFPS = false;
 		}
+		if (toggleFPS)
 		textBox.render(&_renderer, fpsScreenPos);
 
 
-		_renderer.submit(text);
+		_renderer.submit(engineInfo);
 		_renderer.flush();
-
+		
 		++frames;
 		if (runningTime >= 1.0f)
 		{
@@ -89,5 +94,6 @@ void Application::run()
 			updateFPS = true;
 		}
 	}
-	delete font;
+	delete lsFont;
+	//delete arialFont;
 }

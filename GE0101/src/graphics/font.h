@@ -33,6 +33,7 @@ public:
 	{
 		return _atlas;
 	}
+	void bind() const;
 private:
 	Font(std::vector<Letter> letters, Texture* atlas);
 };

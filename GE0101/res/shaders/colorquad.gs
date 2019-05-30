@@ -12,11 +12,11 @@ void main()
 
 	gl_Position = pos;
 	EmitVertex();
-	gl_Position = pos + vec4(0, u_Dimensions.y * u_ScreenRatio, 0, 0);
+	gl_Position = pos + vec4(0, -u_Dimensions.y * u_ScreenRatio, 0, 0);
 	EmitVertex();
 	gl_Position = pos + vec4(u_Dimensions.x, 0, 0, 0);
 	EmitVertex();
-	gl_Position = pos + vec4(u_Dimensions.x, u_Dimensions.y * u_ScreenRatio, 0, 0);
+	gl_Position = pos + vec4(u_Dimensions.x, -u_Dimensions.y * u_ScreenRatio, 0, 0);
 	EmitVertex();
 	EndPrimitive();
 }

@@ -45,9 +45,11 @@ Window::Window(int width, int height, const char* title)
 		_height, 
 		SDL_WINDOW_OPENGL);
 	_glContext = SDL_GL_CreateContext(_win);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	GLenum status = glewInit();
-	setClearColor(0.3f, 0.1f, 0.8f);
+	setClearColor(0.50f, 0.45f, 0.45f);
 }
 
 Window::~Window()

@@ -16,11 +16,13 @@ void ConvNode::print() const
 void ConvNode::render(Renderer* renderer) const
 {
 	TextBox box(_text);
+	unsigned int i = 1;
+	box.pushContent(" ");
 	for (auto& option : _options)
 	{
-		box.pushContent(option.text);
+		box.pushContent(std::to_string(i++) + ": " +  option.text);
 	}
-	box.render(renderer, Vec2(0, 0));
+	box.render(renderer, Vec2(-0.4f, 0.2f));
 }
 
 void ConvNode::setText(const std::string& text)
@@ -52,10 +54,6 @@ ConvNode* ConvNode::activate()
 	static Input& in = Input::instance();
 
 	unsigned int  numOptions = getNumOptions();
-	if (numOptions == 0)
-	{
-		return nullptr;
-	}
 	for (unsigned int i = 0; i < numOptions; ++i)
 	{
 		if (in.poll(KEY_1 + i, KEYSTATE_TYPED))

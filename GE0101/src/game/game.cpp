@@ -23,13 +23,13 @@ Game::Game(Renderer* renderer)
 	ConvNode* node4 = new ConvNode();
 	node1->setText("How are you?");
 	node1->addOption("I'm quite fine.", node2);
-	node1->addOption("Go fuck yourself!", node3);
+	node1->addOption("Mind your own business!", node3);
 	node2->setText("It's such a nice evening!");
 	node2->addOption("Indeed it is. Goodbye!", nullptr);
 	node3->setText("Well, that's not very nice!");
 	node3->addOption("I'm sorry. Ask me again.", node1);
 	node3->addOption("Deal with it!", node4);
-	node4->setText("No need to be an asshole!");
+	node4->setText("No need to be rude!");
 
 	conv->push(node1);
 	conv->push(node2);
@@ -100,12 +100,12 @@ Game::Game(Renderer* renderer)
 	eMesh->setIndices(indexData);
 	
 	texData.loadTexture("res/textures/IMG_2086.png");
-	texData.loadTexture("res/textures/cursor.png");
+	texData.loadTexture("res/textures/cursor1.png");
 
 	_assetData.geometryData.pushGeometry(eMesh);
 	
 	Sprite* snowman = new Sprite(eMesh, texData.getTexture("res/textures/IMG_2086.png"), "snowman");
-	Sprite* cursorSprite = new Sprite(eMesh, texData.getTexture("res/textures/cursor.png"), "cursor");
+	Sprite* cursorSprite = new Sprite(eMesh, texData.getTexture("res/textures/cursor1.png"), "cursor");
 	_assetData.spriteData.pushSprite(snowman);
 	_assetData.spriteData.pushSprite(cursorSprite);
 	
@@ -113,12 +113,12 @@ Game::Game(Renderer* renderer)
 	Actor* player = new Actor(Vec2(), snowman, new InputController());
 	gameState->addActor(player);
 	gameState->setPlayer(player);
-	gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
+	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
 	Actor* a = new Actor(Vec2(0.5f, 0.5f), snowman);
 	a->setConversation(conv);
 	gameState->addActor(a);
 
-	_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec2(), 1.0f, true);
+	_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec4(), 0.5f, true);
 	
 	_stateStack.push_back(gameState);
 }
@@ -141,7 +141,7 @@ void Game::update(float frameTime)
 	static const Window* win = _renderer->getWindow();
 	static int winHeight = win->getHeight();
 	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
-	_cursor->setPos(mousePos);
+	_cursor->setPos(Vec4(mousePos.x, mousePos.y, 1, 1));
 	State* state = _stateStack.back();
 	state->update(this);	
 	_renderer->submit(_cursor);

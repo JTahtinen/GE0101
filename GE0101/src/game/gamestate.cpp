@@ -5,16 +5,11 @@
 #include "actor.h"
 #include "../physics/collider.h"
 
-enum Game_Substate
-{
-	SUBSTATE_ACTIVE,
-	SUBSTATE_CONVERSATION
-};
-
 GameState::GameState(const Game* game, Renderer* renderer)
 	: _renderer(renderer)
 	, _camera(renderer->getDisplayRatio())
 	, _activeConversation(nullptr)
+	, _substate(SUBSTATE_ACTIVE)
 {
 	_map = Map::createMap(5, 5, game);
 
@@ -65,12 +60,21 @@ const Actor* GameState::getPlayer() const
 	return _player;
 }
 
+void GameState::setSubState(Game_Substate substate)
+{
+	_substate = substate;
+}
+
+void GameState::setActiveConversation(Conversation* conversation)
+{
+	_activeConversation = conversation;
+}
+
 State_Condition GameState::update(Game* game)
 {
-	static Game_Substate subState = SUBSTATE_ACTIVE;
 	static Input& in = Input::instance();
 
-	switch (subState)
+	switch (_substate)
 	{
 
 	case SUBSTATE_ACTIVE:
@@ -104,12 +108,7 @@ State_Condition GameState::update(Game* game)
 
 		if (in.poll(KEY_E, KEYSTATE_TYPED))
 		{
-			_activeConversation = _entities.back()->engage();
-			if (_activeConversation)
-			{
-				_activeConversation->start();
-				subState = SUBSTATE_CONVERSATION;
-			}
+			_entities.back()->engage(this);
 		}
 		break;
 	}
@@ -119,19 +118,28 @@ State_Condition GameState::update(Game* game)
 		{
 			WARN("Could not init conversation");
 			_activeConversation = nullptr;
-			subState = SUBSTATE_ACTIVE;
+			_substate = SUBSTATE_ACTIVE;
 			break;
 		}
 		Conversation_Status convStatus = _activeConversation->update();
 		if (convStatus == CONVERSATION_FINISHED)
 		{
 			_activeConversation = nullptr;
-			subState = SUBSTATE_ACTIVE;
+			_substate = SUBSTATE_ACTIVE;
 			break;
 		}
-		_activeConversation->render(_renderer);
 	}
+	}
+	_map->render(_renderer, &_camera);
+
+	for (auto& entity : _entities)
+	{
+		entity->render(_renderer, &_camera);
 	}
 	
+	if (_substate == SUBSTATE_CONVERSATION)
+	{
+		_activeConversation->render(_renderer);
+	}
 	return STATE_RUNNING;
 }

@@ -40,7 +40,7 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 
 	int xStartTile		= (int)((camera->getLeft()	 + halfTileSize) / TILE_SIZE);
 	int xEndTile		= (int)((camera->getRight()  + halfTileSize) / TILE_SIZE) + 1;
-	int yStartTile		= (int)((camera->getBottom() + halfTileSize) / TILE_SIZE);
+	int yStartTile = (int)((camera->getBottom() + halfTileSize) / TILE_SIZE);
 	int yEndTile		= (int)((camera->getTop()	 + halfTileSize) / TILE_SIZE) + 1;
 
 
@@ -56,8 +56,8 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 	if (yEndTile < 0) return;
 	if (yEndTile > _height) yEndTile = _height;
 
-	const Vec2& camPos = camera->getPos();
-	const float zoom = camera->getZoom();
+	const Vec4& camPos = camera->getPos();
+	//const float zoom = camera->getZoom();
 
 	for (int y = yStartTile; y < yEndTile; ++y)
 	{
@@ -65,9 +65,9 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 		{
 			Renderable2D* tile = 
 				Renderable2D::createRenderable2D(_tiles[x + y * _width]->sprite,
-				Vec2(
+				Vec4(
 					-camPos.x + x * TILE_SIZE,
-					-camPos.y + y * TILE_SIZE), zoom);
+					-camPos.y + y * TILE_SIZE, camPos.z), 1.0f);
 			renderer->submit(tile);
 		}
 	}

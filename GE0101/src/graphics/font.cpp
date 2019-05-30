@@ -96,6 +96,11 @@ Font* Font::loadFont(const std::string& filepath)
 	return new Font(letters, atlas);
 }
 
+void Font::bind() const
+{
+	_atlas->bind(1);
+}
+
 Font::Font(std::vector<Letter> letters, Texture* atlas)
 	: _letters(letters)
 	, _atlas(atlas)

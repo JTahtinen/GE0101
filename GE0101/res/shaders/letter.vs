@@ -10,6 +10,8 @@ uniform float u_Scale;
 
 void main()
 {
-	gl_Position = vec4(u_Position.x, u_Position.y * u_ScreenRatio, 0, 1) + vec4(u_Offset.x, (-u_Dimensions.y - u_Offset.y) * u_Scale * u_ScreenRatio, 0, 0);
-	//gl_Position = vec4(u_Position.x, u_Position.y , 0, 1) + vec4(u_Offset.x, u_Offset.y , 0, 0);
+	//gl_Position = vec4(u_Position.x, u_Position.y * u_ScreenRatio, 0, 1) + vec4(u_Offset.x, (-u_Dimensions.y - u_Offset.y) * u_Scale * u_ScreenRatio, 0, 0);
+	gl_Position = vec4(u_Position.x, u_Position.y * u_ScreenRatio, 0, 1) + vec4(u_Offset.x, -u_Offset.y * u_Scale * u_ScreenRatio, 0, 0);
+	
+	
 }

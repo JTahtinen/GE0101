@@ -5,7 +5,7 @@
 #include "renderer.h"
 
 #define RENDER_CHILDREN() for (auto& child : _children)\
-{ if (child) {child->render(_pos + offset);} }
+{ if (child) {child->render(Vec2(_pos.x, _pos.y));} }
 #define DESTROY_CHILDREN() for (auto& child : _children)\
 { if (child) {if (!child->isStreaming()) {child->destroy();}}} _children.clear();
 #define RENDERABLE_POOL_SIZE 100
@@ -60,7 +60,7 @@ void initRenderables(const Renderer* renderer)
 	basicShader = new Shader("res/shaders/basic");
 	basicShader->bind();
 	basicShader->setUniform4f("u_Color", 0, 0, 0, 0);
-	basicShader->setUniform2f("u_Offset", 0, 0);
+	basicShader->setUniform4f("u_Offset", 0, 0, 0, 1);
 	basicShader->setUniform1f("u_ScrRatio", renderer->getDisplayRatio());
 	basicShader->setUniform1f("u_Scale", 1.0f);
 	basicShader->setUniform1i("u_Texture", 0);
@@ -77,7 +77,7 @@ void initRenderables(const Renderer* renderer)
 	textShader = new Shader("res/shaders/letter", true);
 	textShader->bind();
 	textShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
-	textShader->setUniform1f("u_Scale", 0.3f);
+	textShader->setUniform1f("u_Scale", 0.1f);
 	quadShader = new Shader("res/shaders/colorquad", true);
 	quadShader->bind();
 	quadShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
@@ -115,7 +115,7 @@ void destroyRenderables()
 }
 
 
-Renderable::Renderable(const Vec2& pos, bool streaming)
+Renderable::Renderable(const Vec4& pos, bool streaming)
 	: _pos(pos)
 	, _streaming(streaming)
 {
@@ -142,7 +142,7 @@ void Renderable::freeRenderable()
 	_streaming = false;
 }
 
-Renderable2D::Renderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming)
+Renderable2D::Renderable2D(const Sprite* sprite, const Vec4& pos, float scale, bool streaming)
 	: 
 	_sprite(sprite)
 	, _scale(scale)
@@ -151,7 +151,7 @@ Renderable2D::Renderable2D(const Sprite* sprite, const Vec2& pos, float scale, b
 }
 
 
-Renderable2D* Renderable2D::createRenderable2D(const Sprite* sprite, const Vec2& pos, float scale, bool streaming)
+Renderable2D* Renderable2D::createRenderable2D(const Sprite* sprite, const Vec4& pos, float scale, bool streaming)
 {
 	unsigned int tag;
 	Renderable2D* renderable = createRenderable<Renderable2D>(renderable2DPool, availableRenderable2Ds, &tag);
@@ -169,7 +169,7 @@ void Renderable2D::render(const Vec2& offset) const
 {
 	basicShader->bind();
 	_sprite->bind();
-	basicShader->setUniform2f("u_Offset", _pos.x + offset.x, _pos.y + offset.y);
+	basicShader->setUniform4f("u_Offset", _pos.x + offset.x, _pos.y + offset.y, _pos.z, _pos.w);
 	basicShader->setUniform1f("u_Scale", _scale);
 	basicShader->setUniform1i("u_Texture", 0);
 	GLCALL(glDrawElements(GL_TRIANGLES, _sprite->getElementCount(), GL_UNSIGNED_INT, NULL));
@@ -183,7 +183,7 @@ void Renderable2D::destroy()
 	DESTROY_CHILDREN();
 }
 
-TextRenderable::TextRenderable(const std::string& text, const Font* font, const Vec2& pos, float scale, bool streaming)
+TextRenderable::TextRenderable(const std::string& text, const Font* font, const Vec4& pos, float scale, bool streaming)
 	: Renderable(pos, streaming)
 	, _scale(scale)
 {
@@ -191,7 +191,7 @@ TextRenderable::TextRenderable(const std::string& text, const Font* font, const 
 	setContent(text);
 }
 
-TextRenderable* TextRenderable::createTextRenderable(const std::string& text, const Font* font, const Vec2& pos, float scale, bool streaming)
+TextRenderable* TextRenderable::createTextRenderable(const std::string& text, const Font* font, const Vec4& pos, float scale, bool streaming)
 {
 	unsigned int tag;
 	TextRenderable* renderable = createRenderable(textRenderablePool, availableTextRenderables, &tag);
@@ -210,7 +210,8 @@ void TextRenderable::render(const Vec2& offset) const
 	textShader->bind();
 	textVao->bind();
 	textShader->setUniform1f("u_Scale", _scale);
-	Vec2 cursor = _pos + offset;
+	_font->bind();
+	Vec4 cursor = _pos + Vec4(offset.x, offset.y, 0, 1);
 	for (auto& letter : _content)
 	{
 		textShader->setUniform2f("u_Position", cursor.x, cursor.y);
@@ -257,19 +258,19 @@ void TextRenderable::destroy()
 	DESTROY_CHILDREN();
 }
 
-QuadRenderable::QuadRenderable(const Vec2& pos, const Vec2& dimensions, const Vec4& color, bool streaming)
+QuadRenderable::QuadRenderable(const Vec4& pos, const Vec2& dimensions, const Vec4& color, bool streaming)
 	: _dimensions(dimensions)
 	, _color(color)
 	, Renderable(pos, streaming)
 {
 }
 
-QuadRenderable::QuadRenderable(const Vec2& pos, const Vec2& dimensions, bool streaming)
+QuadRenderable::QuadRenderable(const Vec4& pos, const Vec2& dimensions, bool streaming)
 	: QuadRenderable(pos, dimensions, Vec4(0.8f, 0.8f, 0.8f, 1.0f), streaming)
 {
 }
 
-QuadRenderable* QuadRenderable::createQuadRenderable(const Vec2& pos, const Vec2& dimensions, const Vec4& color, bool streaming)
+QuadRenderable* QuadRenderable::createQuadRenderable(const Vec4& pos, const Vec2& dimensions, const Vec4& color, bool streaming)
 {
 	unsigned int tag;
 	QuadRenderable* renderable = createRenderable(quadRenderablePool, availableQuadRenderables, &tag);
@@ -285,7 +286,7 @@ QuadRenderable* QuadRenderable::createQuadRenderable(const Vec2& pos, const Vec2
 }
 
 
-QuadRenderable* QuadRenderable::createQuadRenderable(const Vec2& pos, const Vec2& dimensions, bool streaming)
+QuadRenderable* QuadRenderable::createQuadRenderable(const Vec4& pos, const Vec2& dimensions, bool streaming)
 {
 	return createQuadRenderable(pos, dimensions, Vec4(0.8f, 0.8f, 0.8f, 1.0f), streaming);
 }
