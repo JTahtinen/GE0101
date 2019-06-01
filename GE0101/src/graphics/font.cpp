@@ -3,6 +3,7 @@
 #include "../defs.h"
 #include <sstream>
 #include <string>
+#include "renderers/renderer.h"
 
 Font::~Font()
 {
@@ -98,7 +99,7 @@ Font* Font::loadFont(const std::string& filepath)
 
 void Font::bind() const
 {
-	_atlas->bind(1);
+	_atlas->bind(TEXTURE_SLOT_FONT_ATLAS);
 }
 
 Font::Font(std::vector<Letter> letters, Texture* atlas)

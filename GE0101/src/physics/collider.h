@@ -13,8 +13,6 @@ public:
 		static Collider collider;
 		return collider;
 	}
-
-
 	void push(PhysicsObject* obj);
 	void update();
 private:

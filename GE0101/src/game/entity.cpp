@@ -15,7 +15,7 @@ Entity::Entity(const Vec2& pos, Sprite* sprite)
 	:
 	_sprite(sprite)
 	, _id(nextId())
-	, _object({{ pos, Vec2(0.2f, 0.2f) }, Vec2(0, 0)})
+	, _object({{ pos, Vec2(0.07f, 0.19f) }, Vec2(0, 0)})
 	, _conversation(nullptr)
 	, _engaged(false)
 {

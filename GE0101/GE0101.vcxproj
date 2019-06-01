@@ -166,8 +166,11 @@
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\conversation.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
+    <ClCompile Include="src\graphics\renderers\quadrenderable.cpp" />
     <ClCompile Include="src\graphics\renderers\renderable.cpp" />
+    <ClCompile Include="src\graphics\renderers\renderable2d.cpp" />
     <ClCompile Include="src\graphics\renderers\renderer.cpp" />
+    <ClCompile Include="src\graphics\renderers\textrenderable.cpp" />
     <ClCompile Include="src\graphics\sprite.cpp" />
     <ClCompile Include="src\graphics\textbox.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
@@ -207,6 +210,9 @@
     <ClInclude Include="src\game\state.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\mesh.h" />
+    <ClInclude Include="src\graphics\renderers\quadrenderable.h" />
+    <ClInclude Include="src\graphics\renderers\renderable2d.h" />
+    <ClInclude Include="src\graphics\renderers\textrenderable.h" />
     <ClInclude Include="src\graphics\textbox.h" />
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\controllers\controller.h" />

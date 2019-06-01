@@ -10,17 +10,19 @@ Collider::Collider()
 
 bool Collider::overlap(const Location& loc1, const Location& loc2) const
 {
+	// Margin needed because of floating point rounding error
+	float errorMargin = 0.003f * Game::frameTime;
 	const Vec2& pos1 = loc1.pos;
 	const Vec2& pos2 = loc2.pos;
 
 	const Vec2& dim1 = loc1.dimensions;
 	const Vec2& dim2 = loc2.dimensions;
 
-	float halfC1W	= dim1.x / 2.0f;
-	float halfC2W	= dim2.x / 2.0f;
+	float halfC1W	= (dim1.x * 0.5f);
+	float halfC2W	= (dim2.x * 0.5f);
 	
-	float halfC1H	= dim1.y / 2.0f;
-	float halfC2H	= dim2.y / 2.0f;
+	float halfC1H	= (dim1.y * 0.5f);
+	float halfC2H	= (dim2.y * 0.5f);
 	
 	float left1		= (pos1.x - halfC1W);
 	float left2		= (pos2.x - halfC2W);
@@ -35,13 +37,12 @@ bool Collider::overlap(const Location& loc1, const Location& loc2) const
 	float top2		= (pos2.y + halfC2H);
 
 
-	//TODO: Figure out why this hack is needed 
 
-	bool xCollision = (left1 > left2 && left1 < right2 - 0.01f * Game::frameTime)
-		|| (right1 < right2 && right1 > left2);
+	bool xCollision = (left1 > left2 && left1 < right2 - errorMargin)
+		|| (right1 < right2 && right1 > left2 + errorMargin) || (left1 == left2) || (right1 == right2);
 
-	bool yCollision = (bottom1 > bottom2 && bottom1 < top2 - 0.01f * Game::frameTime)
-		|| (top1 < top2 && top1 > bottom2);
+	bool yCollision = (bottom1 > bottom2 && bottom1 < top2 - errorMargin)
+		|| (top1 < top2&& top1 > bottom2 + errorMargin) || (top1 == top2) || (bottom1 == bottom2);
 
 
 	return (xCollision && yCollision);
@@ -51,48 +52,53 @@ void Collider::update()
 {
 	for (auto& obj : _movingObjects)
 	{
-		const Vec2& force = obj->force;
 		const Location& location = obj->location;
 		const Vec2& pos = location.pos;
 		const Vec2& dimensions = location.dimensions;
-		const Vec2 nextPos = pos + force;
-		const Location nextLocation = { nextPos, dimensions };
-		Vec2 vel = force;
+		Vec2 vel = obj->force;
+	
 		for (auto& other : _objects)
 		{
 			if (obj == other) continue;
-			
+			const Vec2 nextPos = pos + vel;
+			const Location nextLocation = { nextPos, dimensions };
+
 			const Location& otherLoc = other->location;
 			if (overlap(nextLocation, otherLoc))
 			{
+				bool xCollision = false;
+				bool yCollision = false;
+				//collisionHappened = true;
 				const Vec2& otherPos = otherLoc.pos;
 				const Vec2& otherDim = otherLoc.dimensions;
-				const Location nextXLoc = { Vec2(nextPos.x, pos.y), dimensions};
-				const Location nextYLoc = { Vec2(pos.x, nextPos.y), dimensions};
+				const Location nextXLoc = { Vec2(nextPos.x, pos.y), dimensions };
+				const Location nextYLoc = { Vec2(pos.x, nextPos.y), dimensions };
 				if (overlap(nextXLoc, otherLoc))
 				{
 					int dir;
-					if (force.x > 0) dir = 1;
+					if (vel.x > 0) dir = 1;
 					else dir = -1;
 					vel.x =
-						-((pos.x - otherPos.x + dir * (dimensions.x / 2.0f))
-							+ dir * (otherDim.x / 2.0f));
+						-((pos.x - otherPos.x + dir * (dimensions.x * 0.5f))
+							+ dir * (otherDim.x * 0.5f));
+					xCollision = true;
 				}
-			
+
 				if (overlap(nextYLoc, otherLoc))
 				{
 					int dir;
-					if (force.y > 0) dir = 1;
+					if (vel.y > 0) dir = 1;
 					else dir = -1;
 					vel.y =
-						-((pos.y - otherPos.y + dir * (dimensions.y / 2.0f))
-							+ dir * (otherDim.y / 2.0f));
+						-((pos.y - otherPos.y + dir * (dimensions.y * 0.5f))
+							+ dir * (otherDim.y * 0.5f));
+					yCollision = true;
 				}
-		
-				
+
+
 
 				//TODO: Corner collision check
-				break;
+				//break;
 			}
 		}
 		obj->location.pos += vel;

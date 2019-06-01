@@ -1,19 +1,18 @@
 #pragma once
-#include "../sprite.h"
 #include "../../math/math.h"
-#include "../font.h"
 #include <vector>
-#include "../shader.h"
-#include "../mesh.h"
 
 class Renderer;
 
 extern void initRenderables(const Renderer* renderer);
 extern void destroyRenderables();
 
-class VertexArray;
-class IndesBuffer;
-class Texture;
+#define RENDERABLE_POOL_SIZE 100
+
+#define RENDER_CHILDREN() for (auto& child : _children)\
+{ if (child) {child->render(Vec2(_pos.x, _pos.y));} }
+#define DESTROY_CHILDREN() for (auto& child : _children)\
+{ if (child) {if (!child->isStreaming()) {child->destroy();}}} _children.clear();
 
 class Renderable
 {
@@ -42,48 +41,16 @@ protected:
 	virtual void destroy() = 0;
 };
 
-class Renderable2D : public Renderable
+template <typename T> 
+T* createRenderable(T* pool, std::vector<unsigned int>& availableRenderables, unsigned int* tag)
 {
-	const Sprite*		_sprite;
-	float				_scale;
-public:
-	Renderable2D() = default;
-	Renderable2D(const Sprite* sprite, const Vec4& pos, float scale, bool streaming = false);
-	static Renderable2D* createRenderable2D(const Sprite* sprite, const Vec4& pos, float scale, bool streaming = false);
-	virtual void render(const Vec2& offset) const override;
-protected:
-	virtual void destroy() override;
-};
-
-
-class TextRenderable : public Renderable
-{
-	std::vector<const Letter*>			_content;
-	const Font*							_font;
-	float								_scale;
-public:
-	TextRenderable() = default;
-	TextRenderable(const std::string& text, const Font* font, const Vec4& pos, float scale, bool streaming = false);
-	virtual void render(const Vec2& offset) const override;
-	void setContent(const std::string& text);
-	void setFont(const Font* font);
-	inline void setScale(float scale) { _scale = scale; }
-	static TextRenderable* createTextRenderable(const std::string& text, const Font* font, const Vec4& pos, float scale, bool streaming = false);
-protected:
-	virtual void destroy() override;
-};
-
-class QuadRenderable : public Renderable
-{
-	Vec2				_dimensions;
-	Vec4				_color;
-public:
-	QuadRenderable() = default;
-	QuadRenderable(const Vec4& pos, const Vec2& dimensions, const Vec4& color, bool streaming = false);
-	QuadRenderable(const Vec4& pos, const Vec2& dimensions, bool streaming = false);
-	static QuadRenderable* createQuadRenderable(const Vec4& pos, const Vec2& dimensions, const Vec4& color, bool streaming = false);
-	static QuadRenderable* createQuadRenderable(const Vec4& pos, const Vec2& dimensions, bool streaming = false);
-	virtual void render(const Vec2& offset) const override;
-protected:
-	virtual void destroy() override;
-};
+	if (!availableRenderables.empty())
+	{
+		unsigned int i = availableRenderables.back();
+		availableRenderables.pop_back();
+		T* renderable = &pool[i];
+		*tag = i;
+		return renderable;
+	}
+	return nullptr;
+}

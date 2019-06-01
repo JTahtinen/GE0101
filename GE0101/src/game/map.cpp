@@ -83,7 +83,7 @@ Map* Map::createMap(int width, int height, const Game* game)
 	const AssetData* data = game->getAssetData();
 	defTile = new Tile();
 	defTile->barrier = false;
-	defTile->sprite = data->spriteData.getSprite("snowman");
+	defTile->sprite = data->spriteData.getSprite("floor");
 
 	Map::_instance = new Map(width, height);
 

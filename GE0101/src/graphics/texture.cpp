@@ -2,6 +2,7 @@
 #include <GLEW/glew.h>
 #include <SDL2/SDL_image.h>
 #include "../defs.h"
+#include "renderers/renderer.h"
 
 
 
@@ -45,5 +46,5 @@ void Texture::bind(unsigned int slot) const
 
 void Texture::unbind() const
 {
-	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
+	GLCALL(glBindTexture(GL_TEXTURE_2D, TEXTURE_SLOT_UNBIND));
 }

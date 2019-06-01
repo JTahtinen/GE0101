@@ -99,22 +99,29 @@ Game::Game(Renderer* renderer)
 	eMesh->pushData(colors, colorLayout);
 	eMesh->setIndices(indexData);
 	
-	texData.loadTexture("res/textures/IMG_2086.png");
+	texData.loadTexture("res/textures/guy.png");
 	texData.loadTexture("res/textures/cursor1.png");
+	texData.loadTexture("res/textures/floor.png");
 
 	_assetData.geometryData.pushGeometry(eMesh);
 	
-	Sprite* snowman = new Sprite(eMesh, texData.getTexture("res/textures/IMG_2086.png"), "snowman");
+	Sprite* guy = new Sprite(eMesh, texData.getTexture("res/textures/guy.png"), "guy");
 	Sprite* cursorSprite = new Sprite(eMesh, texData.getTexture("res/textures/cursor1.png"), "cursor");
-	_assetData.spriteData.pushSprite(snowman);
+	Sprite* floor = new Sprite(eMesh, texData.getTexture("res/textures/floor.png"), "floor");
+	_assetData.spriteData.pushSprite(guy);
 	_assetData.spriteData.pushSprite(cursorSprite);
-	
+	_assetData.spriteData.pushSprite(floor);
+
 	GameState* gameState = new GameState(this, renderer);
-	Actor* player = new Actor(Vec2(), snowman, new InputController());
+	Actor* player = new Actor(Vec2(), guy, new InputController());
 	gameState->addActor(player);
 	gameState->setPlayer(player);
 	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
-	Actor* a = new Actor(Vec2(0.5f, 0.5f), snowman);
+	gameState->addActor(new Actor(Vec2(0.5f, 0.7f), guy));
+	gameState->addActor(new Actor(Vec2(0.3f, 0.7f), guy));
+	gameState->addActor(new Actor(Vec2(0.82f, 0.74f), guy));
+	gameState->addActor(new Actor(Vec2(0.2f, 0.23f), guy));
+	Actor* a = new Actor(Vec2(0.5f, 0.5f), guy);
 	a->setConversation(conv);
 	gameState->addActor(a);
 
