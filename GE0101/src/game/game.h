@@ -2,12 +2,11 @@
 #include "../graphics/window.h"
 #include "map.h"
 #include <vector>
-#include "entity.h"
-#include "actor.h"
+#include "entity/entity.h"
+#include "entity/actor.h"
 #include "camera.h"
 #include "assets/assetdata.h"
-#include "gamedata.h"
-#include "state.h"
+#include "states/state.h"
 #include "../graphics/renderers/renderer.h"
 
 class Game

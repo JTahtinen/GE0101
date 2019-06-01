@@ -1,13 +1,13 @@
 #include "entity.h"
 #include <iostream>
 #include <vector>
-#include "../globals.h"
-#include "../input/input.h"
-#include "camera.h"
-#include "game.h"
-#include "../physics/collider.h"
-#include "../defs.h"
-#include "gamestate.h"
+#include "../../globals.h"
+#include "../../input/input.h"
+#include "../camera.h"
+#include "../game.h"
+#include "../../physics/collider.h"
+#include "../../defs.h"
+#include "../states/gamestate.h"
 
 static std::vector<GUID> availableGUIDs;
 
@@ -20,7 +20,7 @@ Entity::Entity(const Vec2& pos, Sprite* sprite)
 	, _engaged(false)
 {
 #ifdef _DEBUG
-	std::cout << "Created Entity GUID: " << _id << std::endl;
+	MSG("Created Entity GUID: " << _id);
 #endif
 }
 
@@ -43,7 +43,7 @@ Entity::~Entity()
 	}
 	availableGUIDs.push_back(_id);
 #ifdef _DEBUG
-	std::cout << "Deleted Entity GUID: " << _id << std::endl;
+	MSG("Deleted Entity GUID: " << _id);
 #endif
 }
 

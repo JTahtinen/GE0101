@@ -3,11 +3,11 @@
 #include "../input/input.h"
 #include "../defs.h"
 #include "../globals.h"
-#include "controllers/inputcontroller.h"
-#include "controllers/aicontroller.h"
+#include "entity/controllers/inputcontroller.h"
+#include "entity/controllers/aicontroller.h"
 #include "../physics/collider.h"
 #include "conversation.h"
-#include "gamestate.h"
+#include "states/gamestate.h"
 
 float Game::frameTime = 0.0f;
 
@@ -121,7 +121,7 @@ Game::Game(Renderer* renderer)
 	gameState->addActor(new Actor(Vec2(0.3f, 0.7f), guy));
 	gameState->addActor(new Actor(Vec2(0.82f, 0.74f), guy));
 	gameState->addActor(new Actor(Vec2(0.2f, 0.23f), guy));
-	Actor* a = new Actor(Vec2(0.5f, 0.5f), guy);
+	Actor* a = new Actor(Vec2(0.5f, 0.5f), guy, new AIController(gameState));
 	a->setConversation(conv);
 	gameState->addActor(a);
 
@@ -161,6 +161,8 @@ void Game::pushState(State* state)
 
 void Game::popState()
 {
+	State* state = _stateStack.back();
+	delete state;
 	_stateStack.pop_back();
 }
 

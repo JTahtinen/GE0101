@@ -44,15 +44,10 @@ void QuadRenderable::quit()
 	delete quadVao;
 	delete quadShader;
 
-
 	quadVao = nullptr;
 	quadShader = nullptr;
 
-
-
 	delete[] quadRenderablePool;
-
-
 
 	quadRenderablePool = nullptr;
 }

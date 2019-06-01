@@ -7,6 +7,11 @@ Buffer::Buffer()
 	GLCALL(glGenBuffers(1, &_id));
 }
 
+Buffer::~Buffer()
+{
+	GLCALL(glDeleteBuffers(1, &_id));
+}
+
 void Buffer::push(const void* data, unsigned int size) const
 {
 	bind();

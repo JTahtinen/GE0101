@@ -1,5 +1,5 @@
 #include "inputcontroller.h"
-#include "../../input/input.h"
+#include "../../../input/input.h"
 
 void InputController::update(Actor* e)
 {

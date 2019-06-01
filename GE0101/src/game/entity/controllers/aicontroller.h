@@ -1,6 +1,6 @@
 #pragma once
 #include "controller.h"
-#include "../gamestate.h"
+#include "../../states/gamestate.h"
 
 enum AITask
 {

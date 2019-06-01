@@ -1,9 +1,9 @@
 #pragma once
-#include "../math/vec2.h"
-#include "../graphics/sprite.h"
-#include "../graphics/renderers/renderer.h"
-#include "../physics/physicsobject.h"
-#include "conversation.h"
+#include "../../math/vec2.h"
+#include "../../graphics/sprite.h"
+#include "../../graphics/renderers/renderer.h"
+#include "../../physics/physicsobject.h"
+#include "../conversation.h"
 #include <string>
 #include <sstream>
 

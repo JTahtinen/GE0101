@@ -1,5 +1,5 @@
 #include "aicontroller.h"
-#include "../../defs.h"
+#include "../../../defs.h"
 
 AIController::AIController(GameState* game)
 	: _game(game)

@@ -1,8 +1,7 @@
 #pragma once
 #include "state.h"
-#include "camera.h"
-#include "gamedata.h"
-#include "actor.h"
+#include "../camera.h"
+#include "../entity/actor.h"
 #include <vector>
 
 class Map;
@@ -22,14 +21,13 @@ class GameState : public State
 	std::vector<Entity*>	_entities;
 	std::vector<Actor*>		_actors;
 	Actor*					_player;
-	GameData				_gameData;
 	Camera					_camera;
 	Renderer*				_renderer;
 	Conversation*			_activeConversation;
 	Game_Substate			_substate;
 public:
 	GameState(const Game* game, Renderer* renderer);
-	~GameState();
+	virtual ~GameState() override;
 	void addEntity(Entity* e);
 	void addActor(Actor* e);
 	void setPlayer(Actor* e);

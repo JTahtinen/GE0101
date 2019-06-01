@@ -155,14 +155,13 @@
     <ClCompile Include="src\game\assets\geometrydata.cpp" />
     <ClCompile Include="src\game\assets\spritedata.cpp" />
     <ClCompile Include="src\game\assets\texturedata.cpp" />
-    <ClCompile Include="src\game\gamedata.cpp" />
-    <ClCompile Include="src\game\gamestate.cpp">
+    <ClCompile Include="src\game\states\gamestate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\application\application.cpp" />
-    <ClCompile Include="src\game\actor.cpp" />
-    <ClCompile Include="src\game\controllers\aicontroller.cpp" />
+    <ClCompile Include="src\game\entity\actor.cpp" />
+    <ClCompile Include="src\game\entity\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\conversation.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
@@ -174,9 +173,9 @@
     <ClCompile Include="src\graphics\sprite.cpp" />
     <ClCompile Include="src\graphics\textbox.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
-    <ClCompile Include="src\game\entity.cpp" />
+    <ClCompile Include="src\game\entity\entity.cpp" />
     <ClCompile Include="src\game\game.cpp" />
-    <ClCompile Include="src\game\controllers\inputcontroller.cpp" />
+    <ClCompile Include="src\game\entity\controllers\inputcontroller.cpp" />
     <ClCompile Include="src\game\map.cpp" />
     <ClCompile Include="src\game\scenegraph.cpp" />
     <ClCompile Include="src\graphics\buffers\buffer.cpp" />
@@ -196,18 +195,17 @@
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\application\observer.h" />
     <ClInclude Include="src\defs.h" />
-    <ClInclude Include="src\game\actor.h" />
+    <ClInclude Include="src\game\entity\actor.h" />
     <ClInclude Include="src\game\assets\assetdata.h" />
     <ClInclude Include="src\game\assets\dataops.h" />
     <ClInclude Include="src\game\assets\geometrydata.h" />
     <ClInclude Include="src\game\assets\spritedata.h" />
     <ClInclude Include="src\game\assets\texturedata.h" />
-    <ClInclude Include="src\game\controllers\aicontroller.h" />
+    <ClInclude Include="src\game\entity\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
-    <ClInclude Include="src\game\gamedata.h" />
-    <ClInclude Include="src\game\gamestate.h" />
-    <ClInclude Include="src\game\state.h" />
+    <ClInclude Include="src\game\states\gamestate.h" />
+    <ClInclude Include="src\game\states\state.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\renderers\quadrenderable.h" />
@@ -215,10 +213,10 @@
     <ClInclude Include="src\graphics\renderers\textrenderable.h" />
     <ClInclude Include="src\graphics\textbox.h" />
     <ClInclude Include="src\physics\collider.h" />
-    <ClInclude Include="src\game\controllers\controller.h" />
-    <ClInclude Include="src\game\entity.h" />
+    <ClInclude Include="src\game\entity\controllers\controller.h" />
+    <ClInclude Include="src\game\entity\entity.h" />
     <ClInclude Include="src\game\game.h" />
-    <ClInclude Include="src\game\controllers\inputcontroller.h" />
+    <ClInclude Include="src\game\entity\controllers\inputcontroller.h" />
     <ClInclude Include="src\game\map.h" />
     <ClInclude Include="src\game\scenegraph.h" />
     <ClInclude Include="src\globals.h" />

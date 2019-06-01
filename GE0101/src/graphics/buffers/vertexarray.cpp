@@ -14,6 +14,10 @@ VertexArray::VertexArray(const std::string& name)
 VertexArray::~VertexArray()
 {
 	GLCALL(glDeleteVertexArrays(1, &_id));
+	for (auto& buffer : _buffers)
+	{
+		delete buffer;
+	}
 }
 
 void VertexArray::push(Buffer* buffer, const BufferLayout& layout)

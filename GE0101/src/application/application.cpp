@@ -25,6 +25,8 @@ Application::Application()
 
 Application::~Application()
 {
+	delete _game;
+	_game = nullptr;
 	deleteGlobalData();
 }
 

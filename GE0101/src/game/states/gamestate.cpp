@@ -1,9 +1,9 @@
 #include "gamestate.h"
-#include "map.h"
-#include "game.h"
-#include "../input/input.h"
-#include "actor.h"
-#include "../physics/collider.h"
+#include "../map.h"
+#include "../game.h"
+#include "../../input/input.h"
+#include "../../physics/collider.h"
+#include "../../defs.h"
 
 GameState::GameState(const Game* game, Renderer* renderer)
 	: _renderer(renderer)

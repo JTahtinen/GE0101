@@ -24,7 +24,6 @@ Actor::~Actor()
 {
 	delete _controller;
 	_controller = nullptr;
-	Entity::~Entity();
 }
 
 void Actor::setController(Controller* controller)
