@@ -1,5 +1,6 @@
 #include "vec4.h"
 #include <iostream>
+#include "math.h"
 
 Vec4::Vec4(float x, float y, float z, float w)
 	:

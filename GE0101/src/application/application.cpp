@@ -4,6 +4,7 @@
 #include "../input/input.h"
 #include "../graphics/textbox.h"
 #include "../util/log.h"
+using namespace std::chrono;
 
 Log gameLog;
 
@@ -41,7 +42,7 @@ void Application::run()
 	//float zoom = 1;
 	float frameTime = 0;
 	unsigned int frames = 0;
-	clock_t lastTime = clock();
+	auto lastTime = high_resolution_clock::now();
 	float runningTime = 0;
 
 	Font* arialFont = Font::loadFont("res/fonts/arial");
@@ -70,8 +71,9 @@ void Application::run()
 			toggleFPS = !toggleFPS;
 		}
 	
-		clock_t currentTime = clock();
-		frameTime = (float)(currentTime - lastTime) / CLOCKS_PER_SEC;
+		auto currentTime = high_resolution_clock::now();
+		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
+		frameTime = (double)duration.count() / 1000.0;
 		_game->update(frameTime);
 		lastTime = currentTime;
 		runningTime += frameTime;
