@@ -7,18 +7,18 @@ void InputController::update(Actor* e)
 	Input& in = Input::instance();
 	if (in.poll(KEY_A))
 	{
-		e->addForce(Vec2(-speed, 0));
+		e->move(Vec2(-1.0f, 0), speed);
 	}
 	if (in.poll(KEY_D))
 	{
-		e->addForce(Vec2(speed, 0));
+		e->move(Vec2(1.0f, 0), speed);
 	}
 	if (in.poll(KEY_W))
 	{
-		e->addForce(Vec2(0, speed));
+		e->move(Vec2(0, 1.0f), speed);
 	}
 	if (in.poll(KEY_S))
 	{
-		e->addForce(Vec2(0, -speed));
+		e->move(Vec2(0, -1.0f), speed);
 	}
 }

@@ -73,7 +73,7 @@ void Application::run()
 	
 		auto currentTime = high_resolution_clock::now();
 		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
-		frameTime = (double)duration.count() / 1000.0;
+		frameTime = (float)(duration.count() / 1000.0f);
 		_game->update(frameTime);
 		lastTime = currentTime;
 		runningTime += frameTime;
@@ -99,5 +99,5 @@ void Application::run()
 		}
 	}
 	delete lsFont;
-	//delete arialFont;
+	delete arialFont;
 }

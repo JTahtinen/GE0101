@@ -102,18 +102,22 @@ Game::Game(Renderer* renderer)
 	texData.loadTexture("res/textures/guy.png");
 	texData.loadTexture("res/textures/cursor1.png");
 	texData.loadTexture("res/textures/floor.png");
+	texData.loadTexture("res/textures/wall.png");
 
 	_assetData.geometryData.pushGeometry(eMesh);
 	
 	Sprite* guy = new Sprite(eMesh, texData.getTexture("res/textures/guy.png"), "guy");
 	Sprite* cursorSprite = new Sprite(eMesh, texData.getTexture("res/textures/cursor1.png"), "cursor");
 	Sprite* floor = new Sprite(eMesh, texData.getTexture("res/textures/floor.png"), "floor");
+	Sprite* wall = new Sprite(eMesh, texData.getTexture("res/textures/wall.png"), "wall");
+
 	_assetData.spriteData.pushSprite(guy);
 	_assetData.spriteData.pushSprite(cursorSprite);
 	_assetData.spriteData.pushSprite(floor);
+	_assetData.spriteData.pushSprite(wall);
 
 	GameState* gameState = new GameState(this, renderer);
-	Actor* player = new Actor(Vec2(), guy, new InputController());
+	Actor* player = new Actor(Vec2(0.4f, 0.2f), guy, new InputController());
 	gameState->addActor(player);
 	gameState->setPlayer(player);
 	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));

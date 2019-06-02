@@ -1,14 +1,25 @@
 #pragma once
 #include "../math/vec2.h"
-#include "../math/shapes.h"
-struct Location
+
+class GameState;
+
+struct Position
 {
-	Vec2		pos;
+	Vec2		center;
 	Vec2		dimensions;
 };
 
-struct PhysicsObject
+class PhysicsObject
 {
-	Location	location;
-	Vec2		force;
+	Position	_pos;
+	Vec2		_force;
+public:
+	PhysicsObject(const Vec2& pos, const Vec2& dimensions);
+	void setPos(const Vec2& pos);
+	void setForce(const Vec2& force);
+	void applyForce(const Vec2& force);
+	void collisionCheck(const PhysicsObject& other);
+	void update();
+	bool isMoving() const { return _force.length() > 0.0f; }
+	inline const Position& getPos() const { return _pos; }
 };

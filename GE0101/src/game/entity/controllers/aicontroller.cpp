@@ -11,7 +11,8 @@ void AIController::update(Actor* e)
 {
 	float speed = 0.6f;
 	const Actor* player = _game->getPlayer();
-	Vec2 distanceFromPlayer = e->getPos() - player->getPos();
+	Vec2 distanceFromPlayer = e->getPhysics()->getPos().center 
+		- player->getPhysics()->getPos().center;
 
 	if (_task == AI_IDLE)
 	{
@@ -22,10 +23,10 @@ void AIController::update(Actor* e)
 		}
 	} else if (_task == AI_FOLLOW)
 	{
-		e->setForce(-distanceFromPlayer.getNormal() * speed);
+		e->move(-distanceFromPlayer, speed);
 		if (distanceFromPlayer <= 0.3f)
 		{
-			e->setForce(Vec2(0, 0));
+			e->move(Vec2(0, 0), 0);
 			_task = AI_IDLE;
 	//		MSG("AI TASK: Idle");
 		}
@@ -37,10 +38,10 @@ void AIController::update(Actor* e)
 	}
 	else if (_task == AI_HOSTILE)
 	{
-		e->setForce(-distanceFromPlayer.getNormal() * speed * 3.0f);
+		e->move(-distanceFromPlayer, speed * 3.0f);
 		if (distanceFromPlayer <= 0.3f)
 		{
-			e->setForce(Vec2(0, 0));
+			e->move(Vec2(0, 0), 0);
 			_task = AI_IDLE;
 	//		MSG("AI TASK: Idle");
 		}

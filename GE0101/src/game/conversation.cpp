@@ -70,6 +70,15 @@ Conversation::Conversation()
 	_nodes.reserve(10);
 }
 
+Conversation::~Conversation()
+{
+	for (auto& node : _nodes)
+	{
+		delete node;
+	}
+	_nodes.clear();
+}
+
 void Conversation::push(ConvNode* node)
 {
 	if (node)

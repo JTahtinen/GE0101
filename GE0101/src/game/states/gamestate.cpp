@@ -11,7 +11,8 @@ GameState::GameState(const Game* game, Renderer* renderer)
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
-	_map = Map::createMap(5, 5, game);
+	Map::init(game);
+	_map = Map::loadMap("res/maps/testmap.png", game);
 
 }
 
@@ -22,6 +23,8 @@ GameState::~GameState()
 	{
 		delete entity;
 	}
+	_entities.clear();
+	Map::quit();
 }
 
 void GameState::addEntity(Entity* e)
@@ -88,16 +91,13 @@ State_Condition GameState::update(Game* game)
 			_camera.zoomOut();
 		}
 
-		_map->update(game);
-
 		for (auto& entity : _entities)
 		{
 			entity->update(this);
 		}
 
-		Collider::instance().update();
 
-		_camera.setPos(_player->getPos());
+		_camera.setPos(_player->getPhysics()->getPos().center);
 		_camera.update();
 		_map->render(_renderer, &_camera);
 

@@ -7,7 +7,7 @@ class Renderer;
 extern void initRenderables(const Renderer* renderer);
 extern void destroyRenderables();
 
-#define RENDERABLE_POOL_SIZE 100
+#define RENDERABLE_POOL_SIZE 1000
 
 #define RENDER_CHILDREN() for (auto& child : _children)\
 { if (child) {child->render(Vec2(_pos.x, _pos.y));} }

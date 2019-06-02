@@ -73,7 +73,7 @@ void Actor::addEnemy(const Actor* enemy)
 
 void Actor::update(GameState* gamestate)
 {
-	setForce(Vec2(0, 0));
+	stopMoving();
 
 	if (_controller)
 	{

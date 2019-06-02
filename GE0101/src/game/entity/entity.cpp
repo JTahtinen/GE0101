@@ -15,7 +15,7 @@ Entity::Entity(const Vec2& pos, Sprite* sprite)
 	:
 	_sprite(sprite)
 	, _id(nextId())
-	, _object({{ pos, Vec2(0.07f, 0.19f) }, Vec2(0, 0)})
+	, _object(pos, Vec2(0.07f, 0.19f))
 	, _conversation(nullptr)
 	, _engaged(false)
 {
@@ -47,15 +47,16 @@ Entity::~Entity()
 #endif
 }
 
-void Entity::setForce(const Vec2& force)
+void Entity::move(const Vec2& dir, float amt)
 {
-	_object.force = force * Game::frameTime;
+	_object.applyForce(dir.getNormal() * amt);
 }
 
-void Entity::addForce(const Vec2& force)
+void Entity::stopMoving()
 {
-	_object.force += force * Game::frameTime;
+	_object.setForce(Vec2(0, 0));
 }
+
 
 void Entity::setConversation(Conversation* conversation)
 {
@@ -69,7 +70,13 @@ void Entity::setConversation(Conversation* conversation)
 
 void Entity::update(GameState* gamestate)
 {
-	Collider::instance().push(&_object);
+	auto& entities = gamestate->getEntities();
+	for (auto& entity : entities)
+	{
+		_object.collisionCheck(*entity->getPhysics());
+	}
+	gamestate->getMap()->collisionCheck(this);
+	_object.update();
 }
 
 void Entity::engage(GameState* gamestate)
@@ -83,7 +90,8 @@ void Entity::render(Renderer* renderer, const Camera* camera) const
 {
 	const Vec4& camPos = camera->getPos();
 	Vec2 cam2DPos = Vec2(camPos.x, camPos.y);
-	Vec4 pos(_object.location.pos.x, _object.location.pos.y, 0, 0);
+	const Vec2& objPos = _object.getPos().center;
+	Vec4 pos(objPos.x, objPos.y, 0, 0);
 	if (renderer && _sprite)
 	{
 		Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, Vec4(-camPos.x + pos.x, 

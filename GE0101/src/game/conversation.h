@@ -38,6 +38,7 @@ class Conversation
 	std::vector<ConvNode*>		_nodes;
 	ConvNode*					_activeNode;
 public:
+	~Conversation();
 	Conversation();
 	void push(ConvNode* node);
 	void start();
