@@ -6,7 +6,7 @@ in vec2 v_texCoord;
 out vec4 color;
 
 uniform sampler2D u_Texture;
-
+uniform vec4 u_Color;
 void main()
 {
     vec4 fragcolor = (texture(u_Texture, v_texCoord));
@@ -14,5 +14,5 @@ void main()
     {
         discard;
     }
-	color = fragcolor + v_color;
+	color = fragcolor + v_color + u_Color;
 }

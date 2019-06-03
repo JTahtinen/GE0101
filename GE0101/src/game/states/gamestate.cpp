@@ -90,6 +90,10 @@ State_Condition GameState::update(Game* game)
 		{
 			_camera.zoomOut();
 		}
+		if (in.poll(KEY_E, KEYSTATE_TYPED))
+		{
+			_entities.back()->engage(this);
+		}
 
 		for (auto& entity : _entities)
 		{
@@ -99,17 +103,14 @@ State_Condition GameState::update(Game* game)
 
 		_camera.setPos(_player->getPhysics()->getPos().center);
 		_camera.update();
-		_map->render(_renderer, &_camera);
+
+		/*_map->render(_renderer, &_camera);
 
 		for (auto& entity : _entities)
 		{
 			entity->render(_renderer, &_camera);
-		}
+		}*/
 
-		if (in.poll(KEY_E, KEYSTATE_TYPED))
-		{
-			_entities.back()->engage(this);
-		}
 		break;
 	}
 	case SUBSTATE_CONVERSATION:
@@ -117,7 +118,6 @@ State_Condition GameState::update(Game* game)
 		if (!_activeConversation)
 		{
 			WARN("Could not init conversation");
-			_activeConversation = nullptr;
 			_substate = SUBSTATE_ACTIVE;
 			break;
 		}

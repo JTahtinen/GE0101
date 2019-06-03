@@ -44,27 +44,30 @@ Game::Game(Renderer* renderer)
 
 
 
-	Vec2 vertData[] = {
-		Vec2(-0.1f, -0.1f),
-		Vec2(-0.1f,  0.1f),
-		Vec2(0.1f, -0.1f),
-		Vec2(0.1f, 0.1f)
-	};
+	float vertData[] = {
+		-0.1f, -0.1f,
+		0, 1,
+		1.0f, 0, 0, 0.0f,
 
+		-0.1f,  0.1f,
+		0, 0,
+		0.0f, 0, 0, 0,
+		
+		0.1f, -0.1f,
+		1, 1,
+		0.0f, 0, 0, 0,
+		
+		0.1f, 0.1f,
+		1, 0,
+		0.0f, 0, 0, 0
+	};
+/*
 	Vec2 texCoordData[] = {
-		Vec2(0, 1),
-		Vec2(0, 0),
-		Vec2(1, 1),
-		Vec2(1, 0)
 	};
 
 	Vec4 colorData[]{
-		Vec4(0.0f, 0, 0, 0),
-		Vec4(0.0f, 0, 0, 0),
-		Vec4(0.0f, 0, 0, 0),
-		Vec4(0.0f, 0, 0, 0)
 	};
-
+*/
 	std::vector<unsigned int> indexData;
 	indexData.push_back(0);
 	indexData.push_back(1);
@@ -75,28 +78,30 @@ Game::Game(Renderer* renderer)
 
 
 	Buffer* vertices = new Buffer();
-	Buffer* texCoords = new Buffer();
-	Buffer* colors = new Buffer();
+	//Buffer* texCoords = new Buffer();
+//	Buffer* colors = new Buffer();
 
 	vertices->bind();
 	vertices->push(&vertData[0], sizeof(vertData));
 
-	texCoords->bind();
-	texCoords->push(&texCoordData[0], sizeof(texCoordData));
-
-	colors->bind();
-	colors->push(&colorData[0], sizeof(colorData));
-
+	//texCoords->bind();
+//	texCoords->push(&texCoordData[0], sizeof(texCoordData));
+	//vertices->push(&texCoordData[0], sizeof(texCoordData));
+//	colors->bind();
+//	colors->push(&colorData[0], sizeof(colorData));
+	//vertices->push(&colorData[0], sizeof(colorData));
 	BufferLayout layout;
-	BufferLayout texCoordLayout;
-	BufferLayout colorLayout;
+	//BufferLayout texCoordLayout;
+	//BufferLayout colorLayout;
 	layout.push<float>(2);
-	texCoordLayout.push<float>(2);
-	colorLayout.push<float>(4);
+	layout.push<float>(2);
+	layout.push<float>(4);
+	//texCoordLayout.push<float>(2);
+	//colorLayout.push<float>(4);
 
 	eMesh->pushData(vertices, layout);
-	eMesh->pushData(texCoords, texCoordLayout);
-	eMesh->pushData(colors, colorLayout);
+	//eMesh->pushData(texCoords, texCoordLayout);
+	//eMesh->pushData(colors, colorLayout);
 	eMesh->setIndices(indexData);
 	
 	texData.loadTexture("res/textures/guy.png");

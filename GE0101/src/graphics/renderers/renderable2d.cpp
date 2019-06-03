@@ -17,7 +17,7 @@ void Renderable2D::init(const Renderer* renderer)
 	}
 	basicShader = new Shader("res/shaders/basic");
 	basicShader->bind();
-	basicShader->setUniform4f("u_Color", 0, 0, 0, 0);
+	basicShader->setUniform4f("u_Color", 0, 0.0f, 0.1f, 0);
 	basicShader->setUniform4f("u_Offset", 0, 0, 0, 1);
 	basicShader->setUniform1f("u_ScrRatio", renderer->getDisplayRatio());
 	basicShader->setUniform1f("u_Scale", 1.0f);
