@@ -3,9 +3,8 @@
 #include "../../util/glutil.h"
 #include "../../defs.h"
 
-VertexArray::VertexArray(const std::string& name)
-	: _name(name)
-	, _numAttributes(0)
+VertexArray::VertexArray()
+	: _numAttributes(0)
 {
 	GLCALL(glGenVertexArrays(1, &_id));
 	bind();
@@ -49,5 +48,5 @@ void VertexArray::unbind() const
 VertexArray* VertexArray::loadVertexArray(const std::string& filepath)
 {
 	//TODO: Vao loading
-	return new VertexArray(filepath);
+	return new VertexArray();
 }

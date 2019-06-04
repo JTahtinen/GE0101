@@ -5,9 +5,9 @@
 #include "../../physics/collider.h"
 #include "../../defs.h"
 
-GameState::GameState(const Game* game, Renderer* renderer)
-	: _renderer(renderer)
-	, _camera(renderer->getDisplayRatio())
+GameState::GameState(const Game* game, Layer* layer)
+	: _layer(layer)
+	, _camera(layer->getDisplayRatio())
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
@@ -103,14 +103,7 @@ State_Condition GameState::update(Game* game)
 
 		_camera.setPos(_player->getPhysics()->getPos().center);
 		_camera.update();
-
-		/*_map->render(_renderer, &_camera);
-
-		for (auto& entity : _entities)
-		{
-			entity->render(_renderer, &_camera);
-		}*/
-
+	
 		break;
 	}
 	case SUBSTATE_CONVERSATION:
@@ -130,16 +123,16 @@ State_Condition GameState::update(Game* game)
 		}
 	}
 	}
-	_map->render(_renderer, &_camera);
+	_map->render(_layer, &_camera);
 
 	for (auto& entity : _entities)
 	{
-		entity->render(_renderer, &_camera);
+		entity->render(_layer, &_camera);
 	}
 	
 	if (_substate == SUBSTATE_CONVERSATION)
 	{
-		_activeConversation->render(_renderer);
+		_activeConversation->render(_layer);
 	}
 	return STATE_RUNNING;
 }

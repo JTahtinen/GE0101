@@ -173,6 +173,6 @@ std::string Vec4::toString() const
 {
 	return std::string("Vec4: [X: " + std::to_string(x) +
 		", Y: " + std::to_string(y) +
-		", W: " + std::to_string(z) +
-		", Z: " + std::to_string(w) + "]");
+		", Z: " + std::to_string(z) +
+		", W: " + std::to_string(w) + "]");
 }

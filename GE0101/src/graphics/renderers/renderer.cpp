@@ -1,40 +1,39 @@
 #include "renderer.h"
 #include "../../defs.h"
 
-Renderer::Renderer(int width, int height, const std::string& title)
-	: _win(width, height, title.c_str())
+Renderer::Renderer(Window* window)
+	: _win(window)
 {
-	initRenderables(this);
-	_renderables.reserve(500);
+	ASSERT(_win);
 }
 
 Renderer::~Renderer()
 {
-	destroyRenderables();
+	delete _win;
+	_win = nullptr;
 }
 
-void Renderer::submit(Renderable* renderable)
+void Renderer::begin()
 {
-	if (!renderable)
-	{
-		WARN("Could not add renderable - nullptr exception");
-		return;
-	}
-
-	_renderables.push_back(renderable);
+	clear();
 }
 
-void Renderer::flush()
+void Renderer::end()
+{	
+
+}
+
+void Renderer::clear()
 {
-	_win.clear();
-	for (auto& renderable : _renderables)
-	{
-		renderable->render(Vec2(0, 0));
-		if (!renderable->isStreaming())
-		{
-			renderable->destroy();
-		}
-	}
-	_win.update();
-	_renderables.clear();
+	_win->clear();
+}
+
+void Renderer::update()
+{
+	_win->update();
+}
+
+void Renderer::destroyRenderable(Renderable* renderable)
+{
+	renderable->destroy();
 }

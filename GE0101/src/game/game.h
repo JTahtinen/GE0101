@@ -7,18 +7,18 @@
 #include "camera.h"
 #include "assets/assetdata.h"
 #include "states/state.h"
-#include "../graphics/renderers/renderer.h"
+#include "../graphics/layer.h"
 
 class Game
 {
 	std::vector<State*>		_stateStack;
-	Renderer*				_renderer;
+	Layer*					_layer;
 	AssetData				_assetData;
-	Renderable2D*			_cursor;
+	Sprite*					_cursor;
 public:
 	static float frameTime;
 public:
-	Game(Renderer* renderer);
+	Game(Layer* layer);
 	~Game();
 
 	void update(float frameTime);

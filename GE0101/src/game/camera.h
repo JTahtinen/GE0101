@@ -1,21 +1,22 @@
 #pragma once
 #include "entity/entity.h"
+#include "../math/vec3.h"
 
 class Window;
 
 class Camera
 {
-	Vec4			_pos;
+	Vec3			_pos;
 	const float		_ratio;
 	//float			_zoom{ 1.0f };
 	float			_zoomTarget{ 1.0f };
 public:
-	Camera(const Vec4& pos, float ratio);
+	Camera(const Vec3& pos, float ratio);
 	Camera(float ratio);
 	void zoomIn();
 	void zoomOut();
 	void setZoom(float val);
-	void setPos(const Vec4& pos);
+	void setPos(const Vec3& pos);
 	void setPos(const Vec2& pos);
 	void update();
 	inline float getWidthToHeightRatio() const
@@ -42,7 +43,7 @@ public:
 	{
 		return _pos.y + getHeightToWidthRatio() * _pos.z;
 	}
-	inline const Vec4& getPos() const
+	inline const Vec3& getPos() const
 	{
 		return _pos;
 	}

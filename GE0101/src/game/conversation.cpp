@@ -13,7 +13,7 @@ void ConvNode::print() const
 	}
 }
 
-void ConvNode::render(Renderer* renderer) const
+void ConvNode::render(Layer* layer) const
 {
 	TextBox box(_text);
 	unsigned int i = 1;
@@ -22,7 +22,7 @@ void ConvNode::render(Renderer* renderer) const
 	{
 		box.pushContent(std::to_string(i++) + ": " +  option.text);
 	}
-	box.render(renderer, Vec2(-0.4f, 0.2f));
+	box.render(layer, Vec2(-0.4f, 0.2f));
 }
 
 void ConvNode::setText(const std::string& text)
@@ -118,10 +118,10 @@ void Conversation::reset()
 	_activeNode = _nodes[0];
 }
 
-void Conversation::render(Renderer* renderer) const
+void Conversation::render(Layer* layer) const
 {
 	if (_activeNode)
 	{
-		_activeNode->render(renderer);
+		_activeNode->render(layer);
 	}
 }

@@ -86,17 +86,15 @@ void Entity::engage(GameState* gamestate)
 	gamestate->setSubState(SUBSTATE_CONVERSATION);
 }
 
-void Entity::render(Renderer* renderer, const Camera* camera) const
+void Entity::render(Layer* layer, const Camera* camera) const
 {
-	const Vec4& camPos = camera->getPos();
-	Vec2 cam2DPos = Vec2(camPos.x, camPos.y);
+	
 	const Vec2& objPos = _object.getPos().center;
-	Vec4 pos(objPos.x, objPos.y, 0, 0);
-	if (renderer && _sprite)
+	if (layer && _sprite)
 	{
-		Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, Vec4(-camPos.x + pos.x, 
-			-camPos.y + pos.y, camPos.z), 1.0f);
-		renderer->submit(renderable);
+		//Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, Vec4(-camPos.x + pos.x, 
+			//-camPos.y + pos.y, camPos.z), 1.0f);
+		layer->submitSprite(_sprite, objPos, -camera->getPos());
 	}
 }
 

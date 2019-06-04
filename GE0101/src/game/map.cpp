@@ -5,7 +5,7 @@
 #include "../defs.h"
 #include "../math/vec2.h"
 #include "../math/math.h"
-#include "../graphics/renderers/renderer.h"
+#include "../graphics/layer.h"
 #include "SDL2/SDL_image.h"
 #include "states/gamestate.h"
 #include "../physics/collider.h"
@@ -56,7 +56,7 @@ void Map::collisionCheck(Entity* entity) const
 	}
 }
 
-void Map::render(Renderer* renderer, const Camera* camera) const
+void Map::render(Layer* layer, const Camera* camera) const
 {
 	float halfTileSize = TILE_SIZE * 0.5f;
 
@@ -78,19 +78,21 @@ void Map::render(Renderer* renderer, const Camera* camera) const
 	if (yEndTile < 0) return;
 	if (yEndTile > _height) yEndTile = _height;
 
-	const Vec4& camPos = camera->getPos();
+	const Vec3& camPos = camera->getPos();
 	//const float zoom = camera->getZoom();
 
 	for (int y = yStartTile; y < yEndTile; ++y)
 	{
 		for (int x = xStartTile; x < xEndTile; ++x)
 		{
-			Renderable2D* tile = 
-				Renderable2D::createRenderable2D(_tiles[x + y * _width]->sprite,
-				Vec4(
-					-camPos.x + x * TILE_SIZE,
-					-camPos.y + y * TILE_SIZE, camPos.z), 1.0f);
-			renderer->submit(tile);
+			const Sprite* tile = _tiles[x + y * _width]->sprite;
+
+			//Renderable2D* tile = 
+			//	Renderable2D::createRenderable2D(_tiles[x + y * _width]->sprite,
+			//	Vec4(
+			//		-camPos.x + x * TILE_SIZE,
+			//		-camPos.y + y * TILE_SIZE, camPos.z), 1.0f);
+			layer->submitSprite(tile, Vec2(x * TILE_SIZE, y * TILE_SIZE), -camPos);
 		}
 	}
 }

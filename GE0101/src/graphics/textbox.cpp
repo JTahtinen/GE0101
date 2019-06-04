@@ -50,24 +50,25 @@ void TextBox::setColor(const Vec4& color)
 	_color = color;
 }
 
-void TextBox::render(Renderer* renderer, const Vec2& pos) const
+void TextBox::render(Layer* layer, const Vec2& pos) const
 {
 	Vec2 textOffset = Vec2(0.02f, 0.0f);
-	if (!renderer)
+	if (!layer)
 	{
 		ERR("Could not render text box - Renderer was nullpt");
 		return;
 	}
 
 	// Test values
-	QuadRenderable* background =
-	QuadRenderable::createQuadRenderable(Vec4(pos.x, pos.y, 0, 0), Vec2(_dimensions.x + textOffset.x * 2.0f, _dimensions.y), _color);
+	layer->submitQuad(_color, Vec2(_dimensions.x + textOffset.x * 2.0f, _dimensions.y), pos);
+	//QuadRenderable* background =
+	//QuadRenderable::createQuadRenderable(Vec4(pos.x, pos.y, 0, 0), Vec2(_dimensions.x + textOffset.x * 2.0f, _dimensions.y), _color);
 	//TextRenderable* fg = TextRenderable::createTextRenderable(_content, _font, pos + _offset + textOffset);
 	for (auto& line : _lines)
 	{
-		background->addChild(TextRenderable::createTextRenderable(line, _font, Vec4(textOffset.x, textOffset.y, 0, 0), _textScale));
-		textOffset.y -= 0.2f * _textScale;
+		//background->addChild(TextRenderable::createTextRenderable(line, _font, Vec4(textOffset.x, textOffset.y, 0, 0), _textScale));
+		//textOffset.y -= 0.2f * _textScale;
 	}
-	renderer->submit(background);
+	//layer->submitQuad(background);
 	//renderer->submit(fg);
 }

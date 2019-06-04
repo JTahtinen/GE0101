@@ -1,7 +1,7 @@
 #pragma once
 #include "../../math/vec2.h"
 #include "../../graphics/sprite.h"
-#include "../../graphics/renderers/renderer.h"
+#include "../../graphics/layer.h"
 #include "../../physics/physicsobject.h"
 #include "../conversation.h"
 #include <string>
@@ -34,7 +34,7 @@ public:
 	inline const PhysicsObject* getPhysics() const { return &_object; }
 	virtual void update(GameState* gamestate);
 	void engage(GameState* gamestate);
-	void render(Renderer* renderer, const Camera* camera) const;
+	void render(Layer* layer, const Camera* camera) const;
 	inline GUID getId() const { return _id; }
 	inline std::string getName() const 
 	{

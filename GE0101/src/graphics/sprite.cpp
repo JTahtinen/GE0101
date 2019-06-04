@@ -1,4 +1,4 @@
-#include "sprite.h"
+/*#include "sprite.h"
 #include "../defs.h"
 #include "renderers/renderer.h"
 
@@ -22,4 +22,4 @@ void Sprite::unbind() const
 {
 	_mesh->unbind();
 	_texture->unbind();
-}
+}*/

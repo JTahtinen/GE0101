@@ -2,27 +2,26 @@
 #include "../graphics/window.h"
 #include "game.h"
 
-Camera::Camera(const Vec4& pos, float ratio)
-	:
-	_pos(pos)
+Camera::Camera(const Vec3& pos, float ratio)
+	: _pos(pos)
 	, _ratio(ratio)
 {
 }
 
 Camera::Camera(float ratio)
 	:
-	Camera(Vec4(0, 0, 1, 0), ratio)
+	Camera(Vec3(0, 0, 1), ratio)
 {
 }
 
-void Camera::setPos(const Vec4& pos)
+void Camera::setPos(const Vec3& pos)
 {
 	_pos = pos;
 }
 
 void Camera::setPos(const Vec2& pos)
 {
-	setPos(Vec4(pos.x, pos.y, _pos.z, _pos.w));
+	setPos(Vec3(pos.x, pos.y, _pos.z));
 }
 
 void Camera::zoomIn()

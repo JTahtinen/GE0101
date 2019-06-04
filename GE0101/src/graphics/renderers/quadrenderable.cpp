@@ -27,8 +27,8 @@ void QuadRenderable::init(const Renderer* renderer)
 
 	quadShader = new Shader("res/shaders/colorquad", true);
 	quadShader->bind();
-	quadShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
-	quadVao = new VertexArray("quadVertices");
+	//quadShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
+	//quadVao = new VertexArray("quadVertices");
 	quadVao->bind();
 	quadVbo = new Buffer();
 	quadVbo->bind();

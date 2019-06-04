@@ -6,7 +6,7 @@
 
 class Map;
 class GameData;
-class Renderer;
+class Layer;
 
 enum Game_Substate
 {
@@ -22,11 +22,11 @@ class GameState : public State
 	std::vector<Actor*>						_actors;
 	Actor*									_player;
 	Camera									_camera;
-	Renderer*								_renderer;
+	Layer*									_layer;
 	Conversation*							_activeConversation;
 	Game_Substate							_substate;
 public:
-	GameState(const Game* game, Renderer* renderer);
+	GameState(const Game* game, Layer* layer);
 	virtual ~GameState() override;
 	void addEntity(Entity* e);
 	void addActor(Actor* e);

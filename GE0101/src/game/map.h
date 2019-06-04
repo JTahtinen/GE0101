@@ -8,7 +8,7 @@
 class Game;
 class Entity;
 class Camera;
-class Renderer;
+class Layer;
 struct AssetData;
 
 struct Tile
@@ -26,7 +26,7 @@ class Map
 public:
 	~Map();
 	void collisionCheck(Entity* entity) const;
-	void render(Renderer* renderer, const Camera* camera) const;
+	void render(Layer* layer, const Camera* camera) const;
 	Vec2 getTilePos(const Vec2& absPos) const;
 	static Map* createMap(int width, int height, const Game* game);
 	static Map* loadMap(const std::string& filepath, const Game* game);

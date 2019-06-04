@@ -2,7 +2,7 @@
 #include "../defs.h"
 
 Mesh::Mesh(const std::string& name)
-	: _vao(name)
+	: _name(name)
 {
 	bind();
 }

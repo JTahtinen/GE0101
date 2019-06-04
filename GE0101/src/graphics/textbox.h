@@ -1,6 +1,6 @@
 #pragma once
 #include "../math/vec2.h"
-#include "../graphics/renderers/renderer.h"
+#include "../graphics/layer.h"
 #include "font.h"
 #include <vector>
 
@@ -20,5 +20,5 @@ public:
 	void setContent(const std::string& content);
 	void pushContent(const std::string& content);
 	void setColor(const Vec4& color);
-	void render(Renderer* Renderer, const Vec2& pos) const;
+	void render(Layer* layer, const Vec2& pos) const;
 };

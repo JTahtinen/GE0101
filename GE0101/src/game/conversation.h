@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <utility>
+//#include <utility>
 
 enum Conversation_Status
 {
@@ -9,7 +9,7 @@ enum Conversation_Status
 	CONVERSATION_FINISHED
 };
 
-class Renderer;
+class Layer;
 class ConvNode;
 
 struct ConvOption
@@ -24,7 +24,7 @@ class ConvNode
 	std::vector<ConvOption>		_options;
 public:
 	void print() const;
-	void render(Renderer* renderer) const;
+	void render(Layer* layer) const;
 	void setText(const std::string& text);
 	void addOption(const std::string& text, ConvNode* link);
 	unsigned int getNumOptions() const;
@@ -43,7 +43,7 @@ public:
 	void push(ConvNode* node);
 	void start();
 	Conversation_Status update();
-	void render(Renderer* renderer) const;
+	void render(Layer* layer) const;
 private:
 	void reset();
 };

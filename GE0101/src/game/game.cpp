@@ -11,10 +11,10 @@
 
 float Game::frameTime = 0.0f;
 
-Game::Game(Renderer* renderer)
-	: _renderer(renderer)
+Game::Game(Layer* layer)
+	: _layer(layer)
 {
-	ASSERT(renderer);
+	ASSERT(layer);
 
 	Conversation* conv = new Conversation();
 	ConvNode* node1 = new ConvNode();
@@ -109,19 +109,20 @@ Game::Game(Renderer* renderer)
 	texData.loadTexture("res/textures/floor.png");
 	texData.loadTexture("res/textures/wall.png");
 
+	
 	_assetData.geometryData.pushGeometry(eMesh);
 	
-	Sprite* guy = new Sprite(eMesh, texData.getTexture("res/textures/guy.png"), "guy");
-	Sprite* cursorSprite = new Sprite(eMesh, texData.getTexture("res/textures/cursor1.png"), "cursor");
-	Sprite* floor = new Sprite(eMesh, texData.getTexture("res/textures/floor.png"), "floor");
-	Sprite* wall = new Sprite(eMesh, texData.getTexture("res/textures/wall.png"), "wall");
+	Sprite* guy = new Sprite{ texData.getTexture("res/textures/guy.png"), Vec2(0.2f, 0.2f), "guy" };
+	_cursor = new Sprite{ texData.getTexture("res/textures/cursor1.png"), Vec2(0.2f, 0.2f), "cursor" };
+	Sprite* floor = new Sprite{ texData.getTexture("res/textures/floor.png"), Vec2(0.2f, 0.2f), "floor" };
+	Sprite* wall = new Sprite{ texData.getTexture("res/textures/wall.png"), Vec2(0.2f, 0.2f), "wall" };
 
 	_assetData.spriteData.pushSprite(guy);
-	_assetData.spriteData.pushSprite(cursorSprite);
+	_assetData.spriteData.pushSprite(_cursor);
 	_assetData.spriteData.pushSprite(floor);
 	_assetData.spriteData.pushSprite(wall);
 
-	GameState* gameState = new GameState(this, renderer);
+	GameState* gameState = new GameState(this, layer);
 	Actor* player = new Actor(Vec2(0.4f, 0.2f), guy, new InputController());
 	gameState->addActor(player);
 	gameState->setPlayer(player);
@@ -133,8 +134,8 @@ Game::Game(Renderer* renderer)
 	Actor* a = new Actor(Vec2(0.5f, 0.5f), guy, new AIController(gameState));
 	a->setConversation(conv);
 	gameState->addActor(a);
-
-	_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec4(), 0.5f, true);
+	
+	//_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec4(), 0.5f, true);
 	
 	_stateStack.push_back(gameState);
 }
@@ -146,21 +147,22 @@ Game::~Game()
 		delete state;
 	}
 	_stateStack.clear();
-	_cursor->freeRenderable();
+	//_cursor->freeRenderable();
 }
 
 
 void Game::update(float frameTime)
 {
+	_assetData.textureData.getTexture("res/textures/floor.png")->bind(1);
 	Game::frameTime = frameTime;
 	static Input& in = Input::instance();
-	static const Window* win = _renderer->getWindow();
+	static const Window* win = _layer->getWindow();
 	static int winHeight = win->getHeight();
 	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
-	_cursor->setPos(Vec4(mousePos.x, mousePos.y, 1, 1));
+	//_cursor->setPos(Vec4(mousePos.x, mousePos.y, 1, 1));
 	State* state = _stateStack.back();
 	state->update(this);	
-	_renderer->submit(_cursor);
+	_layer->submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
 }
 
 void Game::pushState(State* state)

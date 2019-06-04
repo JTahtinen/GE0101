@@ -17,11 +17,11 @@ SpriteData::~SpriteData()
 
 void SpriteData::pushSprite(Sprite* sprite)
 {
-	for (auto& s : _data)
+	for (const auto& s : _data)
 	{
-		if (s->getName() == sprite->getName())
+		if (s->name == sprite->name)
 		{
-			WARN("Could not add sprite: " << s->getName() << " to Sprite data - name collision, or sprite already present");
+			WARN("Could not add sprite: " << s->name << " to Sprite data - name collision, or sprite already present");
 			return;
 		}
 	}
@@ -33,7 +33,7 @@ void SpriteData::removeSprite(const std::string& name)
 	unsigned int i = 0;
 	for (auto& sprite : _data)
 	{
-		if (sprite->getName() == name)
+		if (sprite->name == name)
 		{
 			_data.erase(_data.begin() + i);
 			MSG("Deleted Sprite: " << name);
@@ -47,7 +47,7 @@ const Sprite* SpriteData::getSprite(const std::string& name) const
 {
 	for (auto& sprite : _data)
 	{
-		if (sprite->getName() == name)
+		if (sprite->name == name)
 		{
 			return sprite;
 		}

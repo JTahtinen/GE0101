@@ -18,7 +18,7 @@ void TextRenderable::init(const Renderer *renderer)
 	{
 		availableTextRenderables.push_back(i);
 	}
-	textVao = new VertexArray("textVertices");
+	//textVao = new VertexArray("textVertices");
 	textVao->bind();
 	textVbo = new Buffer();
 	textVbo->bind();
@@ -29,7 +29,7 @@ void TextRenderable::init(const Renderer *renderer)
 	textVao->push(textVbo, textLayout);
 	textShader = new Shader("res/shaders/letter", true);
 	textShader->bind();
-	textShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
+	//textShader->setUniform1f("u_ScreenRatio", renderer->getDisplayRatio());
 	textShader->setUniform1f("u_Scale", 0.1f);
 }
 
