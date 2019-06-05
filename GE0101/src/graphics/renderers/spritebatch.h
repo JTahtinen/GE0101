@@ -22,7 +22,7 @@ public:
 	{
 		return (sprite->texture->getId() == _refTexture->getId());
 	}
-	void bindTexture(unsigned int slot = 0) const;
+	void bindTexture() const;
 	inline const std::vector<SpriteRenderable>& getData() const { return _data; }
 	void clear();
 };

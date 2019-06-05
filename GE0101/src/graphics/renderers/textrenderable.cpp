@@ -1,4 +1,4 @@
-#include "textrenderable.h"
+/*#include "textrenderable.h"
 #include "../../defs.h"
 #include "../buffers/vertexarray.h"
 #include "../shader.h"
@@ -116,4 +116,4 @@ void TextRenderable::destroy()
 {
 	availableTextRenderables.push_back(_tag);
 	DESTROY_CHILDREN();
-}
+}*/

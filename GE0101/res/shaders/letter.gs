@@ -3,33 +3,39 @@
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
-uniform vec2 u_Dimensions;
-uniform vec2 u_Offset;
-uniform vec2 u_TexCoord;
 uniform float u_ScreenRatio;
 uniform float u_Scale;
 
+in VS_OUT
+{
+	vec2 dimensions;
+	vec2 texCoord;
+} gs_in[];
+
 out vec2 v_TexCoord;
+
 
 void main()
 {	
-	vec2 dimensions = vec2(u_Dimensions.x * u_Scale, u_Dimensions.y * u_Scale * u_ScreenRatio);
+	vec2 dimensions = gs_in[0].dimensions;
+	vec2 texCoord = gs_in[0].texCoord;
+	vec2 finalDimensions = vec2(dimensions.x * u_Scale, dimensions.y * u_Scale * u_ScreenRatio);
 	vec4 pos = gl_in[0].gl_Position;
 	
 	gl_Position = pos;
-	v_TexCoord = u_TexCoord;
+	v_TexCoord = texCoord;
 	EmitVertex();
 	
-	gl_Position = pos + vec4(0, -dimensions.y, 0, 0);
-	v_TexCoord = u_TexCoord + vec2(0, u_Dimensions.y);
+	gl_Position = pos + vec4(0, -finalDimensions.y, 0, 0);
+	v_TexCoord = texCoord + vec2(0, dimensions.y);
 	EmitVertex();
 	
-	gl_Position = pos + vec4(dimensions.x, 0, 0, 0) ;
-	v_TexCoord = u_TexCoord + vec2(u_Dimensions.x, 0);
+	gl_Position = pos + vec4(finalDimensions.x, 0, 0, 0);
+	v_TexCoord = texCoord + vec2(dimensions.x, 0);
 	EmitVertex();
 	
-	gl_Position = pos + vec4(dimensions.x, -dimensions.y, 0, 0);
-	v_TexCoord = u_TexCoord + u_Dimensions;
+	gl_Position = pos + vec4(finalDimensions.x, -finalDimensions.y, 0, 0);
+	v_TexCoord = texCoord + dimensions;
 	EmitVertex();
 	
 	EndPrimitive();

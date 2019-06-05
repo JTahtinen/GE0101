@@ -1,5 +1,6 @@
 #include "spritebatch.h"
 #include "../../defs.h"
+#include "renderer.h"
 
 SpriteBatch::SpriteBatch(const Texture* reference)
 	: _refTexture(reference)
@@ -21,7 +22,7 @@ void SpriteBatch::clear()
 	_data.clear();
 }
 
-void SpriteBatch::bindTexture(unsigned int slot) const
+void SpriteBatch::bindTexture() const
 {
-	_refTexture->bind(slot);
+	_refTexture->bind(TEXTURE_SLOT_SPRITE);
 }

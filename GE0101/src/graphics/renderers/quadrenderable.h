@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include "renderable.h"
 
 class QuadRenderable : public Renderable
@@ -16,4 +16,4 @@ public:
 	static void quit();
 protected:
 	virtual void destroy() override;
-};
+};*/

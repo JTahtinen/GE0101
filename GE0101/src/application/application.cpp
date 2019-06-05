@@ -12,18 +12,20 @@ Log gameLog;
 void Application::loadGlobalData()
 {
 	BatchRenderer::init(&_window);
+	TextRenderer::init(&_window);
 }
 
 void Application::deleteGlobalData()
 {
 	BatchRenderer::quit();
+	TextRenderer::quit();
 }
 
 Application::Application()
 	: _window(1280, 720, "GE0101")
 {
-	_layer = new Layer(&_window);
 	loadGlobalData();
+	_layer = new Layer(&_window);
 	_game = new Game(_layer);
 	
 }
@@ -49,8 +51,8 @@ void Application::run()
 	auto lastTime = high_resolution_clock::now();
 	float runningTime = 0;
 
-	Font* arialFont = Font::loadFont("res/fonts/arial");
 	Font* lsFont = Font::loadFont("res/fonts/liberation_serif");
+	Font* arialFont = Font::loadFont("res/fonts/arial");
 	TextBox::setDefaultFont(arialFont);
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
 	TextBox textBox("FPS: ", 0.3f);
@@ -94,6 +96,7 @@ void Application::run()
 
 
 		//_layer.submitText(engineInfo);
+		_layer->submitText("Lord Engine, v0.1", Vec2(0.4f, -1.2f), 0.4f, lsFont);
 		_layer->end();
 		_layer->flush();
 

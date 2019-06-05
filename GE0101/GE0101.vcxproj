@@ -173,7 +173,9 @@
     <ClCompile Include="src\graphics\renderers\renderer.cpp" />
     <ClCompile Include="src\graphics\renderers\simplerenderer.cpp" />
     <ClCompile Include="src\graphics\renderers\spritebatch.cpp" />
+    <ClCompile Include="src\graphics\renderers\textbatch.cpp" />
     <ClCompile Include="src\graphics\renderers\textrenderable.cpp" />
+    <ClCompile Include="src\graphics\renderers\textrenderer.cpp" />
     <ClCompile Include="src\graphics\sprite.cpp" />
     <ClCompile Include="src\graphics\textbox.cpp" />
     <ClCompile Include="src\math\vec3.cpp" />
@@ -220,7 +222,9 @@
     <ClInclude Include="src\graphics\renderers\renderable2d.h" />
     <ClInclude Include="src\graphics\renderers\renderer.h" />
     <ClInclude Include="src\graphics\renderers\spritebatch.h" />
+    <ClInclude Include="src\graphics\renderers\textbatch.h" />
     <ClInclude Include="src\graphics\renderers\textrenderable.h" />
+    <ClInclude Include="src\graphics\renderers\textrenderer.h" />
     <ClInclude Include="src\graphics\textbox.h" />
     <ClInclude Include="src\math\vec3.h" />
     <ClInclude Include="src\physics\collider.h" />

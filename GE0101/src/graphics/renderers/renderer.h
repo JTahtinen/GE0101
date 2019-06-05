@@ -7,6 +7,7 @@
 
 #include "../window.h"
 #include <string>
+#include "../buffers/indexbuffer.h"
 
 enum Texture_Slot
 {
@@ -19,6 +20,9 @@ enum Texture_Slot
 class Renderer
 {
 	Window*						_win;
+protected:
+	unsigned int				_vao;
+	unsigned int				_vbo;
 public:
 	Renderer(Window* window);
 	virtual ~Renderer();
@@ -29,5 +33,5 @@ public:
 protected:
 	void clear();
 	void update();
-	void destroyRenderable(Renderable* renderable);
+	//void destroyRenderable(Renderable* renderable);
 };

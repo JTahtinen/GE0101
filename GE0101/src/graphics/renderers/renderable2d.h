@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include "renderable.h"
 #include "../sprite.h"
 
@@ -15,4 +15,4 @@ public:
 	static void quit();
 protected:
 	virtual void destroy() override;
-};
+};*/

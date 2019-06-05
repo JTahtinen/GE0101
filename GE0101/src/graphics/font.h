@@ -13,6 +13,7 @@ struct Letter
 
 class Font
 {
+	unsigned int		_id;
 	std::vector<Letter> _letters;
 	Texture*			_atlas{ nullptr };
 public:
@@ -34,6 +35,8 @@ public:
 		return _atlas;
 	}
 	void bind() const;
+	inline unsigned int getId() const { return _id; }
 private:
 	Font(std::vector<Letter> letters, Texture* atlas);
+	static unsigned int nextId();
 };

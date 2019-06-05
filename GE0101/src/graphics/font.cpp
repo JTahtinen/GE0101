@@ -105,5 +105,12 @@ void Font::bind() const
 Font::Font(std::vector<Letter> letters, Texture* atlas)
 	: _letters(letters)
 	, _atlas(atlas)
+	, _id(nextId())
 {
+}
+
+unsigned int Font::nextId()
+{
+	static unsigned int numIds = 0;
+	return numIds++;
 }

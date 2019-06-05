@@ -14,7 +14,7 @@ extern void destroyRenderables();
 #define DESTROY_CHILDREN() for (auto& child : _children)\
 { if (child) {if (!child->isStreaming()) {child->destroy();}}} _children.clear();
 
-class Renderable
+/*class Renderable
 {
 	friend class Renderer;
 	friend class Renderable2D;
@@ -53,4 +53,4 @@ T* createRenderable(T* pool, std::vector<unsigned int>& availableRenderables, un
 		return renderable;
 	}
 	return nullptr;
-}
+}*/

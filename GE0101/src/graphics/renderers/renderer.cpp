@@ -11,6 +11,8 @@ Renderer::~Renderer()
 {
 	delete _win;
 	_win = nullptr;
+	glDeleteBuffers(1, &_vbo);
+	glDeleteVertexArrays(1, &_vao);
 }
 
 void Renderer::begin()
@@ -32,8 +34,8 @@ void Renderer::update()
 {
 	_win->update();
 }
-
+/*
 void Renderer::destroyRenderable(Renderable* renderable)
 {
 	renderable->destroy();
-}
+}*/

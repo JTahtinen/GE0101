@@ -10,11 +10,9 @@ struct VertexData;
 
 class BatchRenderer : public Renderer
 {
-	unsigned int					_vao;
-	unsigned int					_vbo;
-	IndexBuffer						_ibo;
 	VertexData*						_buffer;
 	std::vector<SpriteBatch>		_spriteBatches;
+	IndexBuffer						_ibo;
 public:
 	BatchRenderer(Window* win);
 	~BatchRenderer();
@@ -22,5 +20,4 @@ public:
 	virtual void flush() override;
 	static void init(const Window* win);
 	static void quit();
-	void setOffset(const Vec3& offset);
 };

@@ -1,4 +1,4 @@
-#include "simplerenderer.h"
+/*#include "simplerenderer.h"
 #include "../../defs.h"
 
 SimpleRenderer::SimpleRenderer(Window* win)
@@ -37,4 +37,4 @@ void SimpleRenderer::flush()
 	}
 	update();
 	_renderables.clear();
-}
+}*/

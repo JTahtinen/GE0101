@@ -1,4 +1,4 @@
-#include "quadrenderable.h"
+/*#include "quadrenderable.h"
 #include "../../defs.h"
 #include "renderer.h"
 #include "../buffers/vertexarray.h"
@@ -101,4 +101,4 @@ void QuadRenderable::destroy()
 {
 	availableQuadRenderables.push_back(_tag);
 	DESTROY_CHILDREN();
-}
+}*/

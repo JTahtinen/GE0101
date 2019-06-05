@@ -67,8 +67,6 @@ BatchRenderer::BatchRenderer(Window* win)
 
 BatchRenderer::~BatchRenderer()
 {
-	glDeleteBuffers(1, &_vbo);
-	glDeleteVertexArrays(1, &_vao);
 }
 
 //void BatchRenderer::submit(const Sprite* renderable, const Vec2& pos, const Vec3& offset)
@@ -87,8 +85,6 @@ void BatchRenderer::submit(const Sprite* renderable, const Vec2& pos, const Vec3
 	
 }
 
-
-
 void BatchRenderer::flush()
 {
 	shader->bind();
@@ -98,7 +94,7 @@ void BatchRenderer::flush()
 	{
 		unsigned int indexCount = 0;
 		auto& data = batch.getData();
-		batch.bindTexture(TEXTURE_SLOT_SPRITE);
+		batch.bindTexture();
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		_buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 		for (const auto& renderable : data)
@@ -151,9 +147,7 @@ void BatchRenderer::init(const Window* window)
 	shader = new Shader("res/shaders/basic");
 	shader->bind();
 	shader->setUniform4f("u_Color", 0, 0.0f, 0.1f, 0);
-	shader->setUniform3f("u_Offset", 0, 0, 0);
 	shader->setUniform1f("u_ScrRatio", window->getRatio());
-	shader->setUniform1f("u_Scale", 1.0f);
 	shader->setUniform1i("u_Texture", TEXTURE_SLOT_SPRITE);
 }
 
@@ -161,10 +155,4 @@ void BatchRenderer::quit()
 {
 	delete shader;
 	shader = nullptr;
-}
-
-void BatchRenderer::setOffset(const Vec3& offset)
-{
-	shader->bind();
-	//shader->setUniform3f("u_Offset", offset.x, offset.y, offset.z);
 }

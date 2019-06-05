@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include <vector>
 #include "../window.h"
 #include <string>
@@ -14,3 +14,4 @@ public:
 	void submit(const Sprite* renderable);
 	virtual void flush() override;
 };
+*/

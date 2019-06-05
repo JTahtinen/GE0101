@@ -1,7 +1,8 @@
-#include "renderable2d.h"
+/*#include "renderable2d.h"
 #include "../../defs.h"
 #include "renderer.h"
-#include "../shader.h"
+#include "../
+.h"
 
 static Renderable2D*				renderable2DPool;
 static std::vector<unsigned int>	availableRenderable2Ds;
@@ -72,3 +73,4 @@ void Renderable2D::destroy()
 	availableRenderable2Ds.push_back(_tag);
 	DESTROY_CHILDREN();
 }
+*/

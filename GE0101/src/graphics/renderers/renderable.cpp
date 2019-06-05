@@ -1,4 +1,4 @@
-#include "renderable.h"
+/*#include "renderable.h"
 #include "../../defs.h"
 #include "../../globals.h"
 #include "../buffers/vertexarray.h"
@@ -47,4 +47,4 @@ void Renderable::setTag(unsigned int tag)
 void Renderable::freeRenderable()
 {
 	_streaming = false;
-}
+}*/
