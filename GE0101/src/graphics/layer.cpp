@@ -4,6 +4,7 @@
 Layer::Layer(Window* win)
 	: _win(win)
 {
+	
 	ASSERT(win);
 	_batchRenderer = new BatchRenderer(win);
 }
@@ -26,11 +27,13 @@ void Layer::submitQuad(const Vec4& color, const Vec2& dimensions, const Vec2& po
 void Layer::begin()
 {
 	_win->clear();
+
 	_batchRenderer->begin();
 }
 
 void Layer::end()
 {
+
 	_batchRenderer->end();
 
 }
@@ -38,4 +41,5 @@ void Layer::flush()
 {
 	_batchRenderer->flush();
 	_win->update();
+
 }

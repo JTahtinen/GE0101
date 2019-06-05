@@ -24,4 +24,5 @@ public:
 	{
 		return _filepath;
 	}
+	inline unsigned int getId() const { return _id; }
 };

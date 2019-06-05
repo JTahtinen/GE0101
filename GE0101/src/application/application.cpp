@@ -96,6 +96,7 @@ void Application::run()
 		//_layer.submitText(engineInfo);
 		_layer->end();
 		_layer->flush();
+
 		
 		++frames;
 		if (runningTime >= 1.0f)

@@ -31,8 +31,9 @@ enum ShaderAttributeIndex
 
 BatchRenderer::BatchRenderer(Window* win)
 	: Renderer(win)
-	, _indexCount(0)
 {
+	_spriteBatches.reserve(30);
+
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 	glGenBuffers(1, &_vbo);
@@ -70,61 +71,79 @@ BatchRenderer::~BatchRenderer()
 	glDeleteVertexArrays(1, &_vao);
 }
 
-void BatchRenderer::begin()
-{
-	_indexCount = 0;
-	shader->bind();
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	_buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-}
-
+//void BatchRenderer::submit(const Sprite* renderable, const Vec2& pos, const Vec3& offset)
 void BatchRenderer::submit(const Sprite* renderable, const Vec2& pos, const Vec3& offset)
 {
-	const Vec2& size = renderable->size;
-	float halfW = size.x * 0.5f;
-	float halfH = size.y * 0.5f;
-
-	_buffer->pos = Vec2(pos.x - halfW, pos.y - halfH);
-	_buffer->texCoord = Vec2(0, 1);
-	_buffer->color = Vec4(0, 0, 0, 0);
-	_buffer->offset = offset;
-	++_buffer;
-
-	_buffer->pos = Vec2(pos.x - halfW, pos.y + halfH);
-	_buffer->texCoord = Vec2(0, 0);
-	_buffer->color = Vec4(0, 0, 0, 0);
-	_buffer->offset = offset;
-	++_buffer;
-
-	_buffer->pos = Vec2(pos.x + halfW, pos.y + halfH);
-	_buffer->texCoord = Vec2(1, 0);
-	_buffer->color = Vec4(0, 0, 0, 0);
-	_buffer->offset = offset;
-	++_buffer;
-
-	_buffer->pos = Vec2(pos.x + halfW, pos.y - halfH);
-	_buffer->texCoord = Vec2(1, 1);
-	_buffer->color = Vec4(0, 0, 0, 0);
-	_buffer->offset = offset;
-	++_buffer;
-
-	_indexCount += 6;
-	if (_indexCount > 1000000)
+	for (auto& batch : _spriteBatches)
 	{
-		__debugbreak();
+		if (batch.checkCompatibility(renderable))
+		{
+			batch.submit(renderable, pos, offset);
+			return;
+		}
 	}
+	_spriteBatches.emplace_back(SpriteBatch(renderable->texture));
+	_spriteBatches.back().submit(renderable, pos, offset);
+	
 }
 
-void BatchRenderer::end()
-{
-	glUnmapBuffer(GL_ARRAY_BUFFER);
-}
+
 
 void BatchRenderer::flush()
 {
+	shader->bind();
 	glBindVertexArray(_vao);
 	_ibo.bind();
-	glDrawElements(GL_TRIANGLES, _indexCount, GL_UNSIGNED_INT, NULL);
+	for (const auto& batch : _spriteBatches)
+	{
+		unsigned int indexCount = 0;
+		auto& data = batch.getData();
+		batch.bindTexture(TEXTURE_SLOT_SPRITE);
+		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+		_buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		for (const auto& renderable : data)
+		{
+			const Sprite* sprite = renderable.sprite;
+			const Vec2& pos = renderable.pos;
+			const Vec3& offset = renderable.offset;
+
+			const Vec2& size = sprite->size;
+			float halfW = size.x * 0.5f;
+			float halfH = size.y * 0.5f;
+
+			_buffer->pos = Vec2(pos.x - halfW, pos.y - halfH);
+			_buffer->texCoord = Vec2(0, 1);
+			_buffer->color = Vec4(0, 0, 0, 0);
+			_buffer->offset = offset;
+			++_buffer;
+
+			_buffer->pos = Vec2(pos.x - halfW, pos.y + halfH);
+			_buffer->texCoord = Vec2(0, 0);
+			_buffer->color = Vec4(0, 0, 0, 0);
+			_buffer->offset = offset;
+			++_buffer;
+
+			_buffer->pos = Vec2(pos.x + halfW, pos.y + halfH);
+			_buffer->texCoord = Vec2(1, 0);
+			_buffer->color = Vec4(0, 0, 0, 0);
+			_buffer->offset = offset;
+			++_buffer;
+
+			_buffer->pos = Vec2(pos.x + halfW, pos.y - halfH);
+			_buffer->texCoord = Vec2(1, 1);
+			_buffer->color = Vec4(0, 0, 0, 0);
+			_buffer->offset = offset;
+			++_buffer;
+
+			indexCount += 6;
+		}
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL);
+	}
+	for (auto& batch : _spriteBatches)
+	{
+		batch.clear();
+	}
 }
 
 void BatchRenderer::init(const Window* window)

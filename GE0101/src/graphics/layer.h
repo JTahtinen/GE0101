@@ -1,11 +1,13 @@
 #pragma once
 #include "renderers/batchrenderer.h"
 #include "window.h"
+#include <vector>
 
 class Layer
 {
-	Window*				_win;
-	BatchRenderer*		_batchRenderer;
+	Window*						_win;
+	BatchRenderer*				_batchRenderer;
+
 public:
 	Layer(Window* win);
 	void submitSprite(const Sprite* sprite, const Vec2& pos, const Vec3& offset);
