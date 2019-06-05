@@ -12,7 +12,7 @@ GameState::GameState(const Game* game, Layer* layer)
 	, _substate(SUBSTATE_ACTIVE)
 {
 	Map::init(game);
-	_map = Map::loadMap("res/maps/testmap.png", game);
+	_map = Map::loadMap("res/maps/testmap3.png", game);
 
 }
 

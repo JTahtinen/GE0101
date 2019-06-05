@@ -123,7 +123,7 @@ Game::Game(Layer* layer)
 	_assetData.spriteData.pushSprite(wall);
 
 	GameState* gameState = new GameState(this, layer);
-	Actor* player = new Actor(Vec2(1.4f, 0.2f), guy, new InputController());
+	Actor* player = new Actor(Vec2(0.4f, 0.2f), guy, new InputController());
 	gameState->addActor(player);
 	gameState->setPlayer(player);
 	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));

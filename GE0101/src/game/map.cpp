@@ -147,14 +147,14 @@ Map* Map::loadMap(const std::string& filepath, const Game* game)
 		{
 			switch (tilePix[x + (height - 1 - y) * width])
 			{
-			case 0x0000ffff:
+			case 0xffff0000:
 				currentTile = floorTile;
 				break;
 			case 0xff0000ff:
 				currentTile = wallTile;
 				break;
 			default:
-				currentTile = floorTile;
+				currentTile = wallTile;
 				break;
 			}
 			map->_tiles[x + y * width] = currentTile;
