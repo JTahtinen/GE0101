@@ -1,16 +1,15 @@
 #include "aicontroller.h"
 #include "../../../defs.h"
 
-AIController::AIController(GameState* game)
+AIController::AIController(std::shared_ptr<GameState> game)
 	: _game(game)
 {
-	ASSERT(game);
 }
 
 void AIController::update(Actor* e)
 {
 	float speed = 0.6f;
-	const Actor* player = _game->getPlayer();
+	auto player = _game->getPlayer();
 	Vec2 distanceFromPlayer = e->getPhysics()->getPos().center 
 		- player->getPhysics()->getPos().center;
 

@@ -12,9 +12,9 @@ enum AITask
 
 class AIController : public Controller
 {
-	const GameState*	_game;
-	AITask				_task{ AI_IDLE };
+	const std::shared_ptr<GameState>	_game;
+	AITask								_task{ AI_IDLE };
 public:
-	AIController(GameState* game);
+	AIController(std::shared_ptr<GameState> game);
 	virtual void update(Actor* e) override;
 };

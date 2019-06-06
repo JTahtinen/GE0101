@@ -1,10 +1,9 @@
 #include "textbatch.h"
 #include "../../defs.h"
 
-TextBatch::TextBatch(const Font* reference)
+TextBatch::TextBatch(std::shared_ptr<const Font> reference)
 	: _refFont(reference)
 {
-	ASSERT(_refFont);
 	_data.reserve(30);
 }
 

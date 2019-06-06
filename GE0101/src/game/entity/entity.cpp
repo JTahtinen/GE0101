@@ -11,7 +11,7 @@
 
 static std::vector<GUID> availableGUIDs;
 
-Entity::Entity(const Vec2& pos, Sprite* sprite)
+Entity::Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite)
 	:
 	_sprite(sprite)
 	, _id(nextId())
@@ -37,10 +37,6 @@ Entity::Entity()
 
 Entity::~Entity()
 {
-	if (_conversation)
-	{
-		delete _conversation;
-	}
 	availableGUIDs.push_back(_id);
 #ifdef _DEBUG
 	MSG("Deleted Entity GUID: " << _id);
@@ -58,7 +54,7 @@ void Entity::stopMoving()
 }
 
 
-void Entity::setConversation(Conversation* conversation)
+void Entity::setConversation(std::shared_ptr<Conversation> conversation)
 {
 	if (!conversation)
 	{
@@ -68,34 +64,31 @@ void Entity::setConversation(Conversation* conversation)
 	_conversation = conversation;
 }
 
-void Entity::update(GameState* gamestate)
+void Entity::update(GameState& gamestate)
 {
-	auto& entities = gamestate->getEntities();
+	auto& entities = gamestate.getEntities();
 	for (auto& entity : entities)
 	{
 		_object.collisionCheck(*entity->getPhysics());
 	}
-	gamestate->getMap()->collisionCheck(this);
+	gamestate.getMap()->collisionCheck(*this);
 	_object.update();
 }
 
-void Entity::engage(GameState* gamestate)
+void Entity::engage(GameState& gamestate)
 {
 	_conversation->start();
-	gamestate->setActiveConversation(_conversation);
-	gamestate->setSubState(SUBSTATE_CONVERSATION);
+	gamestate.setActiveConversation(_conversation);
+	gamestate.setSubState(SUBSTATE_CONVERSATION);
 }
 
-void Entity::render(Layer* layer, const Camera* camera) const
+void Entity::render(Layer& layer, const Camera& camera) const
 {
 	
 	const Vec2& objPos = _object.getPos().center;
-	if (layer && _sprite)
-	{
 		//Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, Vec4(-camPos.x + pos.x, 
 			//-camPos.y + pos.y, camPos.z), 1.0f);
-		layer->submitSprite(_sprite, objPos, -camera->getPos());
-	}
+	layer.submitSprite(_sprite, objPos, -camera.getPos());
 }
 
 GUID Entity::nextId()

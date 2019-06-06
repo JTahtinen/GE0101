@@ -5,7 +5,7 @@
 
 struct Sprite
 {
-	const Texture*			texture;
-	Vec2					size;
-	std::string				name;
+	std::shared_ptr<const Texture>	texture;
+	Vec2							size;
+	std::string						name;
 };

@@ -8,14 +8,10 @@ SpriteData::SpriteData()
 
 SpriteData::~SpriteData()
 {
-	for (auto& sprite : _data)
-	{
-		delete sprite;
-	}
 	_data.clear();
 }
 
-void SpriteData::pushSprite(Sprite* sprite)
+void SpriteData::addSprite(std::shared_ptr<Sprite> sprite)
 {
 	for (const auto& s : _data)
 	{
@@ -43,7 +39,7 @@ void SpriteData::removeSprite(const std::string& name)
 	WARN("Could not delete Sprite: " << name << " from asset data - not found");
 }
 
-const Sprite* SpriteData::getSprite(const std::string& name) const
+std::shared_ptr<const Sprite> SpriteData::getSprite(const std::string& name) const
 {
 	for (auto& sprite : _data)
 	{

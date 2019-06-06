@@ -5,19 +5,19 @@ class Controller;
 
 class Actor : public Entity
 {
-	Controller* _controller{ nullptr };
-	std::vector<const Actor*>		_allies;
-	std::vector<const Actor*>		_enemies;
-	const Entity*					_target{ nullptr };
+	std::shared_ptr<Controller> _controller;
+	std::vector<std::shared_ptr<const Actor>>		_allies;
+	std::vector<std::shared_ptr<const Actor>>		_enemies;
+	std::shared_ptr<const Entity>					_target;
 public:
-	Actor(const Vec2& pos, Sprite* sprite, Controller* controller);
-	Actor(const Vec2& pos, Sprite* sprite);
+	Actor(const Vec2& pos, std::shared_ptr<const Sprite> sprite, std::shared_ptr<Controller> controller);
+	Actor(const Vec2& pos, std::shared_ptr<const Sprite> sprite);
 	Actor(const Vec2& pos);
 	virtual ~Actor() override;
-	void setController(Controller* controller);
-	void setTarget(const Entity* target);
-	const Entity* getTarget() const;
-	void addAlly(const Actor* ally);
-	void addEnemy(const Actor* enemy);
-	virtual void update(GameState* gamestate) override;
+	void setController(std::shared_ptr<Controller> controller);
+	void setTarget(std::shared_ptr<const Entity> target);
+	std::shared_ptr<const Entity> getTarget() const;
+	void addAlly(std::shared_ptr<const Actor> ally);
+	void addEnemy(std::shared_ptr<const Actor> enemy);
+	virtual void update(GameState& gamestate) override;
 };

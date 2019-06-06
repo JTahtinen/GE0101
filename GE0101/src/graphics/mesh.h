@@ -16,6 +16,6 @@ public:
 	inline unsigned int getElementCount() const { return _ibo.getSize(); }
 	void bind() const;
 	void unbind() const;
-	static Mesh* loadMesh(const std::string& filepath);
+	static std::shared_ptr<Mesh> loadMesh(const std::string& filepath);
 	inline const std::string& getName() const { return _name; }
 };

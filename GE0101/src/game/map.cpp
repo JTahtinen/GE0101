@@ -36,10 +36,10 @@ Map::~Map()
 {
 }
 
-void Map::collisionCheck(Entity* entity) const
+void Map::collisionCheck(Entity& entity) const
 {
 	static Vec2 tileDim(TILE_SIZE, TILE_SIZE);
-	Vec2 entityTile = getTilePos(entity->getPhysics()->getPos().center);
+	Vec2 entityTile = getTilePos(entity.getPhysics()->getPos().center);
 	for (int row = 0; row < 3; ++row)
 	{
 		for (int column = 0; column < 3; ++column)
@@ -50,20 +50,20 @@ void Map::collisionCheck(Entity* entity) const
 			if (currentTile && currentTile->barrier)
 			{
 				PhysicsObject tileObj(Vec2((float)(xTilePos * TILE_SIZE), (float)(yTilePos * TILE_SIZE)), Vec2(TILE_SIZE, TILE_SIZE));
-				entity->_object.collisionCheck(tileObj);
+				entity._object.collisionCheck(tileObj);
 			}
 		}
 	}
 }
 
-void Map::render(Layer* layer, const Camera* camera) const
+void Map::render(Layer& layer, const Camera& camera) const
 {
 	float halfTileSize = TILE_SIZE * 0.5f;
 
-	int xStartTile		= (int)((camera->getLeft()	 + halfTileSize) / TILE_SIZE);
-	int xEndTile		= (int)((camera->getRight()  + halfTileSize) / TILE_SIZE) + 1;
-	int yStartTile = (int)((camera->getBottom() + halfTileSize) / TILE_SIZE);
-	int yEndTile		= (int)((camera->getTop()	 + halfTileSize) / TILE_SIZE) + 1;
+	int xStartTile		= (int)((camera.getLeft()	 + halfTileSize) / TILE_SIZE);
+	int xEndTile		= (int)((camera.getRight()  + halfTileSize) / TILE_SIZE) + 1;
+	int yStartTile = (int)((camera.getBottom() + halfTileSize) / TILE_SIZE);
+	int yEndTile		= (int)((camera.getTop()	 + halfTileSize) / TILE_SIZE) + 1;
 
 
 	if (xStartTile < 0) xStartTile = 0;
@@ -78,21 +78,21 @@ void Map::render(Layer* layer, const Camera* camera) const
 	if (yEndTile < 0) return;
 	if (yEndTile > _height) yEndTile = _height;
 
-	const Vec3& camPos = camera->getPos();
+	const Vec3& camPos = camera.getPos();
 	//const float zoom = camera->getZoom();
 
 	for (int y = yStartTile; y < yEndTile; ++y)
 	{
 		for (int x = xStartTile; x < xEndTile; ++x)
 		{
-			const Sprite* tile = _tiles[x + y * _width]->sprite;
+			std::shared_ptr<const Sprite> tile = _tiles[x + y * _width]->sprite;
 
 			//Renderable2D* tile = 
 			//	Renderable2D::createRenderable2D(_tiles[x + y * _width]->sprite,
 			//	Vec4(
 			//		-camPos.x + x * TILE_SIZE,
 			//		-camPos.y + y * TILE_SIZE, camPos.z), 1.0f);
-			layer->submitSprite(tile, Vec2(x * TILE_SIZE, y * TILE_SIZE), -camPos);
+			layer.submitSprite(tile, Vec2(x * TILE_SIZE, y * TILE_SIZE), -camPos);
 		}
 	}
 }
@@ -102,7 +102,7 @@ Vec2 Map::getTilePos(const Vec2& absPos) const
 	return Vec2(absPos.x / TILE_SIZE, absPos.y / TILE_SIZE);
 }
 
-Map* Map::createMap(int width, int height, const Game* game)
+Map* Map::createMap(int width, int height, const Game& game)
 {
 	if (!isInit)
 	{
@@ -118,7 +118,7 @@ Map* Map::createMap(int width, int height, const Game* game)
 	return map;
 }
 
-Map* Map::loadMap(const std::string& filepath, const Game* game)
+Map* Map::loadMap(const std::string& filepath, const Game& game)
 {
 	if (!isInit)
 	{
@@ -164,20 +164,15 @@ Map* Map::loadMap(const std::string& filepath, const Game* game)
 	return map;
 }
 
-bool Map::init(const Game* game)
+bool Map::init(const Game& game)
 {
-	if (!game)
-	{
-		ERR("Could not init map - game was nullptr");
-		return false;
-	}
 	floorTile = new Tile();
 	floorTile->barrier = false;
-	floorTile->sprite = game->getAssetData()->spriteData.getSprite("floor");
+	floorTile->sprite = game.getAssetData()->spriteData.getSprite("floor");
 
 	wallTile = new Tile();
 	wallTile->barrier = true;
-	wallTile->sprite = game->getAssetData()->spriteData.getSprite("wall");
+	wallTile->sprite = game.getAssetData()->spriteData.getSprite("wall");
 	return true;
 }
 
@@ -187,5 +182,4 @@ void Map::quit()
 	floorTile = nullptr;
 	delete wallTile;
 	wallTile = nullptr;
-
 }

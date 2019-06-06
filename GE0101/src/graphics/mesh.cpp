@@ -41,8 +41,8 @@ void Mesh::unbind() const
 }
 
 
-Mesh* Mesh::loadMesh(const std::string& filepath)
+std::shared_ptr<Mesh> Mesh::loadMesh(const std::string& filepath)
 {
 	//TODO: Mesh loading
-	return new Mesh(filepath);
+	return std::make_shared<Mesh>(filepath);
 }

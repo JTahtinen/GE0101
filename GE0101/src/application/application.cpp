@@ -11,8 +11,8 @@ Log gameLog;
 
 void Application::loadGlobalData()
 {
-	BatchRenderer::init(&_window);
-	TextRenderer::init(&_window);
+	BatchRenderer::init(_window);
+	TextRenderer::init(_window);
 }
 
 void Application::deleteGlobalData()
@@ -25,15 +25,13 @@ Application::Application()
 	: _window(1280, 720, "GE0101")
 {
 	loadGlobalData();
-	_layer = new Layer(&_window);
-	_game = new Game(_layer);
+	_layer = std::make_shared<Layer>(&_window);
+	_game = std::make_shared<Game>(_layer);
 	
 }
 
 Application::~Application()
 {
-	delete _game;
-	_game = nullptr;
 	deleteGlobalData();
 }
 
@@ -51,11 +49,10 @@ void Application::run()
 	auto lastTime = high_resolution_clock::now();
 	float runningTime = 0;
 
-	Font* lsFont = Font::loadFont("res/fonts/liberation_serif");
-	Font* arialFont = Font::loadFont("res/fonts/arial");
-	TextBox::setDefaultFont(arialFont);
+	std::shared_ptr<Font> lsFont = Font::loadFont("res/fonts/liberation_serif");
+	std::shared_ptr<Font> arialFont = Font::loadFont("res/fonts/arial");
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
-	TextBox textBox("FPS: ", 0.3f);
+	TextBox textBox("FPS: ", arialFont, 0.3f);
 	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 1.0f));
 	textBox.setFont(lsFont);
 
@@ -110,6 +107,4 @@ void Application::run()
 			updateFPS = true;
 		}
 	}
-	delete lsFont;
-	delete arialFont;
 }

@@ -3,7 +3,10 @@
 #include "globals.h"
 #include <GLEW/glew.h>
 
-
+template<typename T> using ptr = std::shared_ptr<T>;
+template<typename T> using ptr_s = std::shared_ptr<T>;
+template<typename T> using ptr_u = std::unique_ptr<T>;
+template<typename T> using ptr_w = std::weak_ptr<T>;
 
 #define MSG(expr) std::cout << expr << std::endl
 #define ERR(expr) std::cout << "[ERROR] " << expr << std::endl;

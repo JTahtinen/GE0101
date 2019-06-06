@@ -8,40 +8,43 @@ GeometryData::GeometryData()
 
 void GeometryData::loadGeometry(const std::string& filepath)
 {
-	Mesh* mesh = new Mesh(filepath);
-	pushGeometry(mesh);
+	std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(filepath);
+	addGeometry(mesh);
 }
 
-void GeometryData::pushGeometry(Mesh* mesh)
+void GeometryData::addGeometry(std::shared_ptr<Mesh> mesh)
 {
-	if (!mesh)
-	{
-		WARN("Could not push Mesh to Geometry Data - nullptr exception");
-		return;
-	}
 	_data.push_back(mesh);
 }
 
 GeometryData::~GeometryData()
 {
-	for (auto& mesh : _data)
-	{
-		delete mesh;
-	}
 	_data.clear();
 }
 
-void GeometryData::popGeometry(const std::string& name)
+void GeometryData::removeGeometry(const std::string& name)
 {
 	for (unsigned int i = 0; i < _data.size(); ++i)
 	{
 		if (_data[i]->getName() == name)
 		{
-			delete _data[i];
-			_data[i] = nullptr;
+			_data.erase(_data.begin() + i);
 			MSG("Deleted Mesh: " << name);
 			return;
 		}
 	}
-	WARN("Could not pop " << name << " - No such Mesh in Geometry Data");
+	WARN("Could not remove " << name << " - No such Mesh in Geometry Data");
+}
+
+const std::shared_ptr<Mesh> GeometryData::getGeometry(const std::string& name) const
+{
+	for (auto& mesh : _data)
+	{
+		if (mesh->getName() == name)
+		{
+			return mesh;
+		}
+	}
+	ERR("Could not retrieve Mesh: " << name << " - No such Mesh in Geometry Data");
+	return nullptr;
 }

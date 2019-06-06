@@ -2,14 +2,13 @@
 #include "../../defs.h"
 #include "renderer.h"
 
-SpriteBatch::SpriteBatch(const Texture* reference)
+SpriteBatch::SpriteBatch(std::shared_ptr<const Texture> reference)
 	: _refTexture(reference)
 {
-	ASSERT(_refTexture);
 	_data.reserve(500);
 }
 
-void SpriteBatch::submit(const Sprite* sprite, const Vec2& pos, const Vec3& offset)
+void SpriteBatch::submit(std::shared_ptr<const Sprite> sprite, const Vec2& pos, const Vec3& offset)
 {
 	if (sprite)
 	{

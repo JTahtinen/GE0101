@@ -17,24 +17,24 @@ enum Game_Substate
 
 class GameState : public State
 {
-	Map*									_map;
-	std::vector<Entity*>					_entities;
-	std::vector<Actor*>						_actors;
-	Actor*									_player;
+	std::shared_ptr<Map>					_map;
+	std::vector<std::shared_ptr<Entity>>	_entities;
+	std::vector<std::shared_ptr<Actor>>		_actors;
+	std::shared_ptr<Actor>					_player;
 	Camera									_camera;
-	Layer*									_layer;
-	Conversation*							_activeConversation;
+	std::shared_ptr<Layer>					_layer;
+	std::shared_ptr<Conversation>			_activeConversation;
 	Game_Substate							_substate;
 public:
-	GameState(const Game* game, Layer* layer);
+	GameState(const Game& game, std::shared_ptr<Layer>& layer);
 	virtual ~GameState() override;
-	void addEntity(Entity* e);
-	void addActor(Actor* e);
-	void setPlayer(Actor* e);
-	const Actor* getPlayer() const;
+	void addEntity(std::shared_ptr<Entity> e);
+	void addActor(std::shared_ptr<Actor> e);
+	void setPlayer(std::shared_ptr<Actor> e);
 	void setSubState(Game_Substate substate);
-	void setActiveConversation(Conversation* conversation);
-	virtual State_Condition update(Game* game) override;
-	inline const std::vector<Entity*>& getEntities() const { return _entities; }
-	inline const Map* getMap() const { return _map; }
+	void setActiveConversation(std::shared_ptr<Conversation>& conversation);
+	virtual State_Condition update(Game& game) override;
+	inline auto& getEntities() const { return _entities; }
+	inline auto getMap() const { return _map; }
+	inline std::shared_ptr<const Actor> getPlayer() const { return _player; }
 };

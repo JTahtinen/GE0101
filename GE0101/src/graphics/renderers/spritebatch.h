@@ -6,21 +6,21 @@
 
 struct SpriteRenderable
 {
-	const Sprite* sprite;
-	Vec2 pos;
-	Vec3 offset;
+	std::shared_ptr<const Sprite>		sprite;
+	Vec2								pos;
+	Vec3								offset;
 };
 
 class SpriteBatch
 {
-	const Texture*								_refTexture;
+	std::shared_ptr<const Texture>				_refTexture;
 	std::vector<SpriteRenderable>				_data;
 public:
-	SpriteBatch(const Texture* reference);
-	void submit(const Sprite* sprite, const Vec2& pos, const Vec3& offset);
-	inline bool checkCompatibility(const Sprite* sprite)
+	SpriteBatch(std::shared_ptr<const Texture> reference);
+	void submit(std::shared_ptr<const Sprite> sprite, const Vec2& pos, const Vec3& offset);
+	inline bool checkCompatibility(const Sprite& sprite)
 	{
-		return (sprite->texture->getId() == _refTexture->getId());
+		return (sprite.texture->getId() == _refTexture->getId());
 	}
 	void bindTexture() const;
 	inline const std::vector<SpriteRenderable>& getData() const { return _data; }

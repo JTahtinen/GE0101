@@ -8,9 +8,17 @@
 #include <sstream>
 #include "graphics/font.h"
 
+class P
+{
+public:
+	int c;
+	P(int c) : c(c) {}
+};
+
 static void playground()
 {
-
+	std::unique_ptr<P> p = std::make_unique<P>(5);
+	std::cout << p->c;
 }
 
 

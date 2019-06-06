@@ -4,11 +4,11 @@
 #include "../../graphics/sprite.h"
 class SpriteData
 {
-	std::vector<const Sprite*>		_data;
+	std::vector<std::shared_ptr<Sprite>>		_data;
 public:
 	SpriteData();
 	~SpriteData();
-	void pushSprite(Sprite* sprite);
+	void addSprite(std::shared_ptr<Sprite> sprite);
 	void removeSprite(const std::string& name);
-	const Sprite* getSprite(const std::string& name) const;
+	std::shared_ptr<const Sprite> getSprite(const std::string& name) const;
 };

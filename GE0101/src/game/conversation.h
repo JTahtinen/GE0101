@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 //#include <utility>
+#include "../graphics/font.h"
 
 enum Conversation_Status
 {
@@ -14,8 +15,8 @@ class ConvNode;
 
 struct ConvOption
 {
-	std::string			text;
-	ConvNode*			link;
+	std::string							text;
+	std::shared_ptr<ConvNode>			link;
 };
 
 class ConvNode
@@ -24,26 +25,26 @@ class ConvNode
 	std::vector<ConvOption>		_options;
 public:
 	void print() const;
-	void render(Layer* layer) const;
+	void render(Layer& layer, std::shared_ptr<const Font> font) const;
 	void setText(const std::string& text);
-	void addOption(const std::string& text, ConvNode* link);
+	void addOption(const std::string& text, std::shared_ptr<ConvNode> link);
 	unsigned int getNumOptions() const;
-	ConvNode* activate();
-	ConvNode* getNodeFromOption(unsigned int i);
+	std::shared_ptr<ConvNode> activate();
+	std::shared_ptr<ConvNode> getNodeFromOption(unsigned int i);
 };
 
 
 class Conversation
 {
-	std::vector<ConvNode*>		_nodes;
-	ConvNode*					_activeNode;
+	std::vector<std::shared_ptr<ConvNode>>		_nodes;
+	std::shared_ptr<ConvNode>					_activeNode;
 public:
 	~Conversation();
 	Conversation();
-	void push(ConvNode* node);
+	void push(std::shared_ptr<ConvNode> node);
 	void start();
 	Conversation_Status update();
-	void render(Layer* layer) const;
+	void render(Layer& layer, std::shared_ptr<const Font> font) const;
 private:
 	void reset();
 };

@@ -18,5 +18,5 @@ class State
 {
 public:
 	virtual ~State() {};
-	virtual State_Condition update(Game* game) = 0;
+	virtual State_Condition update(Game& game) = 0;
 };

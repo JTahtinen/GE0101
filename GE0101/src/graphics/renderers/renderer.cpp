@@ -4,13 +4,10 @@
 Renderer::Renderer(Window* window)
 	: _win(window)
 {
-	ASSERT(_win);
 }
 
 Renderer::~Renderer()
 {
-	delete _win;
-	_win = nullptr;
 	glDeleteBuffers(1, &_vbo);
 	glDeleteVertexArrays(1, &_vao);
 }

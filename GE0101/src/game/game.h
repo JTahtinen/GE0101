@@ -11,18 +11,18 @@
 
 class Game
 {
-	std::vector<State*>		_stateStack;
-	Layer*					_layer;
-	AssetData				_assetData;
-	Sprite*					_cursor;
+	std::vector<std::shared_ptr<State>>			_stateStack;
+	std::shared_ptr<Layer>						_layer;
+	AssetData									_assetData;
+	std::shared_ptr<Sprite>						_cursor;
 public:
 	static float frameTime;
 public:
-	Game(Layer* layer);
+	Game(std::shared_ptr<Layer> layer);
 	~Game();
 
 	void update(float frameTime);
-	void pushState(State* state);
+	void pushState(std::shared_ptr<State> state);
 	void popState();
 	const AssetData* getAssetData() const;
 };

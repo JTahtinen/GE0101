@@ -16,8 +16,8 @@ class BatchRenderer : public Renderer
 public:
 	BatchRenderer(Window* win);
 	~BatchRenderer();
-	void submit(const Sprite* renderable, const Vec2& pos, const Vec3& offset);
+	void submit(std::shared_ptr<const Sprite> renderable, const Vec2& pos, const Vec3& offset);
 	virtual void flush() override;
-	static void init(const Window* win);
+	static void init(const Window& win);
 	static void quit();
 };

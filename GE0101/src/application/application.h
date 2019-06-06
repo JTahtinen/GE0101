@@ -7,9 +7,9 @@
 
 class Application
 {
-	Layer*					_layer;
-	Game*					_game;
-	Window					_window;
+	std::shared_ptr<Layer>			_layer;
+	std::shared_ptr<Game>			_game;
+	Window							_window;
 public:
 	Application();
 	~Application();

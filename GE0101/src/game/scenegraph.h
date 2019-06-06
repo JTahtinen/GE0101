@@ -4,11 +4,10 @@
 
 class SceneGraph
 {
-	std::vector<const Entity*>		_entities;
+	std::vector<std::shared_ptr<const Entity>>		_entities;
 public:
 	~SceneGraph();
-	void pushEntity(const Entity* entity);
-	const Entity* getEntity(unsigned int index) const;
+	void pushEntity(std::shared_ptr<const Entity> entity);
 	inline static SceneGraph& instance()
 	{
 		static SceneGraph graph;

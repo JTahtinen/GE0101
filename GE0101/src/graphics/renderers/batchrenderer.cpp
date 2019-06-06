@@ -70,11 +70,11 @@ BatchRenderer::~BatchRenderer()
 }
 
 //void BatchRenderer::submit(const Sprite* renderable, const Vec2& pos, const Vec3& offset)
-void BatchRenderer::submit(const Sprite* renderable, const Vec2& pos, const Vec3& offset)
+void BatchRenderer::submit(std::shared_ptr<const Sprite> renderable, const Vec2& pos, const Vec3& offset)
 {
 	for (auto& batch : _spriteBatches)
 	{
-		if (batch.checkCompatibility(renderable))
+		if (batch.checkCompatibility(*renderable))
 		{
 			batch.submit(renderable, pos, offset);
 			return;
@@ -99,7 +99,7 @@ void BatchRenderer::flush()
 		_buffer = (VertexData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 		for (const auto& renderable : data)
 		{
-			const Sprite* sprite = renderable.sprite;
+			const std::shared_ptr<const Sprite>& sprite = renderable.sprite;
 			const Vec2& pos = renderable.pos;
 			const Vec3& offset = renderable.offset;
 
@@ -142,12 +142,12 @@ void BatchRenderer::flush()
 	}
 }
 
-void BatchRenderer::init(const Window* window)
+void BatchRenderer::init(const Window& window)
 {
 	shader = new Shader("res/shaders/basic");
 	shader->bind();
 	shader->setUniform4f("u_Color", 0, 0.0f, 0.1f, 0);
-	shader->setUniform1f("u_ScrRatio", window->getRatio());
+	shader->setUniform1f("u_ScrRatio", window.getRatio());
 	shader->setUniform1i("u_Texture", TEXTURE_SLOT_SPRITE);
 }
 

@@ -50,11 +50,11 @@ TextRenderer::TextRenderer(Window* win)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void TextRenderer::submit(const std::string& label, const Vec2& pos, const float scale, const Font* font)
+void TextRenderer::submit(const std::string& label, const Vec2& pos, const float scale, std::shared_ptr<const Font> font)
 {
 	for (auto& batch : _batches)
 	{
-		if (batch.checkCompatibility(font))
+		if (batch.checkCompatibility(*font))
 		{
 			batch.submit(label, pos, scale);
 			return;
@@ -74,7 +74,7 @@ void TextRenderer::flush()
 		auto& data = batch.getData();
 		batch.bindFont();
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-		const Font* font = batch.getFont();
+		const auto font = batch.getFont();
 		shader->setUniform1i("u_Texture", TEXTURE_SLOT_FONT_ATLAS);
 		_buffer = (LetterData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 		for (const auto& renderable : data)
@@ -85,7 +85,7 @@ void TextRenderer::flush()
 			float cursor = 0;
 			for (const char c : text)
 			{
-				const Letter* l = font->getLetter(c);
+				const auto l = font->getLetter(c);
 
 
 				_buffer->pos = renderable.pos + Vec2(cursor, 0);
@@ -107,11 +107,11 @@ void TextRenderer::flush()
 	}
 }
 
-void TextRenderer::init(Window* win)
+void TextRenderer::init(const Window& win)
 {
 	shader = new Shader("res/shaders/letter", true);
 	shader->bind();
-	shader->setUniform1f("u_ScreenRatio", win->getRatio());
+	shader->setUniform1f("u_ScreenRatio", win.getRatio());
 }
 
 void TextRenderer::quit()

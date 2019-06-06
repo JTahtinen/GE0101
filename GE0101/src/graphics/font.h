@@ -13,12 +13,12 @@ struct Letter
 
 class Font
 {
-	unsigned int		_id;
-	std::vector<Letter> _letters;
-	Texture*			_atlas{ nullptr };
+	unsigned int				_id;
+	std::vector<Letter>			_letters;
+	std::shared_ptr<Texture>	_atlas;
 public:
 	~Font();
-	static Font* loadFont(const std::string& filepath);
+	static std::shared_ptr<Font> loadFont(const std::string& filepath);
 	inline const Letter* getLetter(char letter) const
 	{
 		for (auto& l : _letters)
@@ -30,13 +30,13 @@ public:
 		}
 		return nullptr;
 	}
-	inline const Texture* getAtlas() const
+	inline std::shared_ptr<const Texture> getAtlas() const
 	{
 		return _atlas;
 	}
 	void bind() const;
 	inline unsigned int getId() const { return _id; }
-private:
+public:
 	Font(std::vector<Letter> letters, Texture* atlas);
 	static unsigned int nextId();
 };

@@ -11,16 +11,16 @@
 
 float Game::frameTime = 0.0f;
 
-Game::Game(Layer* layer)
+Game::Game(std::shared_ptr<Layer> layer)
 	: _layer(layer)
 {
 	ASSERT(layer);
 
-	Conversation* conv = new Conversation();
-	ConvNode* node1 = new ConvNode();
-	ConvNode* node2 = new ConvNode();
-	ConvNode* node3 = new ConvNode();
-	ConvNode* node4 = new ConvNode();
+	std::shared_ptr<Conversation> conv = std::make_shared<Conversation>();
+	std::shared_ptr<ConvNode> node1 = std::make_shared<ConvNode>();
+	std::shared_ptr<ConvNode> node2 = std::make_shared<ConvNode>();
+	std::shared_ptr<ConvNode> node3 = std::make_shared<ConvNode>();
+	std::shared_ptr<ConvNode> node4 = std::make_shared<ConvNode>();
 	node1->setText("How are you?");
 	node1->addOption("I'm quite fine.", node2);
 	node1->addOption("Mind your own business!", node3);
@@ -37,72 +37,8 @@ Game::Game(Layer* layer)
 	conv->push(node4);
 
 
-	Mesh* eMesh = new Mesh("defEntityMesh");
-	TextureData& texData = _assetData.textureData;
+	auto texData = _assetData.textureData;
 
-	eMesh->bind();
-
-
-
-	float vertData[] = {
-		-0.1f, -0.1f,
-		0, 1,
-		1.0f, 0, 0, 0.0f,
-
-		-0.1f,  0.1f,
-		0, 0,
-		0.0f, 0, 0, 0,
-		
-		0.1f, -0.1f,
-		1, 1,
-		0.0f, 0, 0, 0,
-		
-		0.1f, 0.1f,
-		1, 0,
-		0.0f, 0, 0, 0
-	};
-/*
-	Vec2 texCoordData[] = {
-	};
-
-	Vec4 colorData[]{
-	};
-*/
-	std::vector<unsigned int> indexData;
-	indexData.push_back(0);
-	indexData.push_back(1);
-	indexData.push_back(2);
-	indexData.push_back(2);
-	indexData.push_back(3);
-	indexData.push_back(1);
-
-
-	Buffer* vertices = new Buffer();
-	//Buffer* texCoords = new Buffer();
-//	Buffer* colors = new Buffer();
-
-	vertices->bind();
-	vertices->push(&vertData[0], sizeof(vertData));
-
-	//texCoords->bind();
-//	texCoords->push(&texCoordData[0], sizeof(texCoordData));
-	//vertices->push(&texCoordData[0], sizeof(texCoordData));
-//	colors->bind();
-//	colors->push(&colorData[0], sizeof(colorData));
-	//vertices->push(&colorData[0], sizeof(colorData));
-	BufferLayout layout;
-	//BufferLayout texCoordLayout;
-	//BufferLayout colorLayout;
-	layout.push<float>(2);
-	layout.push<float>(2);
-	layout.push<float>(4);
-	//texCoordLayout.push<float>(2);
-	//colorLayout.push<float>(4);
-
-	eMesh->pushData(vertices, layout);
-	//eMesh->pushData(texCoords, texCoordLayout);
-	//eMesh->pushData(colors, colorLayout);
-	eMesh->setIndices(indexData);
 	
 	texData.loadTexture("res/textures/guy.png");
 	texData.loadTexture("res/textures/cursor1.png");
@@ -110,28 +46,27 @@ Game::Game(Layer* layer)
 	texData.loadTexture("res/textures/wall.png");
 
 	
-	_assetData.geometryData.pushGeometry(eMesh);
 	
-	Sprite* guy = new Sprite{ texData.getTexture("res/textures/guy.png"), Vec2(0.2f, 0.2f), "guy" };
-	_cursor = new Sprite{ texData.getTexture("res/textures/cursor1.png"), Vec2(0.2f, 0.2f), "cursor" };
-	Sprite* floor = new Sprite{ texData.getTexture("res/textures/floor.png"), Vec2(0.2f, 0.2f), "floor" };
-	Sprite* wall = new Sprite{ texData.getTexture("res/textures/wall.png"), Vec2(0.2f, 0.2f), "wall" };
+	std::shared_ptr<Sprite> guy = std::make_shared<Sprite>( Sprite{ texData.getTexture("res/textures/guy.png"), Vec2(0.2f, 0.2f), "guy" });
+	_cursor = std::make_shared<Sprite>(Sprite { texData.getTexture("res/textures/cursor1.png"), Vec2(0.2f, 0.2f), "cursor" });
+	std::shared_ptr<Sprite> floor = std::make_shared<Sprite>( Sprite { texData.getTexture("res/textures/floor.png"), Vec2(0.2f, 0.2f), "floor" });
+	std::shared_ptr<Sprite> wall = std::make_shared<Sprite>(Sprite{ texData.getTexture("res/textures/wall.png"), Vec2(0.2f, 0.2f), "wall" });
 
-	_assetData.spriteData.pushSprite(guy);
-	_assetData.spriteData.pushSprite(_cursor);
-	_assetData.spriteData.pushSprite(floor);
-	_assetData.spriteData.pushSprite(wall);
+	_assetData.spriteData.addSprite(guy);
+	_assetData.spriteData.addSprite(_cursor);
+	_assetData.spriteData.addSprite(floor);
+	_assetData.spriteData.addSprite(wall);
 
-	GameState* gameState = new GameState(this, layer);
-	Actor* player = new Actor(Vec2(0.4f, 0.2f), guy, new InputController());
+	std::shared_ptr<GameState> gameState = std::make_shared<GameState>(*this, layer);
+	std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2(0.4f, 0.2f), guy, std::make_shared<InputController>());
 	gameState->addActor(player);
 	gameState->setPlayer(player);
 	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
-	gameState->addActor(new Actor(Vec2(0.5f, 0.7f), guy));
-	gameState->addActor(new Actor(Vec2(0.3f, 0.7f), guy));
-	gameState->addActor(new Actor(Vec2(0.82f, 0.74f), guy));
-	gameState->addActor(new Actor(Vec2(0.2f, 0.23f), guy));
-	Actor* a = new Actor(Vec2(0.5f, 0.5f), guy, new AIController(gameState));
+	gameState->addActor(std::make_shared<Actor>(Vec2(0.5f, 0.7f), guy));
+	gameState->addActor(std::make_shared<Actor>(Vec2(0.3f, 0.7f), guy));
+	gameState->addActor(std::make_shared<Actor>(Vec2(0.82f, 0.74f), guy));
+	gameState->addActor(std::make_shared<Actor>(Vec2(0.2f, 0.23f), guy));
+	std::shared_ptr<Actor> a = std::make_shared<Actor>(Vec2(0.5f, 0.5f), guy, std::make_shared<AIController>(gameState));
 	a->setConversation(conv);
 	gameState->addActor(a);
 	
@@ -142,12 +77,7 @@ Game::Game(Layer* layer)
 
 Game::~Game()
 {
-	for (auto& state : _stateStack)
-	{
-		delete state;
-	}
 	_stateStack.clear();
-	//_cursor->freeRenderable();
 }
 
 
@@ -155,24 +85,22 @@ void Game::update(float frameTime)
 {
 	Game::frameTime = frameTime;
 	static Input& in = Input::instance();
-	static const Window* win = _layer->getWindow();
+	static auto& win = _layer->getWindow();
 	static int winHeight = win->getHeight();
 	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
 	//_cursor->setPos(Vec4(mousePos.x, mousePos.y, 1, 1));
-	State* state = _stateStack.back();
-	state->update(this);	
+	auto& state = _stateStack.back();
+	state->update(*this);	
 	_layer->submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
 }
 
-void Game::pushState(State* state)
+void Game::pushState(std::shared_ptr<State> state)
 {
 	_stateStack.push_back(state);
 }
 
 void Game::popState()
 {
-	State* state = _stateStack.back();
-	delete state;
 	_stateStack.pop_back();
 }
 

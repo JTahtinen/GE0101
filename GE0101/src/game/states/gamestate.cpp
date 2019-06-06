@@ -5,29 +5,24 @@
 #include "../../physics/collider.h"
 #include "../../defs.h"
 
-GameState::GameState(const Game* game, Layer* layer)
+GameState::GameState(const Game& game, std::shared_ptr<Layer>& layer)
 	: _layer(layer)
 	, _camera(layer->getDisplayRatio())
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
 	Map::init(game);
-	_map = Map::loadMap("res/maps/testmap3.png", game);
+	_map = std::shared_ptr<Map>(Map::loadMap("res/maps/testmap3.png", game));
 
 }
 
 GameState::~GameState()
 {
-	delete _map;
-	for (auto* entity : _entities)
-	{
-		delete entity;
-	}
 	_entities.clear();
 	Map::quit();
 }
 
-void GameState::addEntity(Entity* e)
+void GameState::addEntity(std::shared_ptr<Entity> e)
 {
 	if (!e)
 	{
@@ -37,7 +32,7 @@ void GameState::addEntity(Entity* e)
 	_entities.push_back(e);
 }
 
-void GameState::addActor(Actor* e)
+void GameState::addActor(std::shared_ptr<Actor> e)
 {
 	if (!e)
 	{
@@ -48,7 +43,7 @@ void GameState::addActor(Actor* e)
 	addEntity(e);
 }
 
-void GameState::setPlayer(Actor* e)
+void GameState::setPlayer(std::shared_ptr<Actor> e)
 {
 	if (!e)
 	{
@@ -58,22 +53,17 @@ void GameState::setPlayer(Actor* e)
 	_player = e;
 }
 
-const Actor* GameState::getPlayer() const
-{
-	return _player;
-}
-
 void GameState::setSubState(Game_Substate substate)
 {
 	_substate = substate;
 }
 
-void GameState::setActiveConversation(Conversation* conversation)
+void GameState::setActiveConversation(std::shared_ptr<Conversation>& conversation)
 {
 	_activeConversation = conversation;
 }
 
-State_Condition GameState::update(Game* game)
+State_Condition GameState::update(Game& game)
 {
 	static Input& in = Input::instance();
 
@@ -92,12 +82,12 @@ State_Condition GameState::update(Game* game)
 		}
 		if (in.poll(KEY_E, KEYSTATE_TYPED))
 		{
-			_entities.back()->engage(this);
+			_entities.back()->engage(*this);
 		}
 
 		for (auto& entity : _entities)
 		{
-			entity->update(this);
+			entity->update(*this);
 		}
 
 
@@ -123,16 +113,16 @@ State_Condition GameState::update(Game* game)
 		}
 	}
 	}
-	_map->render(_layer, &_camera);
+	_map->render(*_layer, _camera);
 
 	for (auto& entity : _entities)
 	{
-		entity->render(_layer, &_camera);
+		entity->render(*_layer, _camera);
 	}
 	
 	if (_substate == SUBSTATE_CONVERSATION)
 	{
-		_activeConversation->render(_layer);
+		//_activeConversation->render(*_layer);
 	}
 	return STATE_RUNNING;
 }

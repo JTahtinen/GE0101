@@ -8,11 +8,11 @@ TextureData::TextureData()
 
 void TextureData::loadTexture(const std::string& filepath)
 {
-	Texture* texture = new Texture(filepath);
-	pushTexture(texture);
+	std::shared_ptr<Texture> texture = std::make_shared<Texture>(filepath);
+	addTexture(texture);
 }
 
-void TextureData::pushTexture(Texture* texture)
+void TextureData::addTexture(std::shared_ptr<Texture> texture)
 {
 	if (!texture)
 	{
@@ -24,29 +24,24 @@ void TextureData::pushTexture(Texture* texture)
 
 TextureData::~TextureData()
 {
-	for (auto& texture : _data)
-	{
-		delete texture;
-	}
 	_data.clear();
 }
 
-void TextureData::popTexture(const std::string& name)
+void TextureData::removeTexture(const std::string& name)
 {
 	for (unsigned int i = 0; i < _data.size(); ++i)
 	{
 		if (_data[i]->getFilePath() == name)
 		{
-			delete _data[i];
-			_data[i] = nullptr;
+			_data.erase(_data.begin() + i);
 			MSG("Deleted texture: " << name);
 			return;
 		}
 	}
-	WARN("Could not pop " << name << " - No such Texture in Texture Data");
+	WARN("Could not remove " << name << " - No such Texture in Texture Data");
 }
 
-const Texture* TextureData::getTexture(const std::string& name) const
+std::shared_ptr<const Texture> TextureData::getTexture(const std::string& name) const
 {
 	for (auto& texture : _data)
 	{
@@ -55,6 +50,6 @@ const Texture* TextureData::getTexture(const std::string& name) const
 			return texture;
 		}
 	}
-	WARN("Could not get Texture " << name << " from Texture Data - no such texture");
+	WARN("Could not retrieve Texture: " << name << " from Texture Data - no such texture");
 	return nullptr;
 }

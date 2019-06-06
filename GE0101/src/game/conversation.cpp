@@ -13,9 +13,9 @@ void ConvNode::print() const
 	}
 }
 
-void ConvNode::render(Layer* layer) const
+void ConvNode::render(Layer& layer, std::shared_ptr<const Font> font) const
 {
-	TextBox box(_text);
+	TextBox box(_text, font);
 	unsigned int i = 1;
 	box.pushContent(" ");
 	for (auto& option : _options)
@@ -30,12 +30,12 @@ void ConvNode::setText(const std::string& text)
 	_text = text;
 }
 
-void ConvNode::addOption(const std::string& text, ConvNode* link)
+void ConvNode::addOption(const std::string& text, std::shared_ptr<ConvNode> link)
 {
 	_options.emplace_back(ConvOption{ text, link });
 }
 
-ConvNode* ConvNode::getNodeFromOption(unsigned int i)
+std::shared_ptr<ConvNode> ConvNode::getNodeFromOption(unsigned int i)
 {
 	if (i < _options.size())
 	{
@@ -49,7 +49,7 @@ unsigned int ConvNode::getNumOptions() const
 	return _options.size();
 }
 
-ConvNode* ConvNode::activate()
+std::shared_ptr<ConvNode> ConvNode::activate()
 {
 	static Input& in = Input::instance();
 
@@ -61,7 +61,7 @@ ConvNode* ConvNode::activate()
 			return getNodeFromOption(i);
 		}
 	}
-	return this;
+	return std::shared_ptr<ConvNode>(this);
 
 }
 
@@ -72,19 +72,12 @@ Conversation::Conversation()
 
 Conversation::~Conversation()
 {
-	for (auto& node : _nodes)
-	{
-		delete node;
-	}
 	_nodes.clear();
 }
 
-void Conversation::push(ConvNode* node)
+void Conversation::push(std::shared_ptr<ConvNode> node)
 {
-	if (node)
-	{
 		_nodes.push_back(node);
-	}
 }
 
 void Conversation::start()
@@ -118,10 +111,10 @@ void Conversation::reset()
 	_activeNode = _nodes[0];
 }
 
-void Conversation::render(Layer* layer) const
+void Conversation::render(Layer& layer, std::shared_ptr<const Font> font) const
 {
 	if (_activeNode)
 	{
-		_activeNode->render(layer);
+		_activeNode->render(layer, font);
 	}
 }

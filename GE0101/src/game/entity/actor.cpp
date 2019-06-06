@@ -1,14 +1,14 @@
 #include "actor.h"
 #include "controllers/controller.h"
 
-Actor::Actor(const Vec2& pos, Sprite* sprite, Controller* controller)
+Actor::Actor(const Vec2& pos, std::shared_ptr<const Sprite> sprite, std::shared_ptr<Controller> controller)
 	:
 	Entity(pos, sprite)
 	, _controller(controller)
 {
 }
 
-Actor::Actor(const Vec2& pos, Sprite* sprite)
+Actor::Actor(const Vec2& pos, std::shared_ptr<const Sprite> sprite)
 	: 
 	Actor(pos, sprite, nullptr)
 {
@@ -22,26 +22,24 @@ Actor::Actor(const Vec2& pos)
 
 Actor::~Actor()
 {
-	delete _controller;
-	_controller = nullptr;
 }
 
-void Actor::setController(Controller* controller)
+void Actor::setController(std::shared_ptr<Controller> controller)
 {
 	_controller = controller;
 }
 
-void Actor::setTarget(const Entity* target)
+void Actor::setTarget(std::shared_ptr<const Entity> target)
 {
 	_target = target;
 }
 
-const Entity* Actor::getTarget() const
+std::shared_ptr<const Entity> Actor::getTarget() const
 {
 	return _target;
 }
 
-void Actor::addAlly(const Actor* ally)
+void Actor::addAlly(std::shared_ptr<const Actor> ally)
 {
 	if (ally)
 	{
@@ -56,7 +54,7 @@ void Actor::addAlly(const Actor* ally)
 	}
 }
 
-void Actor::addEnemy(const Actor* enemy)
+void Actor::addEnemy(std::shared_ptr<const Actor> enemy)
 {
 	if (enemy)
 	{
@@ -71,7 +69,7 @@ void Actor::addEnemy(const Actor* enemy)
 	}
 }
 
-void Actor::update(GameState* gamestate)
+void Actor::update(GameState& gamestate)
 {
 	stopMoving();
 

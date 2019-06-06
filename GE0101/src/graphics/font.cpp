@@ -7,10 +7,9 @@
 
 Font::~Font()
 {
-	delete _atlas;
 }
 
-Font* Font::loadFont(const std::string& filepath)
+std::shared_ptr<Font> Font::loadFont(const std::string& filepath)
 {
 	std::string fontfile = load_text_file(filepath + ".fnt");
 
@@ -94,7 +93,7 @@ Font* Font::loadFont(const std::string& filepath)
 
 	}
 
-	return new Font(letters, atlas);
+	return std::make_shared<Font>(letters, atlas);
 }
 
 void Font::bind() const

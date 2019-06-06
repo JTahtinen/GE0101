@@ -13,17 +13,17 @@ struct Label
 
 class TextBatch
 {
-	const Font*				_refFont;
-	std::vector<Label>		_data;
+	std::shared_ptr<const Font>		_refFont;
+	std::vector<Label>				_data;
 public:
-	TextBatch(const Font* reference);
+	TextBatch(std::shared_ptr<const Font> reference);
 	void submit(const std::string& content, const Vec2& pos, const float scale);
-	inline bool checkCompatibility(const Font* font) const
+	inline bool checkCompatibility(const Font& font) const
 	{
-		return (font->getId() == _refFont->getId());
+		return (font.getId() == _refFont->getId());
 	}
 	void bindFont() const;
 	inline const std::vector<Label>& getData() const { return _data; }
-	inline const Font* getFont() const { return _refFont; }
+	inline const std::shared_ptr<const Font> getFont() const { return _refFont; }
 	void clear();
 };

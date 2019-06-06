@@ -18,23 +18,23 @@ class Entity
 	friend class Map;
 	friend class Controller;
 protected:
-	GUID				_id;
-	PhysicsObject		_object;
-	Sprite*				_sprite;
-	Conversation*		_conversation;
-	bool				_engaged;
+	GUID							_id;
+	PhysicsObject					_object;
+	std::shared_ptr<const Sprite>	_sprite;
+	std::shared_ptr<Conversation>	_conversation;
+	bool							_engaged;
 public:
-	Entity(const Vec2& pos, Sprite* sprite);
+	Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite);
 	Entity(const Vec2& pos);
 	Entity();
 	virtual ~Entity();
 	void move(const Vec2& dir, float amt);
 	void stopMoving();
-	void setConversation(Conversation* conversation);
+	void setConversation(std::shared_ptr<Conversation> conversation);
 	inline const PhysicsObject* getPhysics() const { return &_object; }
-	virtual void update(GameState* gamestate);
-	void engage(GameState* gamestate);
-	void render(Layer* layer, const Camera* camera) const;
+	virtual void update(GameState& gamestate);
+	void engage(GameState& gamestate);
+	void render(Layer& layer, const Camera& camera) const;
 	inline GUID getId() const { return _id; }
 	inline std::string getName() const 
 	{
