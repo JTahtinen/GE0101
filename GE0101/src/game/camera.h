@@ -29,11 +29,11 @@ public:
 	}
 	inline float getLeft() const
 	{
-		return _pos.x - _pos.z;
+		return _pos.x - 1.0f * _pos.z;
 	}
 	inline float getRight() const
 	{
-		return _pos.x + _pos.z;
+		return _pos.x + 1.0f * _pos.z;
 	}
 	inline float getBottom() const
 	{

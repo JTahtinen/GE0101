@@ -58,13 +58,10 @@ void Map::collisionCheck(Entity& entity) const
 
 void Map::render(Layer& layer, const Camera& camera) const
 {
-	float halfTileSize = TILE_SIZE * 0.5f;
-
-	int xStartTile		= (int)((camera.getLeft()	 + halfTileSize) / TILE_SIZE);
-	int xEndTile		= (int)((camera.getRight()  + halfTileSize) / TILE_SIZE) + 1;
-	int yStartTile = (int)((camera.getBottom() + halfTileSize) / TILE_SIZE);
-	int yEndTile		= (int)((camera.getTop()	 + halfTileSize) / TILE_SIZE) + 1;
-
+	int xStartTile		= (int)((camera.getLeft()) / TILE_SIZE);
+	int xEndTile		= (int)((camera.getRight() + TILE_SIZE) / TILE_SIZE);
+	int yStartTile		= (int)((camera.getBottom() + TILE_SIZE) / TILE_SIZE);
+	int yEndTile		= (int)((camera.getTop() + 2 * TILE_SIZE) / TILE_SIZE);
 
 	if (xStartTile < 0) xStartTile = 0;
 	if (xStartTile > _width) return;
@@ -80,18 +77,13 @@ void Map::render(Layer& layer, const Camera& camera) const
 
 	const Vec3& camPos = camera.getPos();
 	//const float zoom = camera->getZoom();
-
+	//MSG(yEndTile);
 	for (int y = yStartTile; y < yEndTile; ++y)
 	{
 		for (int x = xStartTile; x < xEndTile; ++x)
 		{
 			std::shared_ptr<const Sprite> tile = _tiles[x + y * _width]->sprite;
 
-			//Renderable2D* tile = 
-			//	Renderable2D::createRenderable2D(_tiles[x + y * _width]->sprite,
-			//	Vec4(
-			//		-camPos.x + x * TILE_SIZE,
-			//		-camPos.y + y * TILE_SIZE, camPos.z), 1.0f);
 			layer.submitSprite(tile, Vec2(x * TILE_SIZE, y * TILE_SIZE), -camPos);
 		}
 	}

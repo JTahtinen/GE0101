@@ -14,7 +14,6 @@ Renderer::~Renderer()
 
 void Renderer::begin()
 {
-	clear();
 }
 
 void Renderer::end()

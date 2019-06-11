@@ -12,12 +12,14 @@ Log gameLog;
 void Application::loadGlobalData()
 {
 	BatchRenderer::init(_window);
+	QuadRenderer::init(_window);
 	TextRenderer::init(_window);
 }
 
 void Application::deleteGlobalData()
 {
 	BatchRenderer::quit();
+	QuadRenderer::quit();
 	TextRenderer::quit();
 }
 
@@ -51,10 +53,14 @@ void Application::run()
 
 	std::shared_ptr<Font> lsFont = Font::loadFont("res/fonts/liberation_serif");
 	std::shared_ptr<Font> arialFont = Font::loadFont("res/fonts/arial");
+	
+	_assetData.fontData.addElement(lsFont, "liberation_serif");
+	_assetData.fontData.addElement(arialFont, "arial");
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
-	TextBox textBox("FPS: ", arialFont, 0.3f);
+	TextBox::setDefaultFont(_assetData.fontData.getElement("liberation_serif"));
+	TextBox textBox("FPS: ", 0.3f);
 	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 1.0f));
-	textBox.setFont(lsFont);
+	textBox.setFont(arialFont);
 
 	int fps = 0;
 	Vec2 fpsScreenPos(-0.9f, 0.45f);
@@ -78,22 +84,25 @@ void Application::run()
 		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
 		frameTime = (float)(duration.count() / 1000.0f);
 		_layer->begin();
+		
 		_game->update(frameTime);
 		lastTime = currentTime;
 		runningTime += frameTime;
 		if (updateFPS)
 		{
-			//textBox.setContent("FPS: " + std::to_string(fps));
+			textBox.setContent("FPS: " + std::to_string(fps));
 			//MSG(std::to_string(fps));
 			std::cout << std::to_string(fps) << std::endl;
 			updateFPS = false;
 		}
 		//if (toggleFPS)
 		//textBox.render(_renderer, fpsScreenPos);
-
+		textBox.render(*_layer, fpsScreenPos);
 
 		//_layer.submitText(engineInfo);
 		_layer->submitText("Lord Engine, v0.1", Vec2(0.4f, -1.2f), 0.4f, lsFont);
+		
+		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
 		_layer->end();
 		_layer->flush();
 

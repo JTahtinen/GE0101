@@ -5,7 +5,7 @@ class Controller;
 
 class Actor : public Entity
 {
-	std::shared_ptr<Controller> _controller;
+	std::shared_ptr<Controller> _controller{ nullptr };
 	std::vector<std::shared_ptr<const Actor>>		_allies;
 	std::vector<std::shared_ptr<const Actor>>		_enemies;
 	std::shared_ptr<const Entity>					_target;

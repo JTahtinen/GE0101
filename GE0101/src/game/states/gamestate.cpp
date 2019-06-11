@@ -91,7 +91,7 @@ State_Condition GameState::update(Game& game)
 		}
 
 
-		_camera.setPos(_player->getPhysics()->getPos().center);
+		_camera.setPos(_player->getPhysics()->getPos().center + Vec2(0.1f, -0.1f));
 		_camera.update();
 	
 		break;
@@ -122,7 +122,7 @@ State_Condition GameState::update(Game& game)
 	
 	if (_substate == SUBSTATE_CONVERSATION)
 	{
-		//_activeConversation->render(*_layer);
+		_activeConversation->render(*_layer);
 	}
 	return STATE_RUNNING;
 }

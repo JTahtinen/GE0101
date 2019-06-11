@@ -16,7 +16,8 @@ enum ShaderAttributeIndex
 	SHADER_INDEX_POSITION = 0,
 	SHADER_INDEX_TEXCOORD,
 	SHADER_INDEX_COLOR,
-	SHADER_INDEX_OFFSET
+	SHADER_INDEX_OFFSET,
+	SHADER_INDEX_AMT
 };
 
 
@@ -107,29 +108,34 @@ void BatchRenderer::flush()
 			float halfW = size.x * 0.5f;
 			float halfH = size.y * 0.5f;
 
-			_buffer->pos = Vec2(pos.x - halfW, pos.y - halfH);
-			_buffer->texCoord = Vec2(0, 1);
-			_buffer->color = Vec4(0, 0, 0, 0);
-			_buffer->offset = offset;
-			++_buffer;
-
-			_buffer->pos = Vec2(pos.x - halfW, pos.y + halfH);
+			//_buffer->pos = Vec2(pos.x - halfW, pos.y - halfH);
+			_buffer->pos = pos;
 			_buffer->texCoord = Vec2(0, 0);
 			_buffer->color = Vec4(0, 0, 0, 0);
 			_buffer->offset = offset;
 			++_buffer;
 
-			_buffer->pos = Vec2(pos.x + halfW, pos.y + halfH);
+			//_buffer->pos = Vec2(pos.x - halfW, pos.y + halfH);
+			_buffer->pos = Vec2(pos.x, pos.y - size.y);
+			_buffer->texCoord = Vec2(0, 1);
+			_buffer->color = Vec4(0, 0, 0, 0);
+			_buffer->offset = offset;
+			++_buffer;
+
+			//_buffer->pos = Vec2(pos.x + halfW, pos.y - halfH);
+			_buffer->pos = pos + Vec2(size.x, -size.y);
+			_buffer->texCoord = Vec2(1, 1);
+			_buffer->color = Vec4(0, 0, 0, 0);
+			_buffer->offset = offset;
+			++_buffer;
+			
+			//_buffer->pos = Vec2(pos.x + halfW, pos.y + halfH);
+			_buffer->pos = Vec2(pos.x + size.x, pos.y);
 			_buffer->texCoord = Vec2(1, 0);
 			_buffer->color = Vec4(0, 0, 0, 0);
 			_buffer->offset = offset;
 			++_buffer;
 
-			_buffer->pos = Vec2(pos.x + halfW, pos.y - halfH);
-			_buffer->texCoord = Vec2(1, 1);
-			_buffer->color = Vec4(0, 0, 0, 0);
-			_buffer->offset = offset;
-			++_buffer;
 
 			indexCount += 6;
 		}

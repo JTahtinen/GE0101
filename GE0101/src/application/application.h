@@ -4,12 +4,14 @@
 #include "../graphics/renderers/renderer.h"
 #include <vector>
 #include "../graphics/layer.h"
+#include "appassetdata.h"
 
 class Application
 {
 	std::shared_ptr<Layer>			_layer;
 	std::shared_ptr<Game>			_game;
 	Window							_window;
+	AppAssetData					_assetData;
 public:
 	Application();
 	~Application();

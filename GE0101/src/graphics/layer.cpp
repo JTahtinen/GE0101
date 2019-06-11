@@ -5,6 +5,7 @@ Layer::Layer(Window* win)
 	: _win(win)
 {
 	_batchRenderer = std::make_unique<BatchRenderer>(win);
+	_quadRenderer = std::make_unique<QuadRenderer>(win);
 	_textRenderer = std::make_unique<TextRenderer>(win);
 }
 
@@ -22,9 +23,9 @@ void Layer::submitText(const std::string& label, const Vec2& pos, const float sc
 	_textRenderer->submit(label, pos, scale, font);
 }
 
-void Layer::submitQuad(const Vec4& color, const Vec2& dimensions, const Vec2& pos)
+void Layer::submitQuad(const Vec2& pos, const Vec2& size, const Vec4& color)
 {
-	//TODO: Batch rendering for quads
+	_quadRenderer->submit(pos, size, color);
 }
 
 void Layer::begin()
@@ -32,19 +33,23 @@ void Layer::begin()
 	_win->clear();
 
 	_batchRenderer->begin();
+	_quadRenderer->begin();
 	_textRenderer->begin();
 }
 
 void Layer::end()
 {
-
 	_batchRenderer->end();
+	_quadRenderer->end();
 	_textRenderer->end();
 }
+
 void Layer::flush()
 {
 	_batchRenderer->flush();
+	_quadRenderer->flush();
 	_textRenderer->flush();
+
 	_win->update();
 
 }

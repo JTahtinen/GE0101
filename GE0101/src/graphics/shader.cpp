@@ -10,18 +10,18 @@ Shader::Shader(const std::string& filepath, bool inclGeometryShader)
 	_id(glCreateProgram())
 	, _filepath(filepath)
 {
-	std::string vsSource = load_text_file(filepath + ".vs");
-	std::string fsSource = load_text_file(filepath + ".fs");
+	std::string vsSource = load_text_file(filepath + ".vert");
+	std::string fsSource = load_text_file(filepath + ".frag");
 	std::string gsSource;
 
 
 	if (vsSource == "")
 	{
-		ERR("Could not open vertex shader: " << filepath << ".vs");
+		ERR("Could not open vertex shader: " << filepath << ".vert");
 	}
 	if (fsSource == "")
 	{
-		ERR("Could not open fragment shader: " << filepath << ".fs");
+		ERR("Could not open fragment shader: " << filepath << ".frag");
 	}
 
 	GLCALL(unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER));
@@ -45,10 +45,10 @@ Shader::Shader(const std::string& filepath, bool inclGeometryShader)
 
 	if (inclGeometryShader)
 	{
-		gsSource = load_text_file(filepath + ".gs");
+		gsSource = load_text_file(filepath + ".geom");
 		if (gsSource == "")
 		{
-			ERR("Could not open geometry shader: " << filepath << ".gs");
+			ERR("Could not open geometry shader: " << filepath << ".geom");
 		}
 			gsC = gsSource.c_str();
 			GLCALL(geometryShader = glCreateShader(GL_GEOMETRY_SHADER));

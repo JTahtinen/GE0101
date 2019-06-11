@@ -147,6 +147,12 @@
     <ClCompile Include="src\graphics\renderers\textbatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\renderers\quadbatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderers\quadrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h">
@@ -311,15 +317,17 @@
     <ClInclude Include="src\graphics\renderers\textbatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\basic.vs" />
-    <None Include="res\shaders\basic.fs" />
-    <None Include="res\shaders\colorquad.vs" />
-    <None Include="res\shaders\colorquad.gs" />
-    <None Include="res\shaders\colorquad.fs" />
-    <None Include="res\shaders\letter.vs" />
-    <None Include="res\shaders\letter.gs" />
-    <None Include="res\shaders\letter.fs" />
+    <ClInclude Include="src\graphics\renderers\quadrenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderers\quadbatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\appassetdata.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\assetcollection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

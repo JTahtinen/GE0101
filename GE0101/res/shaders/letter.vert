@@ -16,8 +16,7 @@ out VS_OUT
 
 void main()
 {
-	//gl_Position = vec4(u_Position.x, u_Position.y * u_ScreenRatio, 0, 1) + vec4(u_Offset.x, (-u_Dimensions.y - u_Offset.y) * u_Scale * u_ScreenRatio, 0, 0);
-	gl_Position = vec4(a_Position.x + a_Offset.x, (a_Position.y - a_Offset.y) * u_Scale * u_ScreenRatio, 0, 1);
+	gl_Position = vec4(a_Position.x + a_Offset.x, (a_Position.y - a_Offset.y * u_Scale) * u_ScreenRatio, 0, 1);
 	vs_out.dimensions = a_Dimensions;
 	vs_out.texCoord = a_TexCoord;
 }

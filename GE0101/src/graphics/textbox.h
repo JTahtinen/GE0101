@@ -8,12 +8,14 @@ class TextBox
 {
 	std::vector<std::string>					_lines;
 	std::shared_ptr<const Font>					_font;
+	static std::weak_ptr<const Font>			s_defaultFont;
 	Vec2										_dimensions;
 	Vec4										_color;
 	float										_textScale;
 public:
-	TextBox(const std::string& content, std::shared_ptr<const Font> font, float textScale = 0.5f);
-	TextBox(std::shared_ptr<const Font> font);
+	TextBox(const std::string& content, float textScale = 0.5f);
+	TextBox();
+	static void setDefaultFont(std::shared_ptr<const Font> font);
 	inline void setFont(std::shared_ptr<const Font> font) { if (font) _font = font; }
 	void setContent(const std::string& content);
 	void pushContent(const std::string& content);
