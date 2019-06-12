@@ -84,11 +84,17 @@ void Entity::engage(GameState& gamestate)
 
 void Entity::render(Layer& layer, const Camera& camera) const
 {
-	
-	const Vec2& objPos = _object.getPos().center;
-		//Renderable2D* renderable = Renderable2D::createRenderable2D(_sprite, Vec4(-camPos.x + pos.x, 
-			//-camPos.y + pos.y, camPos.z), 1.0f);
-	layer.submitSprite(_sprite, objPos, -camera.getPos());
+
+	const Vec2& pos = _object.getPos().center;
+		
+	const float screenLeft = camera.getLeft();
+	const float screenRight = camera.getRight();
+	const float screenBottom = camera.getBottom();
+	const float screenTop = camera.getTop();
+	if (camera.inBounds(pos, _sprite->size))
+	{
+		layer.submitSprite(_sprite, pos, -camera.getPos());
+	}
 }
 
 GUID Entity::nextId()

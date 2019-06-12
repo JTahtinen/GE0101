@@ -59,7 +59,7 @@ void Application::run()
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
 	TextBox::setDefaultFont(_assetData.fontData.getElement("liberation_serif"));
 	TextBox textBox("FPS: ", 0.3f);
-	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 1.0f));
+	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 0.6f));
 	textBox.setFont(arialFont);
 
 	int fps = 0;
@@ -91,8 +91,6 @@ void Application::run()
 		if (updateFPS)
 		{
 			textBox.setContent("FPS: " + std::to_string(fps));
-			//MSG(std::to_string(fps));
-			std::cout << std::to_string(fps) << std::endl;
 			updateFPS = false;
 		}
 		//if (toggleFPS)
@@ -100,7 +98,7 @@ void Application::run()
 		textBox.render(*_layer, fpsScreenPos);
 
 		//_layer.submitText(engineInfo);
-		_layer->submitText("Lord Engine, v0.1", Vec2(0.4f, -1.2f), 0.4f, lsFont);
+		_layer->submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
 		
 		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
 		_layer->end();
@@ -116,4 +114,5 @@ void Application::run()
 			updateFPS = true;
 		}
 	}
+	gameLog.writeToFile("log.txt");
 }

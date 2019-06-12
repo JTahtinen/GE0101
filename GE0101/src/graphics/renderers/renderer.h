@@ -19,8 +19,8 @@ enum Texture_Slot
 
 class Renderer
 {
-	Window*						_win;
 protected:
+	Window*						_win;
 	unsigned int				_vao;
 	unsigned int				_vbo;
 public:

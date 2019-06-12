@@ -2,6 +2,7 @@
 #include "../shader.h"
 #include "../../defs.h"
 
+
 static Shader* shader;
 
 struct LetterData
@@ -66,7 +67,9 @@ void TextRenderer::submit(const std::string& label, const Vec2& pos, const float
 
 void TextRenderer::flush()
 {
+	
 	shader->bind();
+	
 	glBindVertexArray(_vao);
 	for (const auto& batch : _batches)
 	{

@@ -1,5 +1,6 @@
 #include "log.h"
 #include "../defs.h"
+#include <fstream>
 
 void Log::message(const std::string& content)
 {
@@ -27,10 +28,9 @@ void Log::error(const std::string& content)
 
 void Log::print() const
 {
-	for (auto& message : _messages)
-	{
-		MSG(message.c_str());
-	}
+
+	MSG(this->toString().c_str());
+	
 }
 
 void Log::printLast() const
@@ -39,4 +39,29 @@ void Log::printLast() const
 	{
 		MSG(_messages.back().c_str());
 	}
+}
+
+void Log::writeToFile(const std::string& filename) const
+{
+	std::ofstream file;
+	file.open(filename);
+	if (file.is_open())
+	{
+		file << this->toString().c_str();
+	}
+	else
+	{
+		ERR("Could not write log to file: " << filename.c_str());
+	}
+	file.close();
+}
+
+std::string Log::toString() const
+{
+	std::string output = "";
+	for (const auto& msg : _messages)
+	{
+		output += msg;
+	}
+	return output;
 }

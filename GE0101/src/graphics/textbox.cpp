@@ -6,7 +6,7 @@ std::weak_ptr<const Font> TextBox::s_defaultFont;
 TextBox::TextBox(const std::string& content, float textScale)
 	: _dimensions(0.1f, 0.1f)
 	, _textScale(textScale)
-	, _color(Vec4(0.65f, 0.62f, 0.2f, 1.0f))
+	, _color(Vec4(0.65f, 0.62f, 0.2f, 0.6f))
 {
 	setFont(std::shared_ptr<const Font>(s_defaultFont));
 	_lines.reserve(10);

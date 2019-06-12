@@ -212,6 +212,10 @@ Key Input::translateSDLKey(SDL_Keycode key)
 	case SDLK_9:
 		return KEY_9;
 	default:
+	case SDLK_LSHIFT:
+		return KEY_LSHIFT;
+	case SDLK_RSHIFT:
+		return KEY_RSHIFT;
 		return KEY_NULL;
 	}
 }

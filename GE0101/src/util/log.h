@@ -10,4 +10,6 @@ public:
 	void error(const std::string& content);
 	void print() const;
 	void printLast() const;
+	void writeToFile(const std::string& filename) const;
+	std::string toString() const;
 };

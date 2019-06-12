@@ -51,6 +51,8 @@ enum Key
 	KEY_7,
 	KEY_8,
 	KEY_9,
+	KEY_LSHIFT,
+	KEY_RSHIFT,
 	KEY_AMOUNT,
 	KEY_NULL
 };

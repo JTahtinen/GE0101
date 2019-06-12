@@ -1,6 +1,6 @@
 #include "batchrenderer.h"
 #include "../shader.h"
-
+#include "../../input/input.h"
 static Shader* shader;
 
 struct VertexData
@@ -88,7 +88,10 @@ void BatchRenderer::submit(std::shared_ptr<const Sprite> renderable, const Vec2&
 
 void BatchRenderer::flush()
 {
+	Input& in = Input::instance();
 	shader->bind();
+	Vec2 mousePos = _win->getScreenCoords(in.getMouseX(), in.getMouseY());
+	shader->setUniform2f("u_lightPos", mousePos.x, -mousePos.y);
 	glBindVertexArray(_vao);
 	_ibo.bind();
 	for (const auto& batch : _spriteBatches)

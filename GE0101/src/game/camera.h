@@ -43,6 +43,11 @@ public:
 	{
 		return _pos.y + getHeightToWidthRatio() * _pos.z;
 	}
+	inline bool inBounds(const Vec2& pos, const Vec2& size) const 
+	{
+		return (pos.x + size.x > getLeft() && pos.x < getRight()
+			&& pos.y > getBottom() && pos.y - size.y < getTop());
+	}
 	inline const Vec3& getPos() const
 	{
 		return _pos;
