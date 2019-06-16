@@ -1,36 +1,15 @@
 #include "map.h"
 #include "game.h"
-#include "../graphics/buffers/buffer.h"
-#include "../graphics/buffers/indexbuffer.h"
 #include "../defs.h"
-#include "../math/vec2.h"
 #include "../math/math.h"
 #include "../graphics/layer.h"
 #include "SDL2/SDL_image.h"
 #include "states/gamestate.h"
 #include "../physics/collider.h"
 #include "entity/entity.h"
-
-static bool isInit = false;
-
-static Tile* floorTile;
-static Tile* wallTile;
-
-
-
-Map::Map(int width, int height)
-	: _width(width)
-	, _height(height)
-{
-	ASSERT(width * height > 0);
-	
-	
-	_tiles.reserve(width * height);
-	for (int i = 0; i < width * height; ++i)
-	{
-		_tiles.push_back(floorTile);
-	}
-}
+#include "../util/file.h"
+#include "../application/assetmanager.h"
+#include <sstream>
 
 Map::~Map()
 {
@@ -46,7 +25,7 @@ void Map::collisionCheck(Entity& entity) const
 		{
 			int xTilePos = (int)(entityTile.x - 1 + column);
 			int yTilePos = (int)(entityTile.y - 1 + row);
-			const Tile* currentTile = getTile(xTilePos, yTilePos);
+			std::shared_ptr<const Tile> currentTile = getTile(xTilePos, yTilePos);
 			if (currentTile && currentTile->barrier)
 			{
 				PhysicsObject tileObj(Vec2((float)(xTilePos * TILE_SIZE), (float)(yTilePos * TILE_SIZE)), Vec2(TILE_SIZE, TILE_SIZE));
@@ -94,84 +73,90 @@ Vec2 Map::getTilePos(const Vec2& absPos) const
 	return Vec2(absPos.x / TILE_SIZE, absPos.y / TILE_SIZE);
 }
 
-Map* Map::createMap(int width, int height, const Game& game)
+Map* Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
 {
-	if (!isInit)
-	{
-		init(game);
-		if (!isInit)
-		{
-			ERR("Could not create map - game was nullptr");
-			return nullptr;
-		}
-	}
-	Map* map = new Map(width, height);
+	std::string mapFile = load_text_file(filepath);
 
-	return map;
-}
-
-Map* Map::loadMap(const std::string& filepath, const Game& game)
-{
-	if (!isInit)
+	if (mapFile == "")
 	{
-		isInit = init(game);
-		if (!isInit)
-		{
-			return nullptr;
-		}
-	}
-	SDL_Surface* mapImage = IMG_Load(filepath.c_str());
-	if (!mapImage)
-	{
-		ERR("Could not load map file: " << filepath);
+		ERR("Could not load map: " << filepath);
 		return nullptr;
 	}
 
-	
-	int width = mapImage->w;
-	int height = mapImage->h;
-	Map* map = new Map(width, height);
-	unsigned int* tilePix = (unsigned int*)mapImage->pixels;
-	Tile* currentTile;
-	for (int y = 0; y < height; ++y)
+	std::stringstream ss(mapFile);
+	std::string line = "";
+	Map* map = new Map();
+	std::unordered_map<int, std::shared_ptr<Tile>> tileTypeMap;
+	while (ss >> line)
 	{
-		for (int x = 0; x < width; ++x)
+		if (line == "numTileTypes:")
 		{
-			switch (tilePix[x + (height - 1 - y) * width])
+			ss >> line;
+			int numTileTypes = stoi(line);
+			//tileTypeMap.reserve(numTileTypes);
+			continue;
+		}
+		if (line == "tile:")
+		{
+			ss >> line;
+			std::string tileKey;
+			ss >> tileKey;
+			tileTypeMap.emplace(stoi(tileKey), loadTile(line, game, assets));
+			continue;
+		}
+		if (line == "w:")
+		{
+			ss >> line;
+			map->_width = stoi(line);
+			continue;
+		}
+		if (line == "h:")
+		{
+			ss >> line;
+			map->_height = stoi(line);
+			continue;
+		}
+		if (line == "layout:")
+		{
+			map->_tiles.reserve(map->_width * map->_height);
+			for (int y = 0; y < map->_height; ++y)
 			{
-			case 0xffff0000:
-				currentTile = floorTile;
-				break;
-			case 0xff0000ff:
-				currentTile = wallTile;
-				break;
-			default:
-				currentTile = wallTile;
-				break;
+				ss >> line;
+				for (char tile : line)
+				{
+					map->_tiles.emplace_back(tileTypeMap.find((int)(tile - '0')));
+				}
 			}
-			map->_tiles[x + y * width] = currentTile;
-
 		}
 	}
 	return map;
 }
 
-bool Map::init(const Game& game)
+std::shared_ptr<Tile> Map::loadTile(const std::string& filepath, Game& game, AssetManager& assets)
 {
-	floorTile = new Tile();
-	floorTile->barrier = false;
-	floorTile->sprite = game.getAssetData()->spriteData.getSprite("floor");
+	std::shared_ptr<Tile> tile = std::make_shared<Tile>();
+	std::string file = load_text_file(filepath);
+	std::istringstream ss(file);
+	std::string line;
+	AssetCollection<Sprite>& spriteData = assets.getData<Sprite>();
+	while (ss >> line)
+	{
+		if (line == "name:")
+		{
+			ss >> line;
+			tile->name = line;
+		}
+		if (line == "texture:")
+		{
+			ss >> line;
+			tile->sprite = assets.getData<Sprite>().getElement(line);
+		}
+		if (line == "barrier:")
+		{
+			ss >> line;
+			tile->barrier = (line == "true");
+		}
 
-	wallTile = new Tile();
-	wallTile->barrier = true;
-	wallTile->sprite = game.getAssetData()->spriteData.getSprite("wall");
-	return true;
-}
-
-void Map::quit()
-{
-	delete floorTile;
-	floorTile = nullptr;
-	delete wallTile;
-	wallTile = nullptr;
+	}
+	return tile;
 }

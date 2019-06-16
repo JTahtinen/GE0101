@@ -28,7 +28,7 @@ Application::Application()
 {
 	loadGlobalData();
 	_layer = std::make_shared<Layer>(&_window);
-	_game = std::make_shared<Game>(_layer);
+	_game = std::make_shared<Game>(_assetData);
 	
 }
 
@@ -50,14 +50,19 @@ void Application::run()
 	unsigned int frames = 0;
 	auto lastTime = high_resolution_clock::now();
 	float runningTime = 0;
-
+/*
 	std::shared_ptr<Font> lsFont = Font::loadFont("res/fonts/liberation_serif");
 	std::shared_ptr<Font> arialFont = Font::loadFont("res/fonts/arial");
+*/
 	
-	_assetData.fontData.addElement(lsFont, "liberation_serif");
-	_assetData.fontData.addElement(arialFont, "arial");
+	//auto& fontData = _assetData.getData<Font>();
+	std::shared_ptr<Font> lsFont = _assetData.load<Font>("res/fonts/liberation_serif");
+	std::shared_ptr<Font> arialFont = _assetData.load<Font>("res/fonts/arial");
+
+	/*fontData.addElement(lsFont, "liberation_serif");
+	fontData.addElement(arialFont, "arial");*/
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
-	TextBox::setDefaultFont(_assetData.fontData.getElement("liberation_serif"));
+	TextBox::setDefaultFont(lsFont);
 	TextBox textBox("FPS: ", 0.3f);
 	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 0.6f));
 	textBox.setFont(arialFont);

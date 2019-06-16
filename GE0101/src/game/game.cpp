@@ -8,14 +8,14 @@
 #include "../physics/collider.h"
 #include "conversation.h"
 #include "states/gamestate.h"
+#include "../util/file.h"
+#include "../application/assetmanager.h"
+
 
 float Game::frameTime = 0.0f;
 
-Game::Game(std::shared_ptr<Layer> layer)
-	: _layer(layer)
+Game::Game(AssetManager& assets)
 {
-	ASSERT(layer);
-
 	std::shared_ptr<Conversation> conv = std::make_shared<Conversation>();
 	std::shared_ptr<ConvNode> node1 = std::make_shared<ConvNode>();
 	std::shared_ptr<ConvNode> node2 = std::make_shared<ConvNode>();
@@ -37,42 +37,46 @@ Game::Game(std::shared_ptr<Layer> layer)
 	conv->push(node4);
 
 
-	auto texData = _assetData.textureData;
+	/*
+	Texture::loadTexture("res/textures/cursor1.png", assets);
+	Texture::loadTexture("res/textures/floor.png", assets);
+	Texture::loadTexture("res/textures/wall.png", assets);
+*/
+	//Sprite::loadSprite("res/sprites/guy.sprite", assets);
 
+
+
+	assets.load<Texture>("res/textures/cursor1.png");
+	assets.load<Texture>("res/textures/floor.png");
+	assets.load<Texture>("res/textures/wall.png");
+
+	assets.load<Sprite>("res/sprites/guy.sprite");
 	
-	texData.loadTexture("res/textures/guy.png");
-	texData.loadTexture("res/textures/cursor1.png");
-	texData.loadTexture("res/textures/floor.png");
-	texData.loadTexture("res/textures/wall.png");
+	//std::shared_ptr<Sprite> guy = std::make_shared<Sprite>( Sprite{ texData.getTexture("res/textures/guy.png"), Vec2(0.2f, 0.2f), "res/textures/guy.png" });
+	//_cursor = std::make_shared<Sprite>(Sprite { texData.getTexture("res/textures/cursor1.png"), Vec2(0.2f, 0.2f), "res/textures/cursor1.png" });
+	//std::shared_ptr<Sprite> floor = std::make_shared<Sprite>( Sprite { texData.getTexture("res/textures/floor.png"), Vec2(0.2f, 0.2f), "res/textures/floor.png" });
+	//std::shared_ptr<Sprite> wall = std::make_shared<Sprite>(Sprite{ texData.getTexture("res/textures/wall.png"), Vec2(0.2f, 0.2f), "res/textures/wall.png" });
 
-	
-	
-	std::shared_ptr<Sprite> guy = std::make_shared<Sprite>( Sprite{ texData.getTexture("res/textures/guy.png"), Vec2(0.2f, 0.2f), "guy" });
-	_cursor = std::make_shared<Sprite>(Sprite { texData.getTexture("res/textures/cursor1.png"), Vec2(0.2f, 0.2f), "cursor" });
-	std::shared_ptr<Sprite> floor = std::make_shared<Sprite>( Sprite { texData.getTexture("res/textures/floor.png"), Vec2(0.2f, 0.2f), "floor" });
-	std::shared_ptr<Sprite> wall = std::make_shared<Sprite>(Sprite{ texData.getTexture("res/textures/wall.png"), Vec2(0.2f, 0.2f), "wall" });
-
-	_assetData.spriteData.addSprite(guy);
-	_assetData.spriteData.addSprite(_cursor);
-	_assetData.spriteData.addSprite(floor);
-	_assetData.spriteData.addSprite(wall);
-
-	std::shared_ptr<GameState> gameState = std::make_shared<GameState>(*this, layer);
-	std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2(0.4f, 0.2f), guy, std::make_shared<InputController>());
-	gameState->addActor(player);
-	gameState->setPlayer(player);
+	//_assetData.spriteData.addSprite(_cursor);
+	//_assetData.spriteData.addSprite(floor);
+	//_assetData.spriteData.addSprite(wall);
+	//
+	//std::shared_ptr<GameState> gameState = std::make_shared<GameState>(*this, layer);
+	//std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2(0.4f, 0.2f), guy, std::make_shared<InputController>());
+	//gameState->addActor(player);
+	//gameState->setPlayer(player);
 	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
-	gameState->addActor(std::make_shared<Actor>(Vec2(0.5f, 0.7f), guy));
+	/*gameState->addActor(std::make_shared<Actor>(Vec2(0.5f, 0.7f), guy));
 	gameState->addActor(std::make_shared<Actor>(Vec2(0.3f, 0.7f), guy));
 	gameState->addActor(std::make_shared<Actor>(Vec2(0.82f, 0.74f), guy));
 	gameState->addActor(std::make_shared<Actor>(Vec2(0.2f, 0.23f), guy));
 	std::shared_ptr<Actor> a = std::make_shared<Actor>(Vec2(0.5f, 0.5f), guy, std::make_shared<AIController>(gameState));
 	a->setConversation(conv);
 	gameState->addActor(a);
-	
+	*/
 	//_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec4(), 0.5f, true);
 	
-	_stateStack.push_back(gameState);
+	_stateStack.push_back(loadGameState("res/levels/testlevel.txt", *this, assets));
 }
 
 Game::~Game()
@@ -84,14 +88,20 @@ Game::~Game()
 void Game::update(float frameTime)
 {
 	Game::frameTime = frameTime;
-	static Input& in = Input::instance();
-	static auto& win = _layer->getWindow();
-	static int winHeight = win->getHeight();
-	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
 	//_cursor->setPos(Vec4(mousePos.x, mousePos.y, 1, 1));
 	auto& state = _stateStack.back();
 	state->update(*this);	
-	_layer->submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
+}
+
+void Game::render(Layer& layer)
+{
+	static Input& in = Input::instance();
+	static auto& win = layer.getWindow();
+	static int winHeight = win->getHeight();
+	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
+	_stateStack.back()->render(layer);
+	layer.submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
+
 }
 
 void Game::pushState(std::shared_ptr<State> state)
@@ -104,7 +114,44 @@ void Game::popState()
 	_stateStack.pop_back();
 }
 
-const AssetData* Game::getAssetData() const
+std::shared_ptr<GameState> Game::loadGameState(const std::string& filepath, Game& game, AssetManager& assets)
 {
-	return &_assetData;
+	std::shared_ptr<GameState> gameState = std::make_shared<GameState>(game);
+	std::string file = load_text_file(filepath);
+	std::istringstream ss(file);
+	std::string line;
+	AssetCollection<Sprite>& spriteData = assets.getData<Sprite>();
+	while (ss >> line)
+	{
+		if (line == "map:")
+		{
+			ss >> line;
+			gameState->setMap(std::shared_ptr<Map>(Map::loadMap(line, game, assets)));
+			continue;
+		}
+		if (line == "player:")
+		{
+			ss >> line;
+			float x = stof(line);
+			ss >> line;
+			float y = stof(line);
+			ss >> line;
+			auto sprite = spriteData.getElement(line);
+			std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2((float)x, (float)y), sprite, std::make_shared<InputController>());
+			gameState->addActor(player);
+			gameState->setPlayer(player);
+			continue;
+		}
+		if (line == "e:")
+		{
+			ss >> line;
+			float x = stof(line);
+			ss >> line;
+			float y = stof(line);
+			ss >> line;
+			gameState->addActor(std::make_shared<Actor>(Vec2((float)x, (float)y), spriteData.getElement(line)));
+			continue;
+		}
+	}
+	return gameState;
 }

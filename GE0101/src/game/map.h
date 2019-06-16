@@ -13,26 +13,22 @@ struct AssetData;
 
 struct Tile
 {
+	std::string								name;
 	std::shared_ptr<const Sprite>			sprite;
 	bool									barrier;
 };
-
 
 class Map
 {
 	int											_width; 
 	int											_height;
-	std::vector<Tile*>							_tiles;
+	std::vector<std::shared_ptr<Tile>>			_tiles;
 public:
 	~Map();
 	void collisionCheck(Entity& entity) const;
 	void render(Layer& layer, const Camera& camera) const;
 	Vec2 getTilePos(const Vec2& absPos) const;
-	static Map* createMap(int width, int height, const Game& game);
-	static Map* loadMap(const std::string& filepath, const Game& game);
-	static bool init(const Game& game);
-	static void quit();
-	inline const Tile* getTile(int x, int y) const
+	inline std::shared_ptr<const Tile> getTile(int x, int y) const
 	{
 		if (x < 0 || x >= _width || y < 0 || y >= _height)
 		{
@@ -40,6 +36,8 @@ public:
 		}
 		return _tiles[x + y * _width];
 	}
+	static Map* loadMap(const std::string& filepath, Game& game, AssetManager& asset);
 private:
-	Map(int width, int height);
+	Map() = default;
+	static std::shared_ptr<Tile> loadTile(const std::string& filepath, Game& game, AssetManager& assets);
 };

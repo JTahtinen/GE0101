@@ -1,0 +1,4 @@
+map: res/maps/testmap3.txt
+player: 0.4 0.2 res/sprites/guy.sprite
+e: 0.4 0.6 res/sprites/guy.sprite
+e: 0.2 0.1 res/sprites/guy.sprite

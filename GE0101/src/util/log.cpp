@@ -62,6 +62,7 @@ std::string Log::toString() const
 	for (const auto& msg : _messages)
 	{
 		output += msg;
+		output += "\n";
 	}
 	return output;
 }

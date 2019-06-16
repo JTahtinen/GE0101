@@ -153,6 +153,9 @@
     <ClCompile Include="src\graphics\renderers\quadrenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\application\assetManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h">
@@ -323,10 +326,13 @@
     <ClInclude Include="src\graphics\renderers\quadbatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\application\appassetdata.h">
+    <ClInclude Include="src\util\assetcollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\util\assetcollection.h">
+    <ClInclude Include="src\application\assetmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\asset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

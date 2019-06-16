@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include "renderers/renderer.h"
+#include "../application/assetmanager.h"
 
 Font::~Font()
 {
@@ -19,8 +20,7 @@ std::shared_ptr<Font> Font::loadFont(const std::string& filepath)
 		return nullptr;
 	} 
 
-	Texture* atlas = new Texture(filepath + ".png");
-	
+	std::shared_ptr<Texture> atlas = Texture::loadTexture(filepath + ".png");
 	if (!atlas)
 	{
 		ERR("Could not open font atlas: " << filepath << ".png");
@@ -93,7 +93,8 @@ std::shared_ptr<Font> Font::loadFont(const std::string& filepath)
 
 	}
 
-	return std::make_shared<Font>(letters, atlas);
+	std::shared_ptr<Font> result = std::make_shared<Font>(letters, atlas);
+	return result;
 }
 
 void Font::bind() const
@@ -101,7 +102,7 @@ void Font::bind() const
 	_atlas->bind(TEXTURE_SLOT_FONT_ATLAS);
 }
 
-Font::Font(std::vector<Letter> letters, Texture* atlas)
+Font::Font(std::vector<Letter> letters, std::shared_ptr<Texture> atlas)
 	: _letters(letters)
 	, _atlas(atlas)
 	, _id(nextId())

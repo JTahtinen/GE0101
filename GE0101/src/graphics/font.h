@@ -37,6 +37,6 @@ public:
 	void bind() const;
 	inline unsigned int getId() const { return _id; }
 public:
-	Font(std::vector<Letter> letters, Texture* atlas);
+	Font(std::vector<Letter> letters, std::shared_ptr<Texture> atlas);
 	static unsigned int nextId();
 };

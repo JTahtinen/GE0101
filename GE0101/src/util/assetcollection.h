@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <string>
+#include "../defs.h"
 
 template <typename T>
 class AssetCollection
@@ -24,12 +25,20 @@ public:
 			_data.insert({ name, element });
 		}
 	}
+
 	void removeElement(const std::string& name)
 	{
 		_data.erase(name);
 	}
-	std::shared_ptr<const T> getElement(const std::string& name) const
+
+	std::shared_ptr<T> getElement(const std::string& name) const
 	{
-		return _data.at(name);
+		std::shared_ptr<T> elem = _data.at(name);
+		if (!elem)
+		{
+			ERR("AssetManager: Could not get element : " << name);
+			return nullptr;
+		}
+		return elem;
 	}
 };

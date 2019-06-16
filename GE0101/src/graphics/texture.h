@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+class AssetManager;
+
 class Texture
 {
 	unsigned int			_id;
@@ -8,7 +10,6 @@ class Texture
 	int						_widthInPixels;
 	int						_heightInPixels;
 public:
-	Texture(const std::string& filepath);
 	~Texture();
 	void bind(unsigned int slot = 0) const;
 	void unbind() const;
@@ -25,4 +26,7 @@ public:
 		return _filepath;
 	}
 	inline unsigned int getId() const { return _id; }
+	static std::shared_ptr<Texture> loadTexture(const std::string& filepath);
+private:
+	Texture(const std::string& filepath);
 };

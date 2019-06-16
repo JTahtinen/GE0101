@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\application\assetManager.cpp" />
     <ClCompile Include="src\game\assets\geometrydata.cpp" />
     <ClCompile Include="src\game\assets\spritedata.cpp" />
     <ClCompile Include="src\game\assets\texturedata.cpp" />
@@ -202,9 +203,10 @@
     <ClCompile Include="src\util\log.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\application\appassetdata.h" />
+    <ClInclude Include="src\application\assetmanager.h" />
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\application\observer.h" />
+    <ClInclude Include="src\datatypes\asset.h" />
     <ClInclude Include="src\defs.h" />
     <ClInclude Include="src\game\entity\actor.h" />
     <ClInclude Include="src\game\assets\assetdata.h" />

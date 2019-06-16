@@ -5,14 +5,14 @@
 #include "../../physics/collider.h"
 #include "../../defs.h"
 
-GameState::GameState(const Game& game, std::shared_ptr<Layer>& layer)
-	: _layer(layer)
-	, _camera(layer->getDisplayRatio())
+GameState::GameState(Game& game)
+	: 
+	_camera(16.0f / 9.0f)
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
 	Map::init(game);
-	_map = std::shared_ptr<Map>(Map::loadMap("res/maps/testmap3.png", game));
+	//_map = std::shared_ptr<Map>(Map::loadMap("res/maps/testmap3.png", game));
 
 }
 
@@ -56,6 +56,11 @@ void GameState::setPlayer(std::shared_ptr<Actor> e)
 void GameState::setSubState(Game_Substate substate)
 {
 	_substate = substate;
+}
+
+void GameState::setMap(std::shared_ptr<Map> map)
+{
+	_map = map;
 }
 
 void GameState::setActiveConversation(std::shared_ptr<Conversation>& conversation)
@@ -113,16 +118,21 @@ State_Condition GameState::update(Game& game)
 		}
 	}
 	}
-	_map->render(*_layer, _camera);
+
+	return STATE_RUNNING;
+}
+
+void GameState::render(Layer& layer)
+{
+	_map->render(layer, _camera);
 
 	for (auto& entity : _entities)
 	{
-		entity->render(*_layer, _camera);
+		entity->render(layer, _camera);
 	}
-	
+
 	if (_substate == SUBSTATE_CONVERSATION)
 	{
-		_activeConversation->render(*_layer);
+		_activeConversation->render(layer);
 	}
-	return STATE_RUNNING;
 }
