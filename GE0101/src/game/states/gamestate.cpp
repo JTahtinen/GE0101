@@ -11,7 +11,6 @@ GameState::GameState(Game& game)
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
-	Map::init(game);
 	//_map = std::shared_ptr<Map>(Map::loadMap("res/maps/testmap3.png", game));
 
 }
@@ -19,7 +18,6 @@ GameState::GameState(Game& game)
 GameState::~GameState()
 {
 	_entities.clear();
-	Map::quit();
 }
 
 void GameState::addEntity(std::shared_ptr<Entity> e)

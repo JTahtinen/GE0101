@@ -19,11 +19,8 @@ public:
 	}
 
 	void addElement(std::shared_ptr<T> element, const std::string& name)
-	{
-		if (_data.find(name) == _data.end())
-		{
-			_data.insert({ name, element });
-		}
+	{		
+		_data.emplace(name, element);
 	}
 
 	void removeElement(const std::string& name)
@@ -31,14 +28,19 @@ public:
 		_data.erase(name);
 	}
 
-	std::shared_ptr<T> getElement(const std::string& name) const
+	std::shared_ptr<T> getElement(const std::string& name)
 	{
-		std::shared_ptr<T> elem = _data.at(name);
+		std::shared_ptr<T> elem = _data[name];
 		if (!elem)
 		{
-			ERR("AssetManager: Could not get element : " << name);
+			ERR("AssetManager: Could not get asset: " << name);
 			return nullptr;
 		}
 		return elem;
+	}
+
+	std::shared_ptr<T> loadElement(const std::string& filepath)
+	{
+
 	}
 };

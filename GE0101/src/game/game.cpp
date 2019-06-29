@@ -50,7 +50,7 @@ Game::Game(AssetManager& assets)
 	assets.load<Texture>("res/textures/floor.png");
 	assets.load<Texture>("res/textures/wall.png");
 
-	assets.load<Sprite>("res/sprites/guy.sprite");
+	//assets.load<Sprite>("res/sprites/guy.sprite");
 	
 	//std::shared_ptr<Sprite> guy = std::make_shared<Sprite>( Sprite{ texData.getTexture("res/textures/guy.png"), Vec2(0.2f, 0.2f), "res/textures/guy.png" });
 	//_cursor = std::make_shared<Sprite>(Sprite { texData.getTexture("res/textures/cursor1.png"), Vec2(0.2f, 0.2f), "res/textures/cursor1.png" });

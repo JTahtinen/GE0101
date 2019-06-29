@@ -36,7 +36,8 @@ std::shared_ptr<Texture> Texture::loadTexture(const std::string& filepath)
 		ERR("Could not open texture: " << filepath);
 		return nullptr;
 	}
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>(filepath);
+	Texture* texture = new Texture(filepath);
+	//std::unique_ptr<Texture> texture = std::make_unique<Texture>(filepath);
 	GLCALL(glGenTextures(1, &texture->_id));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, texture->_id));
 	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
@@ -50,5 +51,5 @@ std::shared_ptr<Texture> Texture::loadTexture(const std::string& filepath)
 		0, GL_RGBA, GL_UNSIGNED_BYTE, texImage->pixels));
 	SDL_FreeSurface(texImage);
 
-	return texture;
+	return std::shared_ptr<Texture>(texture);
 }

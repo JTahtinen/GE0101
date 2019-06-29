@@ -27,7 +27,14 @@ std::shared_ptr<Sprite> Sprite::loadSprite(const std::string& filepath, AssetMan
 			if (!texture)
 			{
 				ERR("Could not load Sprite: " << filepath << " - Invalid texture!");
-				return nullptr;
+				MSG("Attempting to load texture: " << line);
+				texture = assets.load<Texture>(line);
+				if (!texture)
+				{
+					ERR("Failed!");
+					return nullptr;
+				}
+				MSG("Success!");
 			}
 			sprite->texture = texData.getElement(line);
 			continue;

@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 
-class AssetManager;
-
 class Texture
 {
 	unsigned int			_id;

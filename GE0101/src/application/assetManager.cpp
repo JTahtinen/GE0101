@@ -1,5 +1,8 @@
 #include "assetmanager.h"
 
+#define ASSET_OPERATIONS()
+
+
 template<>
 AssetCollection<Font>& AssetManager::getData<Font>()
 {
@@ -26,6 +29,7 @@ std::shared_ptr<Font> AssetManager::load<Font>(const std::string& filepath)
 	{
 		_fontData.addElement(font, filepath);
 	}
+	return font;
 }
 
 template<>
@@ -36,6 +40,7 @@ std::shared_ptr<Texture> AssetManager::load<Texture>(const std::string& filepath
 	{
 		_textureData.addElement(texture, filepath);
 	}
+	return texture;
 }
 
 template<>
@@ -46,4 +51,49 @@ std::shared_ptr<Sprite> AssetManager::load<Sprite>(const std::string& filepath)
 	{
 		_spriteData.addElement(sprite, filepath);
 	}
+	return sprite;
+}
+
+template<>
+void AssetManager::add<Font>(std::shared_ptr<Font> element, const std::string& name)
+{
+	_fonts.emplace(name, element);
+}
+
+template<>
+void AssetManager::add<Texture>(std::shared_ptr<Texture> element, const std::string& name)
+{
+	_textures.emplace(name, element);
+}
+
+template<>
+void AssetManager::add<Sprite>(std::shared_ptr<Sprite> element, const std::string& name)
+{
+	_sprites.emplace(name, element);
+}
+
+template<>
+void AssetManager::remove<Font>(const std::string& name)
+{
+	_fonts.erase(name);
+}
+
+void removeElement<Texture>(const std::string& name)
+{
+	_data.erase(name);
+}
+
+void removeElement(const std::string& name)
+{
+	_data.erase(name);
+}
+std::shared_ptr<T> getElement(const std::string& name)
+{
+	std::shared_ptr<T> elem = _data[name];
+	if (!elem)
+	{
+		ERR("AssetManager: Could not get asset: " << name);
+		return nullptr;
+	}
+	return elem;
 }

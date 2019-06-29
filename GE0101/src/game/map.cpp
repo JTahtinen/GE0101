@@ -122,9 +122,14 @@ Map* Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
 			for (int y = 0; y < map->_height; ++y)
 			{
 				ss >> line;
-				for (char tile : line)
+				for (char tileSym : line)
 				{
-					map->_tiles.emplace_back(tileTypeMap.find((int)(tile - '0')));
+					int index = (int)(tileSym - '0');
+					std::shared_ptr<Tile> tile = tileTypeMap[(int)(tileSym - '0')];
+					if (tile)
+					{
+						map->_tiles.emplace_back(tile);
+					}
 				}
 			}
 		}
