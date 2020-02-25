@@ -5,7 +5,6 @@
 
 std::shared_ptr<Sprite> Sprite::loadSprite(const std::string& filepath, AssetManager& assets)
 {
-	AssetCollection<Texture>& texData = assets.getData<Texture>();
 	std::string file = load_text_file(filepath);
 	if (file == "")
 	{
@@ -23,20 +22,13 @@ std::shared_ptr<Sprite> Sprite::loadSprite(const std::string& filepath, AssetMan
 		if (line == "texture:")
 		{
 			ss >> line;
-			std::shared_ptr<Texture> texture = texData.getElement(line);
+			std::shared_ptr<Texture> texture = assets.get<Texture>(line);
 			if (!texture)
 			{
 				ERR("Could not load Sprite: " << filepath << " - Invalid texture!");
-				MSG("Attempting to load texture: " << line);
-				texture = assets.load<Texture>(line);
-				if (!texture)
-				{
-					ERR("Failed!");
-					return nullptr;
-				}
-				MSG("Success!");
+				return nullptr;
 			}
-			sprite->texture = texData.getElement(line);
+			sprite->texture = texture;
 			continue;
 		}
 		if (line == "size:")

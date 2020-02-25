@@ -1,25 +1,5 @@
 #include "assetmanager.h"
 
-#define ASSET_OPERATIONS()
-
-
-template<>
-AssetCollection<Font>& AssetManager::getData<Font>()
-{
-	return _fontData;
-}
-
-template<>
-AssetCollection<Texture>& AssetManager::getData<Texture>()
-{
-	return _textureData;
-}
-
-template<>
-AssetCollection<Sprite>& AssetManager::getData<Sprite>()
-{
-	return _spriteData;
-}
 
 template<>
 std::shared_ptr<Font> AssetManager::load<Font>(const std::string& filepath)
@@ -28,8 +8,11 @@ std::shared_ptr<Font> AssetManager::load<Font>(const std::string& filepath)
 	if (font)
 	{
 		_fontData.addElement(font, filepath);
+		message("Font: " + filepath + " loaded succesfully");
+		return font;
 	}
-	return font;
+	error("Could not load Font: " + filepath);
+	return nullptr;
 }
 
 template<>
@@ -39,8 +22,11 @@ std::shared_ptr<Texture> AssetManager::load<Texture>(const std::string& filepath
 	if (texture)
 	{
 		_textureData.addElement(texture, filepath);
+		message("Texture: " + filepath + " loaded succesfully");
+		return texture;
 	}
-	return texture;
+	error("Could not load Texture: " + filepath);
+	return nullptr;
 }
 
 template<>
@@ -50,50 +36,97 @@ std::shared_ptr<Sprite> AssetManager::load<Sprite>(const std::string& filepath)
 	if (sprite)
 	{
 		_spriteData.addElement(sprite, filepath);
+		message("Sprite: " + filepath + " loaded succesfully");
+		return sprite;
 	}
-	return sprite;
+	error("Could not load Sprite: " + filepath);
+	return nullptr;
 }
 
 template<>
 void AssetManager::add<Font>(std::shared_ptr<Font> element, const std::string& name)
 {
-	_fonts.emplace(name, element);
+	if (_fontData.getElement(name) == nullptr)
+	{
+		error("Font " + name + "already loaded");
+		return;
+	}
+	_fontData.addElement(element, name);
 }
 
 template<>
 void AssetManager::add<Texture>(std::shared_ptr<Texture> element, const std::string& name)
 {
-	_textures.emplace(name, element);
+	_textureData.addElement(element, name);
 }
 
 template<>
 void AssetManager::add<Sprite>(std::shared_ptr<Sprite> element, const std::string& name)
 {
-	_sprites.emplace(name, element);
+	_spriteData.addElement(element, name);
 }
 
 template<>
 void AssetManager::remove<Font>(const std::string& name)
 {
-	_fonts.erase(name);
+	_fontData.removeElement(name);
 }
 
-void removeElement<Texture>(const std::string& name)
+template<>
+void AssetManager::remove<Texture>(const std::string& name)
 {
-	_data.erase(name);
+	_textureData.removeElement(name);
 }
 
-void removeElement(const std::string& name)
+template<>
+std::shared_ptr<Texture> AssetManager::get<Texture>(const std::string& name)
 {
-	_data.erase(name);
-}
-std::shared_ptr<T> getElement(const std::string& name)
-{
-	std::shared_ptr<T> elem = _data[name];
-	if (!elem)
+	std::shared_ptr<Texture> texture = _textureData.getElement(name);
+	if (!texture)
 	{
-		ERR("AssetManager: Could not get asset: " << name);
-		return nullptr;
+		message("Could not get Texture: " + name + ". Attempting to load Texture from file.");
+		texture = load<Texture>(name);
 	}
-	return elem;
+	return texture;
+}
+
+template<>
+std::shared_ptr<Sprite> AssetManager::get<Sprite>(const std::string& name)
+{
+	std::shared_ptr<Sprite> sprite = _spriteData.getElement(name);
+	if (!sprite)
+	{
+		message("Could not get Sprite: "  + name + ". Attempting to load Sprite from file.");
+		sprite = load<Sprite>(name);
+	}
+	return sprite;
+}
+
+template<>
+std::shared_ptr<Font> AssetManager::get<Font>(const std::string& name)
+{
+	std::shared_ptr<Font> font = _fontData.getElement(name);
+	if (!font)
+	{
+		message("Could not get Font: " + name + ". Attempting to load Font from file.");
+		font = load<Font>(name);
+	}
+	return font;
+}
+
+void AssetManager::clear()
+{
+	_textureData.clear();
+	_spriteData.clear();
+	_fontData.clear();
+}
+
+void AssetManager::message(const std::string& message)
+{
+	MSG("ASSETMANAGER: " << message);
+}
+
+void AssetManager::error(const std::string& err)
+{
+	ERR("ASSETMANAGER: " << err);
 }

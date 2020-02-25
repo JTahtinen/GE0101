@@ -46,9 +46,9 @@ Game::Game(AssetManager& assets)
 
 
 
-	assets.load<Texture>("res/textures/cursor1.png");
-	assets.load<Texture>("res/textures/floor.png");
-	assets.load<Texture>("res/textures/wall.png");
+	_cursor = assets.load<Sprite>("res/sprites/cursor.sprite");
+	//assets.get<Texture>("res/textures/floor.png");
+	//assets.get<Texture>("res/textures/wall.png");
 
 	//assets.load<Sprite>("res/sprites/guy.sprite");
 	
@@ -62,7 +62,7 @@ Game::Game(AssetManager& assets)
 	//_assetData.spriteData.addSprite(wall);
 	//
 	//std::shared_ptr<GameState> gameState = std::make_shared<GameState>(*this, layer);
-	//std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2(0.4f, 0.2f), guy, std::make_shared<InputController>());
+	//std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2(0.4f, 0.2f), assets.get<Sprite>("res/sprites/guy.sprite"), std::make_shared<InputController>());
 	//gameState->addActor(player);
 	//gameState->setPlayer(player);
 	//gameState->addActor(new Actor(Vec2(-0.5f, -0.5f), snowman, new AIController(gameState)));
@@ -75,6 +75,7 @@ Game::Game(AssetManager& assets)
 	gameState->addActor(a);
 	*/
 	//_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec4(), 0.5f, true);
+	
 	
 	_stateStack.push_back(loadGameState("res/levels/testlevel.txt", *this, assets));
 }
@@ -120,7 +121,6 @@ std::shared_ptr<GameState> Game::loadGameState(const std::string& filepath, Game
 	std::string file = load_text_file(filepath);
 	std::istringstream ss(file);
 	std::string line;
-	AssetCollection<Sprite>& spriteData = assets.getData<Sprite>();
 	while (ss >> line)
 	{
 		if (line == "map:")
@@ -136,7 +136,7 @@ std::shared_ptr<GameState> Game::loadGameState(const std::string& filepath, Game
 			ss >> line;
 			float y = stof(line);
 			ss >> line;
-			auto sprite = spriteData.getElement(line);
+			auto sprite = assets.get<Sprite>(line);
 			std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2((float)x, (float)y), sprite, std::make_shared<InputController>());
 			gameState->addActor(player);
 			gameState->setPlayer(player);
@@ -149,7 +149,7 @@ std::shared_ptr<GameState> Game::loadGameState(const std::string& filepath, Game
 			ss >> line;
 			float y = stof(line);
 			ss >> line;
-			gameState->addActor(std::make_shared<Actor>(Vec2((float)x, (float)y), spriteData.getElement(line)));
+			gameState->addActor(std::make_shared<Actor>(Vec2((float)x, (float)y), assets.get<Sprite>(line)));
 			continue;
 		}
 	}

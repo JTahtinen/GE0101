@@ -73,7 +73,7 @@ Vec2 Map::getTilePos(const Vec2& absPos) const
 	return Vec2(absPos.x / TILE_SIZE, absPos.y / TILE_SIZE);
 }
 
-Map* Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
+std::shared_ptr<Map> Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
 {
 	std::string mapFile = load_text_file(filepath);
 
@@ -85,7 +85,7 @@ Map* Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
 
 	std::stringstream ss(mapFile);
 	std::string line = "";
-	Map* map = new Map();
+	std::shared_ptr<Map> map = std::make_shared<Map>();
 	std::unordered_map<int, std::shared_ptr<Tile>> tileTypeMap;
 	while (ss >> line)
 	{
@@ -93,7 +93,7 @@ Map* Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
 		{
 			ss >> line;
 			int numTileTypes = stoi(line);
-			//tileTypeMap.reserve(numTileTypes);
+			tileTypeMap.reserve(numTileTypes);
 			continue;
 		}
 		if (line == "tile:")
@@ -143,7 +143,6 @@ std::shared_ptr<Tile> Map::loadTile(const std::string& filepath, Game& game, Ass
 	std::string file = load_text_file(filepath);
 	std::istringstream ss(file);
 	std::string line;
-	AssetCollection<Sprite>& spriteData = assets.getData<Sprite>();
 	while (ss >> line)
 	{
 		if (line == "name:")
@@ -151,17 +150,16 @@ std::shared_ptr<Tile> Map::loadTile(const std::string& filepath, Game& game, Ass
 			ss >> line;
 			tile->name = line;
 		}
-		if (line == "texture:")
+		if (line == "sprite:")
 		{
 			ss >> line;
-			tile->sprite = assets.getData<Sprite>().getElement(line);
+			tile->sprite = assets.get<Sprite>(line);
 		}
 		if (line == "barrier:")
 		{
 			ss >> line;
 			tile->barrier = (line == "true");
 		}
-
 	}
 	return tile;
 }

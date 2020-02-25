@@ -14,7 +14,7 @@ void SceneGraph::pushEntity(std::shared_ptr<const Entity> entity)
 {
 	if (!entity)
 	{
-		gameLog.warning("Could not add null entity to scenegraph!");
+		//gameLog.warning("Could not add null entity to scenegraph!");
 	}
 	_entities.push_back(entity);
 }

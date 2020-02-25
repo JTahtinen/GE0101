@@ -7,7 +7,7 @@
 #include "../graphics/renderers/simplerenderer.h"
 #include "../defs.h"
 
-Log gameLog;
+//Log gameLog;
 
 void Application::loadGlobalData()
 {
@@ -50,17 +50,11 @@ void Application::run()
 	unsigned int frames = 0;
 	auto lastTime = high_resolution_clock::now();
 	float runningTime = 0;
-/*
-	std::shared_ptr<Font> lsFont = Font::loadFont("res/fonts/liberation_serif");
-	std::shared_ptr<Font> arialFont = Font::loadFont("res/fonts/arial");
-*/
-	
-	//auto& fontData = _assetData.getData<Font>();
-	std::shared_ptr<Font> lsFont = _assetData.load<Font>("res/fonts/liberation_serif");
-	std::shared_ptr<Font> arialFont = _assetData.load<Font>("res/fonts/arial");
 
-	/*fontData.addElement(lsFont, "liberation_serif");
-	fontData.addElement(arialFont, "arial");*/
+	
+	std::shared_ptr<Font> lsFont = _assetData.get<Font>("res/fonts/liberation_serif");
+	std::shared_ptr<Font> arialFont = _assetData.get<Font>("res/fonts/arial");
+
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
 	TextBox::setDefaultFont(lsFont);
 	TextBox textBox("FPS: ", 0.3f);
@@ -100,6 +94,7 @@ void Application::run()
 		}
 		//if (toggleFPS)
 		//textBox.render(_renderer, fpsScreenPos);
+		_game->render(*_layer);
 		textBox.render(*_layer, fpsScreenPos);
 
 		//_layer.submitText(engineInfo);
@@ -119,5 +114,6 @@ void Application::run()
 			updateFPS = true;
 		}
 	}
-	gameLog.writeToFile("log.txt");
+	_assetData.clear();
+	//gameLog.writeToFile("log.txt");
 }

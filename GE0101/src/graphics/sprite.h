@@ -2,7 +2,7 @@
 #include "texture.h"
 #include "mesh.h"
 #include "../math/vec2.h"
-
+#include "../datatypes/asset.h"
 class AssetManager; 
 
 class Sprite

@@ -34,7 +34,6 @@ Entity::Entity()
 {
 }
 
-
 Entity::~Entity()
 {
 	availableGUIDs.push_back(_id);
@@ -77,14 +76,21 @@ void Entity::update(GameState& gamestate)
 
 void Entity::engage(GameState& gamestate)
 {
-	_conversation->start();
-	gamestate.setActiveConversation(_conversation);
-	gamestate.setSubState(SUBSTATE_CONVERSATION);
+	if (_conversation)
+	{
+		_conversation->start();
+		// Temp code
+		gamestate.setActiveConversation(_conversation);
+		gamestate.setSubState(SUBSTATE_CONVERSATION);
+	}
 }
 
 void Entity::render(Layer& layer, const Camera& camera) const
 {
-
+	if (!_sprite)
+	{
+		return;
+	}
 	const Vec2& pos = _object.getPos().center;
 		
 	const float screenLeft = camera.getLeft();

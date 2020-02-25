@@ -8,11 +8,11 @@ class SceneGraph
 public:
 	~SceneGraph();
 	void pushEntity(std::shared_ptr<const Entity> entity);
-	inline static SceneGraph& instance()
+/*	inline static SceneGraph& instance()
 	{
 		static SceneGraph graph;
 		return graph;
-	}
+	}*/
 private:
 	SceneGraph();
 };

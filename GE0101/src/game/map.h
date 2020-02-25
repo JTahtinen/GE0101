@@ -36,8 +36,8 @@ public:
 		}
 		return _tiles[x + y * _width];
 	}
-	static Map* loadMap(const std::string& filepath, Game& game, AssetManager& asset);
-private:
+	static std::shared_ptr<Map> loadMap(const std::string& filepath, Game& game, AssetManager& asset);
 	Map() = default;
+private:
 	static std::shared_ptr<Tile> loadTile(const std::string& filepath, Game& game, AssetManager& assets);
 };

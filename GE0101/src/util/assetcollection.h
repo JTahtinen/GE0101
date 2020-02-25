@@ -20,7 +20,7 @@ public:
 
 	void addElement(std::shared_ptr<T> element, const std::string& name)
 	{		
-		_data.emplace(name, element);
+		_data[name] = element;
 	}
 
 	void removeElement(const std::string& name)
@@ -33,14 +33,13 @@ public:
 		std::shared_ptr<T> elem = _data[name];
 		if (!elem)
 		{
-			ERR("AssetManager: Could not get asset: " << name);
 			return nullptr;
 		}
 		return elem;
 	}
 
-	std::shared_ptr<T> loadElement(const std::string& filepath)
+	void clear()
 	{
-
+		_data.clear();
 	}
 };

@@ -11,6 +11,7 @@ GameState::GameState(Game& game)
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
+	
 	//_map = std::shared_ptr<Map>(Map::loadMap("res/maps/testmap3.png", game));
 
 }

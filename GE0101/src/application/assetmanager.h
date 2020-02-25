@@ -11,7 +11,15 @@ class AssetManager
 	AssetCollection<Sprite>		_spriteData;
 public:
 	template<typename T>
-	AssetCollection<T>& getData();
-	template<typename T>
 	std::shared_ptr<T> load(const std::string& filepath);
+	template<typename T>
+	void add(std::shared_ptr<T> element, const std::string& name);
+	template<typename T>
+	void remove(const std::string& name);
+	template<typename T>
+	std::shared_ptr<T> get(const std::string& name);
+	void clear();
+private:
+	void message(const std::string& msg);
+	void error(const std::string& err);
 };
