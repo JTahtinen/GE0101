@@ -8,15 +8,15 @@
 
 class Application
 {
-	std::shared_ptr<Layer>			_layer;
-	std::shared_ptr<Game>			_game;
 	Window							_window;
+	Layer							_layer;
 	AssetManager					_assetData;
+	Game							_game;
 public:
 	Application();
 	~Application();
 	void run();
 private:
-	void loadGlobalData();
-	void deleteGlobalData();
+//	void loadGlobalData();
+//	void deleteGlobalData();
 };

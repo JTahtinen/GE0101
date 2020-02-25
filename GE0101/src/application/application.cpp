@@ -4,12 +4,11 @@
 #include "../input/input.h"
 #include "../graphics/textbox.h"
 #include "../util/log.h"
-#include "../graphics/renderers/simplerenderer.h"
 #include "../defs.h"
 
 //Log gameLog;
 
-void Application::loadGlobalData()
+/*void Application::loadGlobalData()
 {
 	BatchRenderer::init(_window);
 	QuadRenderer::init(_window);
@@ -22,19 +21,21 @@ void Application::deleteGlobalData()
 	QuadRenderer::quit();
 	TextRenderer::quit();
 }
-
+*/
 Application::Application()
 	: _window(1280, 720, "GE0101")
+	, _layer(_window)
+	, _game(_assetData)
 {
-	loadGlobalData();
-	_layer = std::make_shared<Layer>(&_window);
-	_game = std::make_shared<Game>(_assetData);
+	//loadGlobalData();
+	//_layer = std::make_shared<Layer>(&_window);
+	//_game = std::make_shared<Game>(_assetData);
 	
 }
 
 Application::~Application()
 {
-	deleteGlobalData();
+	//deleteGlobalData();
 }
 
 void Application::run()
@@ -82,9 +83,9 @@ void Application::run()
 		auto currentTime = high_resolution_clock::now();
 		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
 		frameTime = (float)(duration.count() / 1000.0f);
-		_layer->begin();
+		_layer.begin();
 		
-		_game->update(frameTime);
+		_game.update(frameTime);
 		lastTime = currentTime;
 		runningTime += frameTime;
 		if (updateFPS)
@@ -94,15 +95,15 @@ void Application::run()
 		}
 		//if (toggleFPS)
 		//textBox.render(_renderer, fpsScreenPos);
-		_game->render(*_layer);
-		textBox.render(*_layer, fpsScreenPos);
+		_game.render(_layer);
+		textBox.render(_layer, fpsScreenPos);
 
 		//_layer.submitText(engineInfo);
-		_layer->submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
+		_layer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
 		
 		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
-		_layer->end();
-		_layer->flush();
+		_layer.end();
+		_layer.flush();
 
 		
 		++frames;

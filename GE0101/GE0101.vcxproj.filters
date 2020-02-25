@@ -78,9 +78,6 @@
     <ClCompile Include="src\graphics\textbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\renderers\renderable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\game\assets\texturedata.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -94,15 +91,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game\assets\spritedata.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\renderers\renderable2d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\renderers\textrenderable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\renderers\quadrenderable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game\entity\actor.cpp">
@@ -121,9 +109,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\physics\physicsobject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphics\renderers\simplerenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\renderers\renderer.cpp">
@@ -224,9 +209,6 @@
     <ClInclude Include="src\graphics\sprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\renderers\renderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\math\shapes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -266,15 +248,6 @@
     <ClInclude Include="src\game\assets\spritedata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\renderers\quadrenderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\renderers\textrenderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\renderers\renderable2d.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\entity\actor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -297,9 +270,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderers\batchrenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphics\renderers\simplerenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderers\renderer.h">

@@ -1,9 +1,5 @@
 #pragma once
 
-#include "renderable.h"
-#include "renderable2d.h"
-#include "quadrenderable.h"
-#include "textrenderable.h"
 
 #include "../window.h"
 #include <string>

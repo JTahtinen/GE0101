@@ -1,7 +1,6 @@
 #include "batchrenderer.h"
-#include "../shader.h"
 #include "../../input/input.h"
-static Shader* shader;
+#include "../../math/vec4.h"
 
 struct VertexData
 {
@@ -32,7 +31,13 @@ enum ShaderAttributeIndex
 
 BatchRenderer::BatchRenderer(Window* win)
 	: Renderer(win)
+	, _shader("res/shaders/basic")
 {
+	_shader.bind();
+	_shader.setUniform4f("u_Color", 0, 0.0f, 0.1f, 0);
+	_shader.setUniform1f("u_ScrRatio", win->getRatio());
+	_shader.setUniform1i("u_Texture", TEXTURE_SLOT_SPRITE);
+
 	_spriteBatches.reserve(30);
 
 	glGenVertexArrays(1, &_vao);
@@ -89,9 +94,9 @@ void BatchRenderer::submit(std::shared_ptr<const Sprite> renderable, const Vec2&
 void BatchRenderer::flush()
 {
 	Input& in = Input::instance();
-	shader->bind();
+	_shader.bind();
 	Vec2 mousePos = _win->getScreenCoords(in.getMouseX(), in.getMouseY());
-	shader->setUniform2f("u_lightPos", mousePos.x, -mousePos.y);
+	_shader.setUniform2f("u_lightPos", mousePos.x, -mousePos.y);
 	glBindVertexArray(_vao);
 	_ibo.bind();
 	for (const auto& batch : _spriteBatches)
@@ -151,6 +156,7 @@ void BatchRenderer::flush()
 	}
 }
 
+/*
 void BatchRenderer::init(const Window& window)
 {
 	shader = new Shader("res/shaders/basic");
@@ -159,9 +165,12 @@ void BatchRenderer::init(const Window& window)
 	shader->setUniform1f("u_ScrRatio", window.getRatio());
 	shader->setUniform1i("u_Texture", TEXTURE_SLOT_SPRITE);
 }
+*/
 
+/*
 void BatchRenderer::quit()
 {
 	delete shader;
 	shader = nullptr;
 }
+*/

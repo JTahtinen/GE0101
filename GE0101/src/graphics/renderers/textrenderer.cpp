@@ -1,9 +1,6 @@
 #include "textrenderer.h"
-#include "../shader.h"
 #include "../../defs.h"
 
-
-static Shader* shader;
 
 struct LetterData
 {
@@ -30,9 +27,11 @@ enum ShaderAttributeIndex
 
 TextRenderer::TextRenderer(Window* win)
 	: Renderer(win)
+	, _shader("res/shaders/letter", true)
 {
-	ASSERT(shader);
-	shader->setUniform1f("u_ScreenRatio", win->getRatio());
+	_shader.bind();
+	_shader.setUniform1f("u_ScreenRatio", win->getRatio());
+	_shader.setUniform1f("u_ScreenRatio", win->getRatio());
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 	glGenBuffers(1, &_vbo);
@@ -68,7 +67,7 @@ void TextRenderer::submit(const std::string& label, const Vec2& pos, const float
 void TextRenderer::flush()
 {
 	
-	shader->bind();
+	_shader.bind();
 	
 	glBindVertexArray(_vao);
 	for (const auto& batch : _batches)
@@ -78,13 +77,13 @@ void TextRenderer::flush()
 		batch.bindFont();
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		const auto font = batch.getFont();
-		shader->setUniform1i("u_Texture", TEXTURE_SLOT_FONT_ATLAS);
+		_shader.setUniform1i("u_Texture", TEXTURE_SLOT_FONT_ATLAS);
 		_buffer = (LetterData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 		for (const auto& renderable : data)
 		{
 			const std::string& text = renderable.content;
 			const float scale = renderable.scale;
-			shader->setUniform1f("u_Scale", scale);
+			_shader.setUniform1f("u_Scale", scale);
 			float cursor = 0;
 			for (const char c : text)
 			{
@@ -110,6 +109,7 @@ void TextRenderer::flush()
 	}
 }
 
+/*
 void TextRenderer::init(const Window& win)
 {
 	shader = new Shader("res/shaders/letter", true);
@@ -122,3 +122,4 @@ void TextRenderer::quit()
 	delete shader;
 	shader = nullptr;
 }
+*/

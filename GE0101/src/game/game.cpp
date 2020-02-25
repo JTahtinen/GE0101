@@ -98,8 +98,8 @@ void Game::render(Layer& layer)
 {
 	static Input& in = Input::instance();
 	static auto& win = layer.getWindow();
-	static int winHeight = win->getHeight();
-	Vec2 mousePos = win->getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
+	static int winHeight = win.getHeight();
+	Vec2 mousePos = win.getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
 	_stateStack.back()->render(layer);
 	layer.submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
 

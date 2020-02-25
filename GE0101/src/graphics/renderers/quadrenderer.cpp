@@ -1,8 +1,6 @@
 #include "quadrenderer.h"
-#include "../shader.h"
 #include "../../defs.h"
 
-static Shader* quadShader;
 
 struct QuadData
 {
@@ -27,7 +25,12 @@ enum ShaderAttributeIndex
 
 QuadRenderer::QuadRenderer(Window* win)
 	: Renderer(win)
+	, _shader("res/shaders/colorquad", true)
 {
+
+	_shader.bind();
+	_shader.setUniform1f("u_ScreenRatio", win->getRatio());
+
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 	glGenBuffers(1, &_vbo);
@@ -43,6 +46,10 @@ QuadRenderer::QuadRenderer(Window* win)
 
 }
 
+QuadRenderer::~QuadRenderer()
+{
+}
+
 void QuadRenderer::submit(const Vec2& pos, const Vec2& size, const Vec4& color)
 {
 	_batch.submit(pos, size, color);
@@ -50,7 +57,7 @@ void QuadRenderer::submit(const Vec2& pos, const Vec2& size, const Vec4& color)
 
 void QuadRenderer::flush()
 {
-	quadShader->bind();
+	_shader.bind();
 	glBindVertexArray(_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 	QuadData* buffer = (QuadData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
@@ -74,6 +81,7 @@ void QuadRenderer::flush()
 	glDrawArrays(GL_POINTS, 0, numQuads);
 }
 
+/*
 void QuadRenderer::init(const Window& win)
 {
 	quadShader = new Shader("res/shaders/colorquad", true);
@@ -86,3 +94,4 @@ void QuadRenderer::quit()
 	delete quadShader;
 	quadShader = nullptr;
 }
+*/

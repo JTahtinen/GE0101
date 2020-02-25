@@ -5,11 +5,13 @@
 #include "../sprite.h"
 #include "../../math/vec3.h"
 #include "spritebatch.h"
+#include "../shader.h"
 
 struct VertexData;
 
 class BatchRenderer : public Renderer
 {
+	Shader							_shader;
 	VertexData*						_buffer;
 	std::vector<SpriteBatch>		_spriteBatches;
 	IndexBuffer						_ibo;
@@ -18,6 +20,6 @@ public:
 	~BatchRenderer();
 	void submit(std::shared_ptr<const Sprite> renderable, const Vec2& pos, const Vec3& offset);
 	virtual void flush() override;
-	static void init(const Window& win);
-	static void quit();
+	/*static void init(const Window& win);
+	static void quit();*/
 };
