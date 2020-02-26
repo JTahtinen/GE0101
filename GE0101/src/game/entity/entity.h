@@ -4,7 +4,10 @@
 #include "../../graphics/layer.h"
 #include "../../physics/physicsobject.h"
 #include "../conversation.h"
+#include "components/component.h"
+#include "components/graphicscomponent.h"
 #include <string>
+#include <vector>
 #include <sstream>
 
 class Camera;
@@ -18,12 +21,14 @@ class Entity
 	friend class Map;
 	friend class Controller;
 protected:
-	GUID							_id;
-	PhysicsObject					_object;
-	std::shared_ptr<const Sprite>	_sprite;
-	std::shared_ptr<Conversation>	_conversation;
-	bool							_engaged;
+	GUID								_id;
+	PhysicsObject						_object;
+	std::shared_ptr<const Sprite>		_sprite;
+	std::shared_ptr<GraphicsComponent>	_graphics{ nullptr };
+	std::shared_ptr<Conversation>		_conversation;
+	bool								_engaged;
 public:
+	Entity(const Vec2& pos, std::vector<std::shared_ptr<const Sprite>> frames);
 	Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite);
 	Entity(const Vec2& pos);
 	Entity();

@@ -136,8 +136,15 @@ std::shared_ptr<GameState> Game::loadGameState(const std::string& filepath, Game
 			ss >> line;
 			float y = stof(line);
 			ss >> line;
-			auto sprite = assets.get<Sprite>(line);
-			std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2((float)x, (float)y), sprite, std::make_shared<InputController>());
+		//	auto sprite = assets.get<Sprite>(line);
+			std::vector<std::shared_ptr<const Sprite>> animFrames;
+			animFrames.reserve(5);
+			animFrames.push_back(assets.get<Sprite>("res/sprites/stationary.sprite"));
+			animFrames.push_back(assets.get<Sprite>("res/sprites/left.sprite"));
+			animFrames.push_back(assets.get<Sprite>("res/sprites/up.sprite"));
+			animFrames.push_back(assets.get<Sprite>("res/sprites/right.sprite"));
+			animFrames.push_back(assets.get<Sprite>("res/sprites/down.sprite"));
+			std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2((float)x, (float)y), animFrames, std::make_shared<InputController>());
 			gameState->addActor(player);
 			gameState->setPlayer(player);
 			continue;

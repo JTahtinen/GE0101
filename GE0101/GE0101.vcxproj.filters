@@ -141,6 +141,12 @@
     <ClCompile Include="src\application\assetManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\entity\components\staticgraphicscomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\entity\components\animatedgraphicscomponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h">
@@ -303,6 +309,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\datatypes\asset.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\entity\components\component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\entity\components\graphicscomponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\entity\components\staticgraphicscomponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\entity\components\animatedgraphicscomponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

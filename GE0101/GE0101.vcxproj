@@ -156,6 +156,8 @@
     <ClCompile Include="src\game\assets\geometrydata.cpp" />
     <ClCompile Include="src\game\assets\spritedata.cpp" />
     <ClCompile Include="src\game\assets\texturedata.cpp" />
+    <ClCompile Include="src\game\entity\components\animatedgraphicscomponent.cpp" />
+    <ClCompile Include="src\game\entity\components\staticgraphicscomponent.cpp" />
     <ClCompile Include="src\game\states\gamestate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -209,6 +211,10 @@
     <ClInclude Include="src\game\assets\geometrydata.h" />
     <ClInclude Include="src\game\assets\spritedata.h" />
     <ClInclude Include="src\game\assets\texturedata.h" />
+    <ClInclude Include="src\game\entity\components\animatedgraphicscomponent.h" />
+    <ClInclude Include="src\game\entity\components\component.h" />
+    <ClInclude Include="src\game\entity\components\graphicscomponent.h" />
+    <ClInclude Include="src\game\entity\components\staticgraphicscomponent.h" />
     <ClInclude Include="src\game\entity\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />

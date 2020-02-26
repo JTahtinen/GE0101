@@ -22,4 +22,5 @@ public:
 	void update();
 	bool isMoving() const { return _force.length() > 0.0f; }
 	inline const Position& getPos() const { return _pos; }
+	inline const Vec2& getForce() const { return _force; }
 };

@@ -1,6 +1,19 @@
 #include "actor.h"
 #include "controllers/controller.h"
 
+Actor::Actor(const Vec2& pos, std::vector<std::shared_ptr<const Sprite>> frames, std::shared_ptr<Controller> controller)
+	: 
+	Entity(pos, frames)
+	, _controller(controller)
+{
+}
+
+Actor::Actor(const Vec2& pos, std::vector<std::shared_ptr<const Sprite>> frames)
+	: 
+	Actor(pos, frames, nullptr)
+{
+}
+
 Actor::Actor(const Vec2& pos, std::shared_ptr<const Sprite> sprite, std::shared_ptr<Controller> controller)
 	:
 	Entity(pos, sprite)

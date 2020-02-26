@@ -8,8 +8,19 @@
 #include "../../physics/collider.h"
 #include "../../defs.h"
 #include "../states/gamestate.h"
+#include "components/staticgraphicscomponent.h"
+#include "components/animatedgraphicscomponent.h"
 
 static std::vector<GUID> availableGUIDs;
+
+Entity::Entity(const Vec2& pos, std::vector<std::shared_ptr<const Sprite>> frames)
+	: _id(nextId())
+	, _object(pos, Vec2(0.07f, 0.19f))
+	, _conversation(nullptr)
+	, _engaged(false)
+	, _graphics(std::make_shared<AnimatedGraphicsComponent>(frames))
+{
+}
 
 Entity::Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite)
 	:
@@ -18,6 +29,7 @@ Entity::Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite)
 	, _object(pos, Vec2(0.07f, 0.19f))
 	, _conversation(nullptr)
 	, _engaged(false)
+	, _graphics(std::make_shared<StaticGraphicsComponent>(sprite))
 {
 #ifdef _DEBUG
 	MSG("Created Entity GUID: " << _id);
@@ -72,6 +84,7 @@ void Entity::update(GameState& gamestate)
 	}
 	gamestate.getMap()->collisionCheck(*this);
 	_object.update();
+	_graphics->update(this);
 }
 
 void Entity::engage(GameState& gamestate)
@@ -87,20 +100,7 @@ void Entity::engage(GameState& gamestate)
 
 void Entity::render(Layer& layer, const Camera& camera) const
 {
-	if (!_sprite)
-	{
-		return;
-	}
-	const Vec2& pos = _object.getPos().center;
-		
-	const float screenLeft = camera.getLeft();
-	const float screenRight = camera.getRight();
-	const float screenBottom = camera.getBottom();
-	const float screenTop = camera.getTop();
-	if (camera.inBounds(pos, _sprite->size))
-	{
-		layer.submitSprite(_sprite, pos, -camera.getPos());
-	}
+	_graphics->render(this, &layer, camera);
 }
 
 GUID Entity::nextId()
