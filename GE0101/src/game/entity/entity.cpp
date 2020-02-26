@@ -20,6 +20,7 @@ Entity::Entity(const Vec2& pos, std::vector<std::shared_ptr<const Sprite>> frame
 	, _engaged(false)
 	, _graphics(std::make_shared<AnimatedGraphicsComponent>(frames))
 {
+	init();
 }
 
 Entity::Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite)
@@ -31,9 +32,7 @@ Entity::Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite)
 	, _engaged(false)
 	, _graphics(std::make_shared<StaticGraphicsComponent>(sprite))
 {
-#ifdef _DEBUG
-	MSG("Created Entity GUID: " << _id);
-#endif
+	init();
 }
 
 Entity::Entity(const Vec2& pos)
@@ -52,6 +51,22 @@ Entity::~Entity()
 #ifdef _DEBUG
 	MSG("Deleted Entity GUID: " << _id);
 #endif
+}
+
+void Entity::init()
+{
+	_commandList.reserve(10);
+	_normalSpeed = 1.0f;
+	_increasedSpeed = 1.8f;
+	_currentSpeed = _normalSpeed;
+#ifdef _DEBUG
+	MSG("Created Entity GUID: " << _id);
+#endif
+}
+
+void Entity::addCommand(EntityCommand command)
+{
+	_commandList.push_back(command);
 }
 
 void Entity::move(const Vec2& dir, float amt)
@@ -77,6 +92,30 @@ void Entity::setConversation(std::shared_ptr<Conversation> conversation)
 
 void Entity::update(GameState& gamestate)
 {
+	for (EntityCommand command : _commandList)
+	{
+		switch (command)
+		{
+		case COMMAND_MOVE_UP:
+			move(Vec2(0, 1.0f), _currentSpeed);
+			break;
+		case COMMAND_MOVE_DOWN:
+			move(Vec2(0, -1.0f), _currentSpeed);
+			break;
+		case COMMAND_MOVE_LEFT:
+			move(Vec2(-1.0f, 0), _currentSpeed);
+			break;
+		case COMMAND_MOVE_RIGHT:
+			move(Vec2(1.0f, 0), _currentSpeed);
+			break;
+		case COMMAND_INCREASE_SPEED:
+			_currentSpeed = _increasedSpeed;
+			break;
+		case COMMAND_DECREASE_SPEED:
+			_currentSpeed = _normalSpeed;
+			break;
+		}
+	}
 	auto& entities = gamestate.getEntities();
 	for (auto& entity : entities)
 	{
@@ -85,6 +124,7 @@ void Entity::update(GameState& gamestate)
 	gamestate.getMap()->collisionCheck(*this);
 	_object.update();
 	_graphics->update(this);
+	_commandList.clear();
 }
 
 void Entity::engage(GameState& gamestate)

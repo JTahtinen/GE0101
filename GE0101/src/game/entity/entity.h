@@ -16,23 +16,42 @@ class Game;
 
 typedef unsigned int GUID;
 
+enum EntityCommand
+{
+	COMMAND_MOVE_UP,
+	COMMAND_MOVE_DOWN,
+	COMMAND_MOVE_LEFT,
+	COMMAND_MOVE_RIGHT,
+	COMMAND_INCREASE_SPEED,
+	COMMAND_DECREASE_SPEED
+
+};
+
 class Entity
 {
 	friend class Map;
 	friend class Controller;
+	friend class GraphicsComponent;
+	friend class AnimatedGraphicsComponent;
 protected:
 	GUID								_id;
 	PhysicsObject						_object;
 	std::shared_ptr<const Sprite>		_sprite;
 	std::shared_ptr<GraphicsComponent>	_graphics{ nullptr };
 	std::shared_ptr<Conversation>		_conversation;
+	std::vector<EntityCommand>			_commandList;
 	bool								_engaged;
+	float								_normalSpeed;
+	float								_increasedSpeed;
+	float								_currentSpeed;
 public:
 	Entity(const Vec2& pos, std::vector<std::shared_ptr<const Sprite>> frames);
 	Entity(const Vec2& pos, std::shared_ptr<const Sprite> sprite);
 	Entity(const Vec2& pos);
 	Entity();
 	virtual ~Entity();
+	void init();
+	void addCommand(EntityCommand command);
 	void move(const Vec2& dir, float amt);
 	void stopMoving();
 	void setConversation(std::shared_ptr<Conversation> conversation);

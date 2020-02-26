@@ -28,28 +28,37 @@ void AnimatedGraphicsComponent::update(Entity* e)
 		_currentFrame = _frames[FRAME_STATIONARY];
 		return;
 	}
-	if (vel.x > 0)
+
+	EntityCommand moveCommand = COMMAND_MOVE_UP;
+
+	for (auto command : e->_commandList)
 	{
+		switch (command)
+		{
+		case COMMAND_MOVE_UP:
+		case COMMAND_MOVE_DOWN:
+		case COMMAND_MOVE_LEFT:
+		case COMMAND_MOVE_RIGHT:
+			moveCommand = command;
+			break;
+		}
+	}
+
+	switch (moveCommand)
+	{
+	case COMMAND_MOVE_RIGHT:
 		_currentFrame = _frames[FRAME_RIGHT];
 		return;
-	}
-	if (vel.x < 0)
-	{
+	case COMMAND_MOVE_LEFT:
 		_currentFrame = _frames[FRAME_LEFT];
 		return;
-	}
-	if (vel.y > 0)
-	{
+	case COMMAND_MOVE_UP:
 		_currentFrame = _frames[FRAME_UP];
 		return;
-	}
-
-	if (vel.y < 0)
-	{
+	case COMMAND_MOVE_DOWN:
 		_currentFrame = _frames[FRAME_DOWN];
-		return;
+		return;	
 	}
-
 }
 
 void AnimatedGraphicsComponent::render(const Entity* e, Layer* layer, const Camera& camera) const
