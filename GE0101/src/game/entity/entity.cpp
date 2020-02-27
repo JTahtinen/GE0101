@@ -92,6 +92,7 @@ void Entity::setConversation(std::shared_ptr<Conversation> conversation)
 
 void Entity::update(GameState& gamestate)
 {
+	bool increasedSpeed = false;
 	for (EntityCommand command : _commandList)
 	{
 		switch (command)
@@ -110,11 +111,13 @@ void Entity::update(GameState& gamestate)
 			break;
 		case COMMAND_INCREASE_SPEED:
 			_currentSpeed = _increasedSpeed;
-			break;
-		case COMMAND_DECREASE_SPEED:
-			_currentSpeed = _normalSpeed;
+			increasedSpeed = true;
 			break;
 		}
+	}
+	if (!_increasedSpeed)
+	{
+		_currentSpeed = _normalSpeed;
 	}
 	auto& entities = gamestate.getEntities();
 	for (auto& entity : entities)
