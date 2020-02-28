@@ -43,6 +43,15 @@ public:
 	{
 		return _pos.y + getHeightToWidthRatio() * _pos.z;
 	}
+	inline Vec2 getArea() const
+	{
+		return Vec2(getRight() - getLeft(), getTop() - getBottom());
+	}
+	inline Vec2 getWorldPoint(const Vec2& screenPoint) const
+	{
+		Vec2 area = getArea();
+		return Vec2(getLeft() + screenPoint.x * area.x, getBottom() + screenPoint.y * area.y);
+	}
 	inline bool inBounds(const Vec2& pos, const Vec2& size) const 
 	{
 		return (pos.x + size.x > getLeft() && pos.x < getRight()

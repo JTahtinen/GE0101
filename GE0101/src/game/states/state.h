@@ -2,6 +2,7 @@
 
 class Game;
 class Layer;
+class Vec2;
 
 enum State_Type
 {
@@ -21,4 +22,5 @@ public:
 	virtual ~State() {};
 	virtual State_Condition update(Game& game) = 0;
 	virtual void render(Layer& layer) = 0;
+	virtual Vec2 getInContextPosition(const Vec2& screenPosition) const = 0;
 };

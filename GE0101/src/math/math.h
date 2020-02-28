@@ -40,4 +40,11 @@ namespace math
 	{
 		return (int)(val + 0.5f);
 	}
+
+	inline float projectToCoordinates(float sourceVal, float originMin, float originMax, float targetMin, float targetMax)
+	{
+		float originRange = originMax - originMin;
+		float targetRange = targetMax - targetMin;
+		return (sourceVal - originMin) / (originRange / targetRange) + targetMin;
+	}
 }

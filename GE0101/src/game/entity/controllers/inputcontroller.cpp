@@ -36,7 +36,7 @@ void InputController::update(Actor* e)
 	static float runningSpeed = 1.8f;
 	static float currentSpeed = speed;
 	Input& in = Input::instance();
-	if (in.poll(KEY_LSHIFT))
+	if (in.poll(KEY_LSHIFT, KEYSTATE_TYPED))
 	{
 		setInput(INC_SPEED, true);
 		//e->addCommand(COMMAND_INCREASE_SPEED);
@@ -46,7 +46,7 @@ void InputController::update(Actor* e)
 		//e->addCommand(COMMAND_DECREASE_SPEED);
 		setInput(INC_SPEED, false);
 	}
-	if (in.poll(KEY_A))
+	if (in.poll(KEY_A, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_LEFT, true);
@@ -55,7 +55,7 @@ void InputController::update(Actor* e)
 	{
 		setInput(MOVE_LEFT, false);
 	}
-	if (in.poll(KEY_D))
+	if (in.poll(KEY_D, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_RIGHT, true);
@@ -64,7 +64,7 @@ void InputController::update(Actor* e)
 	{
 		setInput(MOVE_RIGHT, false);
 	}
-	if (in.poll(KEY_W))
+	if (in.poll(KEY_W, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_UP, true);
@@ -73,7 +73,7 @@ void InputController::update(Actor* e)
 	{
 		setInput(MOVE_UP, false);
 	}
-	if (in.poll(KEY_S))
+	if (in.poll(KEY_S, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_DOWN, true);
@@ -94,12 +94,10 @@ void InputController::update(Actor* e)
 			if (command.second == i)
 			{
 				sortedCommands.push_back(command.first);
-				MSG(command.second);
 				break;
 			}
 		}
 	}
-	MSG(" ");
 	for (auto& command : sortedCommands)
 	{
 		e->addCommand(command);

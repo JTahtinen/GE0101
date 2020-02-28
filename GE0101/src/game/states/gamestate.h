@@ -37,5 +37,6 @@ public:
 	inline auto& getEntities() const { return _entities; }
 	inline auto getMap() const { return _map; }
 	inline std::shared_ptr<const Actor> getPlayer() const { return _player; }
+	virtual Vec2 getInContextPosition(const Vec2& screenPosition) const override;
 	virtual void render(Layer& layer) override;
 };

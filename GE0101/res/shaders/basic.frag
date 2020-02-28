@@ -15,10 +15,5 @@ void main()
 	//temp code
 	vec4 lightColor = vec4(1.0, 0.7, 0.7, 0) * v_lightIntensity;
     vec4 fragcolor = (texture(u_Texture, v_texCoord));
-    if (fragcolor.a == 0)
-    {
-        discard;
-    }
-
-	color = vec4(fragcolor.rgb * lightColor.rgb, fragcolor.a) + v_color + u_Color;
+ 	color = vec4(fragcolor.rgb * lightColor.rgb, fragcolor.a) + v_color + u_Color;
 }

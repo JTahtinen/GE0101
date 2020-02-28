@@ -121,6 +121,14 @@ State_Condition GameState::update(Game& game)
 	return STATE_RUNNING;
 }
 
+Vec2 GameState::getInContextPosition(const Vec2& screenPosition) const
+{
+	//Vec2 projectedMousePos(screenPosition.x * 0.5f + 0.5f, screenPosition.y * 0.5f + 0.5f);
+	Vec2 projectedMousePos(math::projectToCoordinates(screenPosition.x, -1.0f, 1.0f, 0, 1.0f)
+		, math::projectToCoordinates(screenPosition.y, -1.0f, 1.0f, 0, 1.0f));
+	return _camera.getWorldPoint(projectedMousePos);
+}
+
 void GameState::render(Layer& layer)
 {
 	_map->render(layer, _camera);
