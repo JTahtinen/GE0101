@@ -70,6 +70,10 @@ void GameState::setActiveConversation(std::shared_ptr<Conversation>& conversatio
 State_Condition GameState::update(Game& game)
 {
 	static Input& in = Input::instance();
+	if (in.poll(KEY_Q, KEYSTATE_TYPED))
+	{
+		return STATE_FINISHED;
+	}
 
 	switch (_substate)
 	{

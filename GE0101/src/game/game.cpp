@@ -7,6 +7,7 @@
 #include "entity/controllers/aicontroller.h"
 #include "../physics/collider.h"
 #include "conversation.h"
+#include "states/menustate.h"
 #include "states/gamestate.h"
 #include "../util/file.h"
 #include "../application/assetmanager.h"
@@ -15,7 +16,10 @@
 float Game::frameTime = 0.0f;
 
 Game::Game(AssetManager& assets)
+	: _curStateIndex(0)
 {
+	_states.reserve(2);
+
 	std::shared_ptr<Conversation> conv = std::make_shared<Conversation>();
 	std::shared_ptr<ConvNode> node1 = std::make_shared<ConvNode>();
 	std::shared_ptr<ConvNode> node2 = std::make_shared<ConvNode>();
@@ -76,13 +80,13 @@ Game::Game(AssetManager& assets)
 	*/
 	//_cursor = Renderable2D::createRenderable2D(cursorSprite, Vec4(), 0.5f, true);
 	
-	
-	_stateStack.push_back(loadGameState("res/levels/testlevel.txt", *this, assets));
+	_states.push_back(std::make_unique<MenuState>());
+	_states.push_back(std::move(loadGameState("res/levels/testlevel.txt", *this, assets)));
 }
 
 Game::~Game()
 {
-	_stateStack.clear();
+	_states.clear();
 }
 
 
@@ -90,8 +94,17 @@ void Game::update(float frameTime)
 {
 	Game::frameTime = frameTime;
 	//_cursor->setPos(Vec4(mousePos.x, mousePos.y, 1, 1));
-	auto& state = _stateStack.back();
-	state->update(*this);	
+
+	auto& state = _states[_curStateIndex];
+	State_Condition sCond = state->update(*this);
+	if (sCond == STATE_FINISHED)
+	{
+		++_curStateIndex;
+		if (_curStateIndex >= _states.size())
+		{
+			_curStateIndex = 0;
+		}
+	}
 }
 
 void Game::render(Layer& layer)
@@ -101,29 +114,29 @@ void Game::render(Layer& layer)
 	static int winHeight = win.getHeight();
 	
 	Vec2 mousePos = win.getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
-	const auto& state = _stateStack.back();
-	_stateStack.back()->render(layer);
+	const auto& state = _states[_curStateIndex];
+	state->render(layer);
 	Vec2 cursorWorldPos = state->getInContextPosition(win.getScreenCoords(in.getMouseX(), winHeight - in.getMouseY()));
-	//MSG(cursorWorldPos.toString());
+	MSG(cursorWorldPos.toString());
 	//MSG(math::projectToCoordinates(1.0f, 1.0f, 3.0f, -1.0f, 1.0f));
 	//MSG(mousePos.toString());
 	layer.submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
 
 }
 
-void Game::pushState(std::shared_ptr<State> state)
+void Game::pushState(std::unique_ptr<State> state)
 {
-	_stateStack.push_back(state);
+	_states.push_back(std::move(state));
 }
 
 void Game::popState()
 {
-	_stateStack.pop_back();
+	_states.pop_back();
 }
 
-std::shared_ptr<GameState> Game::loadGameState(const std::string& filepath, Game& game, AssetManager& assets)
+std::unique_ptr<GameState> Game::loadGameState(const std::string& filepath, Game& game, AssetManager& assets)
 {
-	std::shared_ptr<GameState> gameState = std::make_shared<GameState>(game);
+	std::unique_ptr<GameState> gameState = std::make_unique<GameState>(game);
 	std::string file = load_text_file(filepath);
 	std::istringstream ss(file);
 	std::string line;

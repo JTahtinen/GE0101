@@ -161,6 +161,7 @@
     <ClCompile Include="src\game\states\gamestate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\game\states\menustate.cpp" />
     <ClCompile Include="src\graphics\font.cpp" />
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\game\entity\actor.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
     <ClInclude Include="src\game\states\gamestate.h" />
+    <ClInclude Include="src\game\states\menustate.h" />
     <ClInclude Include="src\game\states\state.h" />
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\mesh.h" />
