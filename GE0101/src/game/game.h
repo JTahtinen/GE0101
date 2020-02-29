@@ -13,7 +13,6 @@ class AssetManager;
 class Game
 {
 	std::vector<std::unique_ptr<State>>			_states;
-	std::shared_ptr<Sprite>						_cursor;
 	unsigned int								_curStateIndex;
 public:
 	static float frameTime;

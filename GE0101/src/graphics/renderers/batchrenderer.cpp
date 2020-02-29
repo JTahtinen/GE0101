@@ -155,22 +155,3 @@ void BatchRenderer::flush()
 		batch.clear();
 	}
 }
-
-/*
-void BatchRenderer::init(const Window& window)
-{
-	shader = new Shader("res/shaders/basic");
-	shader->bind();
-	shader->setUniform4f("u_Color", 0, 0.0f, 0.1f, 0);
-	shader->setUniform1f("u_ScrRatio", window.getRatio());
-	shader->setUniform1i("u_Texture", TEXTURE_SLOT_SPRITE);
-}
-*/
-
-/*
-void BatchRenderer::quit()
-{
-	delete shader;
-	shader = nullptr;
-}
-*/

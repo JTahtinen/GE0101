@@ -37,7 +37,7 @@ void Layer::submitQuad(const Vec2& pos, const Vec2& size, const Vec4& color)
 
 void Layer::begin()
 {
-	_win.clear();
+	//_win.clear();
 
 	_batchRenderer.begin();
 	_quadRenderer.begin();
@@ -57,6 +57,6 @@ void Layer::flush()
 	_quadRenderer.flush();
 	_textRenderer.flush();
 
-	_win.update();
+//	_win.update();
 
 }

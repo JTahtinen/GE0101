@@ -47,16 +47,26 @@ void Application::run()
 
 	Input& in = Input::instance();
 
+
+
 	//float zoom = 1;
 	float frameTime = 0;
 	unsigned int frames = 0;
 	auto lastTime = high_resolution_clock::now();
 	float runningTime = 0;
 
-	
+
 	std::shared_ptr<Font> lsFont = _assetData.get<Font>("res/fonts/liberation_serif");
 	std::shared_ptr<Font> arialFont = _assetData.get<Font>("res/fonts/arial");
 
+	Layer gameLayer(_window, lsFont);
+	Layer uiLayer(_window, lsFont);
+	Layer cursorLayer(_window, lsFont);
+	Layer* layers[3];
+
+	layers[0] = &gameLayer;
+	layers[1] = &uiLayer;
+	layers[2] = &cursorLayer;
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
 	TextBox::setDefaultFont(lsFont);
 	TextBox textBox("FPS: ", 0.3f);
@@ -71,9 +81,15 @@ void Application::run()
 	float windowGreen = 0.45f;
 	float curWindowGreen = windowGreen;
 	Slider slider(0.0f, 1.0f, &windowGreen);
+	static int winHeight = _window.getHeight();
+	const auto& cursor = _assetData.get<Sprite>("res/sprites/cursor.sprite");
+
 	while (running)
 	{
+		_window.clear();
 		in.update();
+
+		Vec2 mousePos = _window.getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
 		if (in.poll(KEY_ESCAPE))
 		{
 			running = false;
@@ -97,8 +113,12 @@ void Application::run()
 		auto currentTime = high_resolution_clock::now();
 		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
 		frameTime = (float)(duration.count() / 1000.0f);
-		_layer.begin();
-		
+		//_layer.begin();
+		for (auto& layer : layers)
+		{
+			layer->begin();
+		}
+
 		_game.update(frameTime);
 		lastTime = currentTime;
 		runningTime += frameTime;
@@ -109,24 +129,29 @@ void Application::run()
 		}
 		//if (toggleFPS)
 		//textBox.render(_renderer, fpsScreenPos);
-		_game.render(_layer);
-		textBox.render(_layer, fpsScreenPos);
-		
-		slider.render(_layer, Vec2(0.75f, 0.2f));
-
-		//_layer.submitText(engineInfo);
-		_layer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
-
 		if (curWindowGreen != windowGreen)
 		{
 			_window.setClearColor(0.50f, windowGreen, 0.45f);
 			curWindowGreen = windowGreen;
 		}
+		_game.render(gameLayer);
+		textBox.render(uiLayer, fpsScreenPos);
 		
-		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
-		_layer.end();
-		_layer.flush();
+		slider.render(uiLayer, Vec2(0.75f, 0.2f));
 
+		//_layer.submitText(engineInfo);
+		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
+
+		cursorLayer.submitSprite(cursor, mousePos, Vec3(0, 0, -1));
+
+		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
+		//_layer.end();
+		//_layer.flush();
+		for (auto& layer : layers)
+		{
+			layer->end();
+			layer->flush();
+		}
 		
 		++frames;
 		if (runningTime >= 1.0f)
@@ -136,6 +161,7 @@ void Application::run()
 			frames = 0;
 			updateFPS = true;
 		}
+		_window.update();
 	}
 	_assetData.clear();
 	//gameLog.writeToFile("log.txt");

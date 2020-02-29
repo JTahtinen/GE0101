@@ -52,7 +52,7 @@ void Slider::setValueZeroToOne(float value)
 	{
 		_valueAbs = _rangeMax;
 	}
-	else if (_valueAbs < 0.0f)
+	else if (_valueAbs < 0)
 	{
 		_valueAbs = _rangeMin;
 	}
@@ -85,14 +85,25 @@ float Slider::getValue() const
 void Slider::render(Layer& layer, const Vec2& pos) const
 {
 	static float sliderVisLength = 0.25f;
+	static float sliderVisThickness = 0.02f;
 	static float knobThickness = 0.04f;  //snort
 	float knobVisPos = (pos.y - sliderVisLength) + math::projectToCoordinates(_valueAbs, _rangeMin, _rangeMax, 0, sliderVisLength) + knobThickness * 0.5f;
-	layer.submitQuad(pos, Vec2(0.02f, sliderVisLength), Vec4(0.2f, 0.2f, 0.2f, 1.0f));
-	layer.submitQuad(Vec2(pos.x - 0.25f * knobThickness, knobVisPos), Vec2(knobThickness, knobThickness), Vec4(0.8f, 0.8f, 0.8f, 0.5f));
+	layer.submitQuad(Vec2(pos.x - 0.5f * sliderVisThickness, pos.y + 0.5f * sliderVisThickness), Vec2(sliderVisThickness * 2.0f, sliderVisLength + sliderVisThickness), Vec4(0.4f, 0.4f, 0.4f, 1.0f));
+	layer.submitQuad(pos, Vec2(sliderVisThickness, sliderVisLength), Vec4(0, 0, 0, 1.0f));
+	layer.submitQuad(Vec2(pos.x - 0.25f * knobThickness, knobVisPos), Vec2(knobThickness, knobThickness), Vec4(0.8f, 0.8f, 0.8f, 0.8f));
 	
 	
 	std::stringstream stream;
-	stream << std::fixed << std::setprecision(1) << _valueAbs;
+	float visValue = 0;
+	if (_valueAbs <= 0)
+	{
+		visValue = 0; // This is used to fix a bug where the slider might display negative 0
+	}
+	else
+	{
+		visValue = _valueAbs;
+	}
+	stream << std::fixed << std::setprecision(2) << visValue;
 	
 	layer.submitText(stream.str(), Vec2(pos.x, pos.y - sliderVisLength - 0.02f), 0.2f);
 }
