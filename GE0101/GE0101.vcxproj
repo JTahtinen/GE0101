@@ -198,6 +198,7 @@
     <ClCompile Include="src\math\vec2.cpp" />
     <ClCompile Include="src\math\vec4.cpp" />
     <ClCompile Include="src\physics\physicsobject.cpp" />
+    <ClCompile Include="src\ui\slider.cpp" />
     <ClCompile Include="src\util\log.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +257,7 @@
     <ClInclude Include="src\math\vec2.h" />
     <ClInclude Include="src\math\vec4.h" />
     <ClInclude Include="src\physics\physicsobject.h" />
+    <ClInclude Include="src\ui\slider.h" />
     <ClInclude Include="src\util\assetcollection.h" />
     <ClInclude Include="src\util\file.h" />
     <ClInclude Include="src\util\glutil.h" />

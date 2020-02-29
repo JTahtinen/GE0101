@@ -5,6 +5,7 @@
 #include "../graphics/textbox.h"
 #include "../util/log.h"
 #include "../defs.h"
+#include "../ui/slider.h"
 
 //Log gameLog;
 
@@ -67,6 +68,7 @@ void Application::run()
 	Vec2 mouse;
 	bool updateFPS = true;
 	bool toggleFPS = true;
+	Slider slider(-1.0f, 2.0f, 0.0f);
 	while (running)
 	{
 		in.update();
@@ -78,6 +80,16 @@ void Application::run()
 		if (in.poll(KEY_F, KEYSTATE_TYPED))
 		{
 			toggleFPS = !toggleFPS;
+		}
+
+		if (in.poll(KEY_UP))
+		{
+			slider.slideByAbs(0.01f);
+		}
+		
+		if (in.poll(KEY_DOWN))
+		{
+			slider.slideByAbs(-0.01f);
 		}
 	
 		auto currentTime = high_resolution_clock::now();
@@ -97,6 +109,7 @@ void Application::run()
 		//textBox.render(_renderer, fpsScreenPos);
 		_game.render(_layer);
 		textBox.render(_layer, fpsScreenPos);
+		slider.render(_layer, Vec2(0.75f, 0.4f));
 
 		//_layer.submitText(engineInfo);
 		_layer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
