@@ -54,13 +54,13 @@ void TextRenderer::submit(const std::string& label, const Vec2& pos, const float
 {
 	for (auto& batch : _batches)
 	{
-		if (batch.checkCompatibility(*font))
+		if (batch.checkCompatibility(*font, scale))
 		{
 			batch.submit(label, pos, scale);
 			return;
 		}
 	}
-	_batches.emplace_back(TextBatch(font));
+	_batches.emplace_back(TextBatch(font, scale));
 	_batches.back().submit(label, pos, scale);
 }
 

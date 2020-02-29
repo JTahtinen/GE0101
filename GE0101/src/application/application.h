@@ -8,9 +8,9 @@
 
 class Application
 {
+	AssetManager					_assetData;
 	Window							_window;
 	Layer							_layer;
-	AssetManager					_assetData;
 	Game							_game;
 public:
 	Application();

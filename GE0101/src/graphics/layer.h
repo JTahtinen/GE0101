@@ -11,11 +11,13 @@ class Layer
 	BatchRenderer								_batchRenderer;
 	TextRenderer								_textRenderer;
 	QuadRenderer								_quadRenderer;
+	std::shared_ptr<const Font>					_defaultFont;
 public:
-	Layer(Window& win);
+	Layer(Window& win, std::shared_ptr<const Font> defaultFont);
 	~Layer();
 	void submitSprite(std::shared_ptr<const Sprite> sprite, const Vec2& pos, const Vec3& offset);
 	void submitText(const std::string& label, const Vec2& pos, const float scale, std::shared_ptr<const Font> font);
+	void submitText(const std::string& label, const Vec2& pos, const float scale);
 	void submitQuad(const Vec2& pos, const Vec2& size, const Vec4& color);
 	void begin();
 	void end();

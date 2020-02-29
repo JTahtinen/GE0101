@@ -7,8 +7,10 @@ class Slider
 	float						_rangeMin;
 	float						_rangeMax;
 	float						_valueAbs;
+	float*						_tiedValue;
 public:
 	Slider(const float rangeMin, const float rangeMax, const float initValue);
+	Slider(const float rangeMin, const float rangeMax, float* tiedValue);
 	void setValueAbs(float value);
 	void setValueZeroToOne(float value);
 	void slideByAbs(float value);

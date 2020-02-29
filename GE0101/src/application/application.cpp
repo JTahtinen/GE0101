@@ -25,7 +25,7 @@ void Application::deleteGlobalData()
 */
 Application::Application()
 	: _window(1280, 720, "GE0101")
-	, _layer(_window)
+	, _layer(_window, _assetData.get<Font>("res/fonts/liberation_serif"))
 	, _game(_assetData)
 {
 	//loadGlobalData();
@@ -68,7 +68,9 @@ void Application::run()
 	Vec2 mouse;
 	bool updateFPS = true;
 	bool toggleFPS = true;
-	Slider slider(-1.0f, 2.0f, 0.0f);
+	float windowGreen = 0.45f;
+	float curWindowGreen = windowGreen;
+	Slider slider(0.0f, 1.0f, &windowGreen);
 	while (running)
 	{
 		in.update();
@@ -109,10 +111,17 @@ void Application::run()
 		//textBox.render(_renderer, fpsScreenPos);
 		_game.render(_layer);
 		textBox.render(_layer, fpsScreenPos);
-		slider.render(_layer, Vec2(0.75f, 0.4f));
+		
+		slider.render(_layer, Vec2(0.75f, 0.2f));
 
 		//_layer.submitText(engineInfo);
 		_layer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
+
+		if (curWindowGreen != windowGreen)
+		{
+			_window.setClearColor(0.50f, windowGreen, 0.45f);
+			curWindowGreen = windowGreen;
+		}
 		
 		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
 		_layer.end();

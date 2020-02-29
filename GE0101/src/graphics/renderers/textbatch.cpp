@@ -1,8 +1,9 @@
 #include "textbatch.h"
 #include "../../defs.h"
 
-TextBatch::TextBatch(std::shared_ptr<const Font> reference)
-	: _refFont(reference)
+TextBatch::TextBatch(std::shared_ptr<const Font> referenceFont, float referenceScale)
+	: _refFont(referenceFont)
+	, _refScale(referenceScale)
 {
 	_data.reserve(30);
 }

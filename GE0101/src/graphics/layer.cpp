@@ -1,15 +1,14 @@
 #include "layer.h"
 #include "../defs.h"
 
-Layer::Layer(Window& win)
+Layer::Layer(Window& win, std::shared_ptr<const Font> defaultFont)
 	: _win(win)
 	, _batchRenderer(&win)
 	, _quadRenderer(&win)
 	, _textRenderer(&win)
+	, _defaultFont(defaultFont)
 {
-	//_batchRenderer = std::make_unique<BatchRenderer>(win);
-	//_quadRenderer = std::make_unique<QuadRenderer>(win);
-	//_textRenderer = std::make_unique<TextRenderer>(win);
+	ASSERT(_defaultFont);
 }
 
 Layer::~Layer()
@@ -24,6 +23,11 @@ void Layer::submitSprite(std::shared_ptr<const Sprite> sprite, const Vec2& pos, 
 void Layer::submitText(const std::string& label, const Vec2& pos, const float scale, std::shared_ptr<const Font> font)
 {
 	_textRenderer.submit(label, pos, scale, font);
+}
+
+void Layer::submitText(const std::string& label, const Vec2& pos, const float scale)
+{
+	submitText(label, pos, scale, _defaultFont);
 }
 
 void Layer::submitQuad(const Vec2& pos, const Vec2& size, const Vec4& color)

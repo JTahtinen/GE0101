@@ -117,7 +117,7 @@ void Game::render(Layer& layer)
 	const auto& state = _states[_curStateIndex];
 	state->render(layer);
 	Vec2 cursorWorldPos = state->getInContextPosition(win.getScreenCoords(in.getMouseX(), winHeight - in.getMouseY()));
-	MSG(cursorWorldPos.toString());
+	//MSG(cursorWorldPos.toString());
 	//MSG(math::projectToCoordinates(1.0f, 1.0f, 3.0f, -1.0f, 1.0f));
 	//MSG(mousePos.toString());
 	layer.submitSprite(_cursor, mousePos, Vec3(0, 0, -1));
