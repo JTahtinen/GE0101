@@ -8,9 +8,16 @@ template<typename T> using ptr_s = std::shared_ptr<T>;
 template<typename T> using ptr_u = std::unique_ptr<T>;
 template<typename T> using ptr_w = std::weak_ptr<T>;
 
+#ifdef _DEBUG
 #define MSG(expr) std::cout << expr << std::endl
 #define ERR(expr) std::cout << "[ERROR] " << expr << std::endl;
 #define WARN(expr) std::cout << "[WARNING] " << expr << std::endl;
+#else
+#define MSG(expr)
+#define ERR(expr)
+#define WARN(expr)
+#endif 
+
 #define LOGMSG(expr) gameLog.message(expr)
 #define LOGERR(expr) gameLog.error(expr)
 #define LOGWARN(expr) gameLog.warning(expr)
