@@ -98,6 +98,7 @@ State_Condition GameState::update(Game& game)
 			entity->update(*this);
 		}
 
+		const Vec2& playerDimensions = _player->getPhysics()->getPos().dimensions;
 
 		_camera.setPos(_player->getPhysics()->getPos().center + Vec2(0.1f, 0.1f));
 		_camera.update();

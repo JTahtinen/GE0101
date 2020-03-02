@@ -1,5 +1,14 @@
 #include "assetmanager.h"
 
+AssetManager::~AssetManager()
+{
+	_fontData.clear();
+	message("Fonts cleared");
+	_textureData.clear();
+	message("Textures cleared");
+	_spriteData.clear();
+	message("Sprites cleared");
+}
 
 template<>
 std::shared_ptr<Font> AssetManager::load<Font>(const std::string& filepath)

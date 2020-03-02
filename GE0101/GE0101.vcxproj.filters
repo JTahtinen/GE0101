@@ -335,5 +335,8 @@
     <ClInclude Include="src\ui\slider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\util\timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

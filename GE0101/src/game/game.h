@@ -7,6 +7,7 @@
 #include "camera.h"
 #include "states/state.h"
 #include "../graphics/layer.h"
+#include "../util/timer.h"
 
 class AssetManager;
 
@@ -14,6 +15,7 @@ class Game
 {
 	std::vector<std::unique_ptr<State>>			_states;
 	unsigned int								_curStateIndex;
+	Timer										_gameTimer;
 public:
 	static float frameTime;
 public:

@@ -262,6 +262,7 @@
     <ClInclude Include="src\util\file.h" />
     <ClInclude Include="src\util\glutil.h" />
     <ClInclude Include="src\util\log.h" />
+    <ClInclude Include="src\util\timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

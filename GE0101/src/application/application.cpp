@@ -1,12 +1,10 @@
 #include "application.h"
-#include <chrono>
-#include <time.h>
 #include "../input/input.h"
 #include "../graphics/textbox.h"
 #include "../util/log.h"
 #include "../defs.h"
 #include "../ui/slider.h"
-
+#include "../util/timer.h"
 //Log gameLog;
 
 /*void Application::loadGlobalData()
@@ -31,7 +29,6 @@ Application::Application()
 	//loadGlobalData();
 	//_layer = std::make_shared<Layer>(&_window);
 	//_game = std::make_shared<Game>(_assetData);
-	
 }
 
 Application::~Application()
@@ -41,19 +38,13 @@ Application::~Application()
 
 void Application::run()
 {
-	using namespace std::chrono;
-
 	bool running = true;
 
 	Input& in = Input::instance();
 
 
 
-	//float zoom = 1;
-	float frameTime = 0;
-	unsigned int frames = 0;
-	auto lastTime = high_resolution_clock::now();
-	float runningTime = 0;
+	
 
 
 	std::shared_ptr<Font> lsFont = _assetData.get<Font>("res/fonts/liberation_serif");
@@ -88,6 +79,15 @@ void Application::run()
 	static int winHeight = _window.getHeight();
 	const auto& cursor = _assetData.get<Sprite>("res/sprites/cursor.sprite");
 
+	bool slidersVisible = false;
+
+
+	float frameTime = 0;
+	unsigned int frames = 0;
+	float runningTime = 0;
+
+	Timer gameTimer;
+	gameTimer.start();
 	while (running)
 	{
 		_window.clear();
@@ -104,62 +104,62 @@ void Application::run()
 			toggleFPS = !toggleFPS;
 		}
 
-		if (in.poll(KEY_U))
+		if (slidersVisible)
 		{
-			red.slideByAbs(0.01f);
+			if (in.poll(KEY_U))
+			{
+				red.slideByAbs(0.01f);
+			}
+
+			if (in.poll(KEY_J))
+			{
+				red.slideByAbs(-0.01f);
+			}
+
+			if (in.poll(KEY_I))
+			{
+				green.slideByAbs(0.01f);
+			}
+
+			if (in.poll(KEY_K))
+			{
+				green.slideByAbs(-0.01f);
+			}
+
+			if (in.poll(KEY_O))
+			{
+				blue.slideByAbs(0.01f);
+			}
+
+			if (in.poll(KEY_L))
+			{
+				blue.slideByAbs(-0.01f);
+			}
 		}
+
+		if (in.poll(KEY_M, KEYSTATE_TYPED))
+		{
+			slidersVisible = !slidersVisible;
+		}
+
 		
-		if (in.poll(KEY_J))
-		{
-			red.slideByAbs(-0.01f);
-		}
 
-		if (in.poll(KEY_I))
-		{
-			green.slideByAbs(0.01f);
-		}
+		frameTime = (float)(gameTimer.getElapsedSinceLastUpdateInMillis() * 0.001f);
 
-		if (in.poll(KEY_K))
-		{
-			green.slideByAbs(-0.01f);
-		}
-
-		if (in.poll(KEY_O))
-		{
-			blue.slideByAbs(0.01f);
-		}
-
-		if (in.poll(KEY_L))
-		{
-			blue.slideByAbs(-0.01f);
-		}
-	
-		if (in.poll(KEY_X, KEYSTATE_TYPED))
-		{
-			red.toggleLabel();
-			green.toggleLabel();
-			blue.toggleLabel();
-		}
-
-		auto currentTime = high_resolution_clock::now();
-		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
-		frameTime = (float)(duration.count() / 1000.0f);
-		//_layer.begin();
 		for (auto& layer : layers)
 		{
 			layer->begin();
 		}
 
 		_game.update(frameTime);
-		lastTime = currentTime;
+		gameTimer.update();
 		runningTime += frameTime;
 		if (updateFPS)
 		{
 			textBox.setContent("FPS: " + std::to_string(fps));
 			updateFPS = false;
 		}
-		//if (toggleFPS)
-		//textBox.render(_renderer, fpsScreenPos);
+
 		if (curWinColor != winColor)
 		{
 			_window.setClearColor(winColor.x, winColor.y, winColor.z);
@@ -167,19 +167,16 @@ void Application::run()
 		}
 		_game.render(gameLayer);
 		textBox.render(uiLayer, fpsScreenPos);
-
-		red.render(uiLayer, Vec2(0.60f, 0.2f));
-		green.render(uiLayer, Vec2(0.70f, 0.2f));
-		blue.render(uiLayer, Vec2(0.80f, 0.2f));
-
-		//_layer.submitText(engineInfo);
+		
+		if (slidersVisible)
+		{
+			red.render(uiLayer, Vec2(0.60f, 0.2f));
+			green.render(uiLayer, Vec2(0.70f, 0.2f));
+			blue.render(uiLayer, Vec2(0.80f, 0.2f));
+		}
 		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
-		//uiLayer.submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
 		cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
 
-		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
-		//_layer.end();
-		//_layer.flush();
 		for (auto& layer : layers)
 		{
 			layer->end();

@@ -13,6 +13,7 @@
 #include "../application/assetmanager.h"
 
 
+
 float Game::frameTime = 0.0f;
 
 Game::Game(AssetManager& assets)
@@ -81,6 +82,7 @@ Game::Game(AssetManager& assets)
 	
 	_states.push_back(std::make_unique<MenuState>());
 	_states.push_back(std::move(loadGameState("res/levels/testlevel.txt", *this, assets)));
+	_gameTimer.start();
 }
 
 Game::~Game()
@@ -104,7 +106,11 @@ void Game::update(float frameTime)
 			_curStateIndex = 0;
 		}
 	}
+	_gameTimer.update();
 }
+
+#include <sstream>
+#include <iomanip>
 
 void Game::render(Layer& layer)
 {
@@ -119,7 +125,9 @@ void Game::render(Layer& layer)
 	//MSG(cursorWorldPos.toString());
 	//MSG(math::projectToCoordinates(1.0f, 1.0f, 3.0f, -1.0f, 1.0f));
 	//MSG(mousePos.toString());
-
+	std::stringstream stream;
+	stream << std::fixed << std::setprecision(2) << (float)_gameTimer.getElapsedInMillis() * 0.001f;
+	layer.submitText(stream.str(), Vec2(0.75f, 0.45f), 0.2f);
 }
 
 void Game::pushState(std::unique_ptr<State> state)

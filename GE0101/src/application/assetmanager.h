@@ -10,6 +10,7 @@ class AssetManager
 	AssetCollection<Texture>	_textureData;
 	AssetCollection<Sprite>		_spriteData;
 public:
+	~AssetManager();
 	template<typename T>
 	std::shared_ptr<T> load(const std::string& filepath);
 	template<typename T>
