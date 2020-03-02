@@ -26,5 +26,6 @@ public:
 	void bindFont() const;
 	inline const std::vector<Label>& getData() const { return _data; }
 	inline const std::shared_ptr<const Font> getFont() const { return _refFont; }
+	inline float getScale() const { return _refScale; }
 	void clear();
 };

@@ -57,7 +57,7 @@ void TextBox::setColor(const Vec4& color)
 
 void TextBox::render(Layer& layer, const Vec2& pos) const
 {
-	Vec2 textOffset = Vec2(0.02f, 0.0f);
+	Vec2 textOffset = Vec2(0.02f, 0.015f);
 	
 
 	// Test values

@@ -78,9 +78,13 @@ void Application::run()
 	Vec2 mouse;
 	bool updateFPS = true;
 	bool toggleFPS = true;
-	float windowGreen = 0.45f;
-	float curWindowGreen = windowGreen;
-	Slider slider(0.0f, 1.0f, &windowGreen);
+	
+	Vec3 curWinColor(0.50f, 0.45f, 0.45f);
+	Vec3 winColor = curWinColor;
+	Slider red(0.0f, 1.0f, &winColor.x, "Red");
+	Slider green(0.0f, 1.0f, &winColor.y, "Green");
+	Slider blue(0.0f, 1.0f, &winColor.z, "Blue");
+	
 	static int winHeight = _window.getHeight();
 	const auto& cursor = _assetData.get<Sprite>("res/sprites/cursor.sprite");
 
@@ -100,16 +104,43 @@ void Application::run()
 			toggleFPS = !toggleFPS;
 		}
 
-		if (in.poll(KEY_UP))
+		if (in.poll(KEY_U))
 		{
-			slider.slideByAbs(0.01f);
+			red.slideByAbs(0.01f);
 		}
 		
-		if (in.poll(KEY_DOWN))
+		if (in.poll(KEY_J))
 		{
-			slider.slideByAbs(-0.01f);
+			red.slideByAbs(-0.01f);
+		}
+
+		if (in.poll(KEY_I))
+		{
+			green.slideByAbs(0.01f);
+		}
+
+		if (in.poll(KEY_K))
+		{
+			green.slideByAbs(-0.01f);
+		}
+
+		if (in.poll(KEY_O))
+		{
+			blue.slideByAbs(0.01f);
+		}
+
+		if (in.poll(KEY_L))
+		{
+			blue.slideByAbs(-0.01f);
 		}
 	
+		if (in.poll(KEY_X, KEYSTATE_TYPED))
+		{
+			red.toggleLabel();
+			green.toggleLabel();
+			blue.toggleLabel();
+		}
+
 		auto currentTime = high_resolution_clock::now();
 		auto duration = duration_cast<milliseconds>(currentTime - lastTime);
 		frameTime = (float)(duration.count() / 1000.0f);
@@ -129,19 +160,21 @@ void Application::run()
 		}
 		//if (toggleFPS)
 		//textBox.render(_renderer, fpsScreenPos);
-		if (curWindowGreen != windowGreen)
+		if (curWinColor != winColor)
 		{
-			_window.setClearColor(0.50f, windowGreen, 0.45f);
-			curWindowGreen = windowGreen;
+			_window.setClearColor(winColor.x, winColor.y, winColor.z);
+			curWinColor = winColor;
 		}
 		_game.render(gameLayer);
 		textBox.render(uiLayer, fpsScreenPos);
-		
-		slider.render(uiLayer, Vec2(0.75f, 0.2f));
+
+		red.render(uiLayer, Vec2(0.60f, 0.2f));
+		green.render(uiLayer, Vec2(0.70f, 0.2f));
+		blue.render(uiLayer, Vec2(0.80f, 0.2f));
 
 		//_layer.submitText(engineInfo);
-		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.47f), 0.4f, lsFont);
-
+		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
+		//uiLayer.submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
 		cursorLayer.submitSprite(cursor, mousePos, Vec3(0, 0, -1));
 
 		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);

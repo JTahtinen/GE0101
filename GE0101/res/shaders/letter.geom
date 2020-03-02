@@ -23,19 +23,22 @@ void main()
 	vec4 pos = gl_in[0].gl_Position;
 	
 	gl_Position = pos;
-	v_TexCoord = texCoord;
-	EmitVertex();
-	
-	gl_Position = pos + vec4(0, -finalDimensions.y, 0, 0);
 	v_TexCoord = texCoord + vec2(0, dimensions.y);
 	EmitVertex();
 	
-	gl_Position = pos + vec4(finalDimensions.x, 0, 0, 0);
-	v_TexCoord = texCoord + vec2(dimensions.x, 0);
+	gl_Position = pos + vec4(0, finalDimensions.y, 0, 0);
+	//gl_Position = pos + vec4(0, dimensions.y, 0, 0);
+	v_TexCoord = texCoord;
 	EmitVertex();
 	
-	gl_Position = pos + vec4(finalDimensions.x, -finalDimensions.y, 0, 0);
+	gl_Position = pos + vec4(finalDimensions.x, 0, 0, 0);
+	//gl_Position = pos + vec4(dimensions.x, 0, 0, 0);
 	v_TexCoord = texCoord + dimensions;
+	EmitVertex();
+	
+	gl_Position = pos + vec4(finalDimensions.x, finalDimensions.y, 0, 0);
+	//gl_Position = pos + vec4(dimensions.xy, 0, 0);
+	v_TexCoord = texCoord + vec2(dimensions.x, 0);
 	EmitVertex();
 	
 	EndPrimitive();

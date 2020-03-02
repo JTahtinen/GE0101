@@ -4,16 +4,18 @@
 #include <iomanip>
 #include "../defs.h"
 
-Slider::Slider(const float rangeMin, const float rangeMax, const float initValue)
+Slider::Slider(const float rangeMin, const float rangeMax, const float initValue, const std::string& label)
 	: _rangeMin(rangeMin)
 	, _rangeMax(rangeMax)
 	, _valueAbs(initValue)
+	, _label(label)
 	, _tiedValue(nullptr)
+	, _showLabel(true)
 {
 }
 
-Slider::Slider(const float rangeMin, const float rangeMax, float* tiedValue)
-	: Slider(rangeMin, rangeMax, 0.0f)
+Slider::Slider(const float rangeMin, const float rangeMax, float* tiedValue, const std::string& label)
+	: Slider(rangeMin, rangeMax, 0.0f, label)
 {
 	if (!tiedValue)
 	{
@@ -76,6 +78,10 @@ void Slider::slideByZeroToOne(float value)
 	setValueZeroToOne(projectToZeroToOne(_valueAbs) + value);
 }
 
+void Slider::toggleLabel()
+{
+	_showLabel = !_showLabel;
+}
 
 float Slider::getValue() const
 {
@@ -87,25 +93,29 @@ void Slider::render(Layer& layer, const Vec2& pos) const
 	static float sliderVisLength = 0.25f;
 	static float sliderVisThickness = 0.02f;
 	static float knobThickness = 0.04f;  //snort
-	float knobVisPos = (pos.y - sliderVisLength) + math::projectToCoordinates(_valueAbs, _rangeMin, _rangeMax, 0, sliderVisLength) + knobThickness * 0.5f;
-	layer.submitQuad(Vec2(pos.x - 0.5f * sliderVisThickness, pos.y + 0.5f * sliderVisThickness), Vec2(sliderVisThickness * 2.0f, sliderVisLength + sliderVisThickness), Vec4(0.4f, 0.4f, 0.4f, 1.0f));
-	layer.submitQuad(pos, Vec2(sliderVisThickness, sliderVisLength), Vec4(0, 0, 0, 1.0f));
-	layer.submitQuad(Vec2(pos.x - 0.25f * knobThickness, knobVisPos), Vec2(knobThickness, knobThickness), Vec4(0.8f, 0.8f, 0.8f, 0.8f));
-	
-	
-	std::stringstream stream;
 	float visValue = 0;
-	if (_valueAbs <= 0)
+	if (_valueAbs <= _rangeMin)
 	{
-		visValue = 0; // This is used to fix a bug where the slider might display negative 0
+		visValue = _rangeMin; // This is used to fix a bug where the slider might display negative 0
 	}
 	else
 	{
 		visValue = _valueAbs;
 	}
+	float knobVisPos = pos.y + math::projectToCoordinates(visValue, _rangeMin, _rangeMax, 0, sliderVisLength) + knobThickness * 0.5f;
+	layer.submitQuad(Vec2(pos.x - 0.5f * sliderVisThickness, pos.y - 0.5f * sliderVisThickness), Vec2(sliderVisThickness * 2.0f, sliderVisLength + sliderVisThickness), Vec4(0.4f, 0.4f, 0.4f, 1.0f));
+	layer.submitQuad(pos, Vec2(sliderVisThickness, sliderVisLength), Vec4(0, 0, 0, 1.0f));
+	layer.submitQuad(Vec2(pos.x - 0.25f * knobThickness, knobVisPos), Vec2(knobThickness, -knobThickness), Vec4(0.8f, 0.8f, 0.8f, 0.8f));
+	
+	
+	std::stringstream stream;
 	stream << std::fixed << std::setprecision(2) << visValue;
 	
-	layer.submitText(stream.str(), Vec2(pos.x, pos.y - sliderVisLength - 0.02f), 0.2f);
+	if (_showLabel)
+	{
+		layer.submitText(_label, Vec2(pos.x - 0.02f, pos.y + sliderVisLength + 0.022f), 0.2f);
+	}
+	layer.submitText(stream.str(), Vec2(pos.x, pos.y - 0.04f), 0.2f);
 }
 
 float Slider::projectToAbs(float zeroToOneRelative)

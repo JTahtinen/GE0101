@@ -16,6 +16,7 @@ class Font
 	unsigned int				_id;
 	std::vector<Letter>			_letters;
 	std::shared_ptr<Texture>	_atlas;
+	float						_base;
 public:
 	~Font();
 	static std::shared_ptr<Font> loadFont(const std::string& filepath);
@@ -36,7 +37,8 @@ public:
 	}
 	void bind() const;
 	inline unsigned int getId() const { return _id; }
+	inline float getBase() const { return _base; }
 public:
-	Font(std::vector<Letter> letters, std::shared_ptr<Texture> atlas);
+	Font(std::vector<Letter> letters, std::shared_ptr<Texture> atlas, float base);
 	static unsigned int nextId();
 };

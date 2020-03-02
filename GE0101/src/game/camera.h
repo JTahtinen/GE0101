@@ -55,7 +55,7 @@ public:
 	inline bool inBounds(const Vec2& pos, const Vec2& size) const 
 	{
 		return (pos.x + size.x > getLeft() && pos.x < getRight()
-			&& pos.y > getBottom() && pos.y - size.y < getTop());
+			&& pos.y + size.y > getBottom() && pos.y < getTop());
 	}
 	inline const Vec3& getPos() const
 	{

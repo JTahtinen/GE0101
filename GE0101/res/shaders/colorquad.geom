@@ -23,7 +23,7 @@ void main()
 	v_Color = outcolor;
 	EmitVertex();
 	
-	gl_Position = pos + vec4(0, -size.y * u_ScreenRatio, 0, 0);
+	gl_Position = pos + vec4(0, size.y * u_ScreenRatio, 0, 0);
 	v_Color = outcolor;
 	EmitVertex();
 	
@@ -31,7 +31,7 @@ void main()
 	v_Color = outcolor;
 	EmitVertex();
 	
-	gl_Position = pos + vec4(size.x, -size.y * u_ScreenRatio, 0, 0);
+	gl_Position = pos + vec4(size.x, size.y * u_ScreenRatio, 0, 0);
 	v_Color = outcolor;
 	EmitVertex();
 	

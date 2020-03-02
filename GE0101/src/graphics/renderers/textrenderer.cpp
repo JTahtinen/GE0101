@@ -77,13 +77,14 @@ void TextRenderer::flush()
 		batch.bindFont();
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		const auto font = batch.getFont();
+		float scale = batch.getScale();
 		_shader.setUniform1i("u_Texture", TEXTURE_SLOT_FONT_ATLAS);
+		_shader.setUniform1f("u_Base", batch.getFont()->getBase() * scale);
 		_buffer = (LetterData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		_shader.setUniform1f("u_Scale", scale);
 		for (const auto& renderable : data)
 		{
 			const std::string& text = renderable.content;
-			const float scale = renderable.scale;
-			_shader.setUniform1f("u_Scale", scale);
 			float cursor = 0;
 			for (const char c : text)
 			{

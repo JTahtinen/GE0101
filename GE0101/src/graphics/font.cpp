@@ -35,10 +35,17 @@ std::shared_ptr<Font> Font::loadFont(const std::string& filepath)
 	std::vector<Letter> letters;
 	int i = 0;
 	bool firstIdSkipped = false;
+	bool baseFound = false;
+	float base = 0.0f;
 	while (ss >> line)
 	{
 		std::istringstream word(line);
 		getline(word, line, '=');
+		if (!baseFound && line == "base")
+		{
+			getline(word, line);
+			base = stof(line) / (float)texHeight;
+		}
 		if (line == "id")
 		{
 			if (!firstIdSkipped)
@@ -93,7 +100,7 @@ std::shared_ptr<Font> Font::loadFont(const std::string& filepath)
 
 	}
 
-	std::shared_ptr<Font> result = std::make_shared<Font>(letters, atlas);
+	std::shared_ptr<Font> result = std::make_shared<Font>(letters, atlas, base);
 	return result;
 }
 
@@ -102,9 +109,10 @@ void Font::bind() const
 	_atlas->bind(TEXTURE_SLOT_FONT_ATLAS);
 }
 
-Font::Font(std::vector<Letter> letters, std::shared_ptr<Texture> atlas)
+Font::Font(std::vector<Letter> letters, std::shared_ptr<Texture> atlas, float base)
 	: _letters(letters)
 	, _atlas(atlas)
+	, _base(base)
 	, _id(nextId())
 {
 }

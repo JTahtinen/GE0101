@@ -37,10 +37,16 @@ void Map::collisionCheck(Entity& entity) const
 
 void Map::render(Layer& layer, const Camera& camera) const
 {
-	int xStartTile		= (int)((camera.getLeft()) / TILE_SIZE);
-	int xEndTile		= (int)((camera.getRight() + TILE_SIZE) / TILE_SIZE);
-	int yStartTile		= (int)((camera.getBottom() + TILE_SIZE) / TILE_SIZE);
-	int yEndTile		= (int)((camera.getTop() + 2 * TILE_SIZE) / TILE_SIZE);
+	//int xStartTile		= (int)((camera.getLeft()) / TILE_SIZE);
+	//int xEndTile		= (int)((camera.getRight() + TILE_SIZE) / TILE_SIZE);
+	//int yStartTile		= (int)((camera.getBottom() + TILE_SIZE) / TILE_SIZE);
+	//int yEndTile		= (int)((camera.getTop() + 2 * TILE_SIZE) / TILE_SIZE);
+
+	int xStartTile = (int)((camera.getLeft()) / TILE_SIZE);
+	int xEndTile = (int)((camera.getRight() + TILE_SIZE) / TILE_SIZE);
+	int yStartTile = (int)((camera.getBottom()) / TILE_SIZE);
+	int yEndTile = (int)((camera.getTop() + TILE_SIZE) / TILE_SIZE);
+
 
 	if (xStartTile < 0) xStartTile = 0;
 	if (xStartTile > _width) return;
