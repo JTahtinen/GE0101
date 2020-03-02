@@ -175,7 +175,7 @@ void Application::run()
 		//_layer.submitText(engineInfo);
 		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
 		//uiLayer.submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
-		cursorLayer.submitSprite(cursor, mousePos, Vec3(0, 0, -1));
+		cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
 
 		//_layer->submitText("Lord Engine, v0.1", Vec2(0.0f, 0.0f), 0.4f, lsFont);
 		//_layer.end();

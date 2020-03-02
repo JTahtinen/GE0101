@@ -99,7 +99,7 @@ State_Condition GameState::update(Game& game)
 		}
 
 
-		_camera.setPos(_player->getPhysics()->getPos().center + Vec2(0.1f, -0.1f));
+		_camera.setPos(_player->getPhysics()->getPos().center + Vec2(0.1f, 0.1f));
 		_camera.update();
 	
 		break;
