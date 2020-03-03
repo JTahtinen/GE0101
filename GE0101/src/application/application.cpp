@@ -90,7 +90,7 @@ void Application::run()
 	Timer gameTimer;
 	gameTimer.start();
 
-	Screen screen(cursor);
+	Screen screen(cursor, cursorLayer);
 	screen.addScreenElement(&red);
 	screen.addScreenElement(&green);
 	screen.addScreenElement(&blue);
@@ -183,7 +183,7 @@ void Application::run()
 			blue.render(uiLayer);
 		}
 		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
-		cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
+	//	cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
 
 		for (auto& layer : layers)
 		{

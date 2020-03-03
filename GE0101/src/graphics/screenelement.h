@@ -13,6 +13,7 @@ public:
 	virtual void onClickHold(const Vec2& relativePos) {};
 	virtual void onRelease(const Vec2& relativePos) {};
 	virtual void onExit(const Vec2& relativePos) {}
+	virtual const std::string& getLabel() const { return ""; };
 	inline void setScreenPos(const Vec2& screenPos) 
 	{ 
 		_screenStart = screenPos; 

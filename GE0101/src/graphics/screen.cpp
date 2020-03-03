@@ -1,9 +1,15 @@
 #include "screen.h"
 #include "../input/input.h"
+#include "../defs.h"
 
-Screen::Screen(std::shared_ptr<const Sprite> cursorSprite)
+#define LABEL_WIDTH_OFFSET -0.05f
+#define LABEL_HEIGHT_OFFSET -0.03f
+
+Screen::Screen(std::shared_ptr<const Sprite> cursorSprite, Layer& layer)
 	: _cursorSprite(cursorSprite)
+	, _layer(layer)
 	, _selectedElement(nullptr)
+	, _elementLabel("")
 {
 	_screenElements.reserve(500);
 }
@@ -16,43 +22,47 @@ void Screen::update(const Window& win)
 	if (!_selectedElement)
 	{
 		selectScreenElement(win);
-		if (!_selectedElement)
-		{
-			return;
-		}
 	}
 	
-	Vec2 relativeCursorPos = _cursorPos - _selectedElement->getScreenPos();
-	bool unSelectElement = false;
-	if (_selectedElement->coversPoint(_cursorPos))
+	if (_selectedElement)
 	{
-		_selectedElement->onHover(relativeCursorPos);
-	}
-	else
-	{
-		unSelectElement = true;
-	}
-	if (in.pollMouse(MOUSESTATE_CLICKED))
-	{
-		_selectedElement->onClick(relativeCursorPos);
-	}
-	if (in.pollMouse(MOUSESTATE_CLICK_HELD))
-	{
-		_selectedElement->onClickHold(relativeCursorPos);
-		unSelectElement = false;
-	}
-	if (in.pollMouse(MOUSESTATE_RELEASED))
-	{
-		_selectedElement->onRelease(relativeCursorPos);
-		if (!_selectedElement->coversPoint(_cursorPos))
+		_cursorElementRelativePos = _cursorPos - _selectedElement->getScreenPos();
+		bool unSelectElement = false;
+		if (_selectedElement->coversPoint(_cursorPos))
+		{
+			_selectedElement->onHover(_cursorElementRelativePos);
+		}
+		else
 		{
 			unSelectElement = true;
 		}
+		if (in.pollMouse(MOUSESTATE_CLICKED))
+		{
+			_selectedElement->onClick(_cursorElementRelativePos);
+		}
+		if (in.pollMouse(MOUSESTATE_CLICK_HELD))
+		{
+			_selectedElement->onClickHold(_cursorElementRelativePos);
+			unSelectElement = false;
+		}
+		if (in.pollMouse(MOUSESTATE_RELEASED))
+		{
+			_selectedElement->onRelease(_cursorElementRelativePos);
+			if (!_selectedElement->coversPoint(_cursorPos))
+			{
+				unSelectElement = true;
+			}
+		}
+		if (unSelectElement)
+		{
+			unSelectScreenElement();
+		}
 	}
-	if (unSelectElement)
+	Vec2 cursorVisPos(_cursorPos.x, _cursorPos.y - _cursorSprite->size.y);
+	_layer.submitSprite(_cursorSprite, cursorVisPos, Vec3(0, 0, -1));
+	if (_elementLabel != "")
 	{
-		_selectedElement->onExit(relativeCursorPos);
-		_selectedElement = nullptr;
+		_layer.submitText(_elementLabel, cursorVisPos + Vec2(LABEL_WIDTH_OFFSET, LABEL_HEIGHT_OFFSET), 0.2f);
 	}
 }
 
@@ -71,8 +81,16 @@ void Screen::selectScreenElement(const Window& win)
 		if (screenElement->coversPoint(_cursorPos))
 		{
 			_selectedElement = screenElement;
+			_elementLabel = screenElement->getLabel();
 			return;
 		}
 	}
 	_selectedElement = nullptr;
+}
+
+void Screen::unSelectScreenElement()
+{
+	_selectedElement->onExit(_cursorElementRelativePos);
+	_selectedElement = nullptr;
+	_elementLabel = "";
 }
