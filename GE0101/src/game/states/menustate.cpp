@@ -5,7 +5,7 @@
 State_Condition MenuState::update(Game& game)
 {
 	Input& in = Input::instance();
-	if (in.poll(KEY_Q, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_Q, KEYSTATE_TYPED))
 	{
 		return STATE_FINISHED;
 	}

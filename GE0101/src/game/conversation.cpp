@@ -56,7 +56,7 @@ ConvNode* ConvNode::activate()
 	unsigned int  numOptions = getNumOptions();
 	for (unsigned int i = 0; i < numOptions; ++i)
 	{
-		if (in.poll(KEY_1 + i, KEYSTATE_TYPED))
+		if (in.pollKeyboard(KEY_1 + i, KEYSTATE_TYPED))
 		{
 			return getNodeFromOption(i);
 		}
@@ -86,7 +86,7 @@ void Conversation::start()
 
 Conversation_Status Conversation::update()
 {
-	if (Input::instance().poll(KEY_E, KEYSTATE_TYPED))
+	if (Input::instance().pollKeyboard(KEY_E, KEYSTATE_TYPED))
 	{
 		reset();
 		return CONVERSATION_FINISHED;

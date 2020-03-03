@@ -5,6 +5,8 @@
 #include "../defs.h"
 #include "../ui/slider.h"
 #include "../util/timer.h"
+#include "../graphics/screen.h"
+
 //Log gameLog;
 
 /*void Application::loadGlobalData()
@@ -66,18 +68,17 @@ void Application::run()
 
 	int fps = 0;
 	Vec2 fpsScreenPos(-0.9f, 0.45f);
-	Vec2 mouse;
 	bool updateFPS = true;
 	bool toggleFPS = true;
 	
 	Vec3 curWinColor(0.50f, 0.45f, 0.45f);
 	Vec3 winColor = curWinColor;
-	Slider red(0.0f, 1.0f, &winColor.x, "Red");
-	Slider green(0.0f, 1.0f, &winColor.y, "Green");
-	Slider blue(0.0f, 1.0f, &winColor.z, "Blue");
-	
+	Slider red(0.0f, 1.0f, &winColor.x, "Red", Vec2(0.60f, 0.0f));
+	Slider green(0.0f, 1.0f, &winColor.y, "Green", Vec2(0.70f, 0.0f));
+	Slider blue(0.0f, 1.0f, &winColor.z, "Blue", Vec2(0.80f, 0.0f));
+
 	static int winHeight = _window.getHeight();
-	const auto& cursor = _assetData.get<Sprite>("res/sprites/cursor.sprite");
+	const std::shared_ptr<const Sprite> cursor = _assetData.get<Sprite>("res/sprites/cursor.sprite");
 
 	bool slidersVisible = false;
 
@@ -88,56 +89,63 @@ void Application::run()
 
 	Timer gameTimer;
 	gameTimer.start();
+
+	Screen screen(cursor);
+	screen.addScreenElement(&red);
+	screen.addScreenElement(&green);
+	screen.addScreenElement(&blue);
+
+
 	while (running)
 	{
 		_window.clear();
 		in.update();
 
 		Vec2 mousePos = _window.getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
-		if (in.poll(KEY_ESCAPE))
+		if (in.pollKeyboard(KEY_ESCAPE))
 		{
 			running = false;
 		}
 
-		if (in.poll(KEY_F, KEYSTATE_TYPED))
+		if (in.pollKeyboard(KEY_F, KEYSTATE_TYPED))
 		{
 			toggleFPS = !toggleFPS;
 		}
 
 		if (slidersVisible)
 		{
-			if (in.poll(KEY_U))
+			if (in.pollKeyboard(KEY_U))
 			{
 				red.slideByAbs(0.01f);
 			}
 
-			if (in.poll(KEY_J))
+			if (in.pollKeyboard(KEY_J))
 			{
 				red.slideByAbs(-0.01f);
 			}
 
-			if (in.poll(KEY_I))
+			if (in.pollKeyboard(KEY_I))
 			{
 				green.slideByAbs(0.01f);
 			}
 
-			if (in.poll(KEY_K))
+			if (in.pollKeyboard(KEY_K))
 			{
 				green.slideByAbs(-0.01f);
 			}
 
-			if (in.poll(KEY_O))
+			if (in.pollKeyboard(KEY_O))
 			{
 				blue.slideByAbs(0.01f);
 			}
 
-			if (in.poll(KEY_L))
+			if (in.pollKeyboard(KEY_L))
 			{
 				blue.slideByAbs(-0.01f);
 			}
 		}
 
-		if (in.poll(KEY_M, KEYSTATE_TYPED))
+		if (in.pollKeyboard(KEY_M, KEYSTATE_TYPED))
 		{
 			slidersVisible = !slidersVisible;
 		}
@@ -170,9 +178,9 @@ void Application::run()
 		
 		if (slidersVisible)
 		{
-			red.render(uiLayer, Vec2(0.60f, 0.2f));
-			green.render(uiLayer, Vec2(0.70f, 0.2f));
-			blue.render(uiLayer, Vec2(0.80f, 0.2f));
+			red.render(uiLayer);
+			green.render(uiLayer);
+			blue.render(uiLayer);
 		}
 		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
 		cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
@@ -191,6 +199,7 @@ void Application::run()
 			frames = 0;
 			updateFPS = true;
 		}
+		screen.update(_window);
 		_window.update();
 	}
 	_assetData.clear();

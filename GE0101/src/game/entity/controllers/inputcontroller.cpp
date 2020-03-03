@@ -36,49 +36,49 @@ void InputController::update(Actor* e)
 	static float runningSpeed = 1.8f;
 	static float currentSpeed = speed;
 	Input& in = Input::instance();
-	if (in.poll(KEY_LSHIFT, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_LSHIFT, KEYSTATE_TYPED))
 	{
 		setInput(INC_SPEED, true);
 		//e->addCommand(COMMAND_INCREASE_SPEED);
 	}
-	else if (in.poll(KEY_LSHIFT, KEYSTATE_RELEASED))
+	else if (in.pollKeyboard(KEY_LSHIFT, KEYSTATE_RELEASED))
 	{
 		//e->addCommand(COMMAND_DECREASE_SPEED);
 		setInput(INC_SPEED, false);
 	}
-	if (in.poll(KEY_A, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_A, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_LEFT, true);
 	}
-	else if (in.poll(KEY_A, KEYSTATE_RELEASED))
+	else if (in.pollKeyboard(KEY_A, KEYSTATE_RELEASED))
 	{
 		setInput(MOVE_LEFT, false);
 	}
-	if (in.poll(KEY_D, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_D, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_RIGHT, true);
 	}
-	else if (in.poll(KEY_D, KEYSTATE_RELEASED))
+	else if (in.pollKeyboard(KEY_D, KEYSTATE_RELEASED))
 	{
 		setInput(MOVE_RIGHT, false);
 	}
-	if (in.poll(KEY_W, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_W, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_UP, true);
 	}
-	else if (in.poll(KEY_W, KEYSTATE_RELEASED))
+	else if (in.pollKeyboard(KEY_W, KEYSTATE_RELEASED))
 	{
 		setInput(MOVE_UP, false);
 	}
-	if (in.poll(KEY_S, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_S, KEYSTATE_TYPED))
 	{
 		//e->addCommand(COMMAND_MOVE_LEFT);
 		setInput(MOVE_DOWN, true);
 	}
-	else if (in.poll(KEY_S, KEYSTATE_RELEASED))
+	else if (in.pollKeyboard(KEY_S, KEYSTATE_RELEASED))
 	{
 		setInput(MOVE_DOWN, false);
 	}

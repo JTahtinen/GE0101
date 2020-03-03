@@ -70,7 +70,7 @@ void GameState::setActiveConversation(std::shared_ptr<Conversation>& conversatio
 State_Condition GameState::update(Game& game)
 {
 	static Input& in = Input::instance();
-	if (in.poll(KEY_Q, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_Q, KEYSTATE_TYPED))
 	{
 		return STATE_FINISHED;
 	}
@@ -80,15 +80,15 @@ State_Condition GameState::update(Game& game)
 
 	case SUBSTATE_ACTIVE:
 	{
-		if (in.poll(KEY_Z, KEYSTATE_TYPED) || in.getMouseWheelUp())
+		if (in.pollKeyboard(KEY_Z, KEYSTATE_TYPED) || in.getMouseWheelUp())
 		{
 			_camera.zoomIn();
 		}
-		if (in.poll(KEY_X, KEYSTATE_TYPED) || in.getMouseWheelDown())
+		if (in.pollKeyboard(KEY_X, KEYSTATE_TYPED) || in.getMouseWheelDown())
 		{
 			_camera.zoomOut();
 		}
-		if (in.poll(KEY_E, KEYSTATE_TYPED))
+		if (in.pollKeyboard(KEY_E, KEYSTATE_TYPED))
 		{
 			_entities.back()->engage(*this);
 		}

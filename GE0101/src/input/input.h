@@ -64,6 +64,13 @@ enum KeyState
 	KEYSTATE_RELEASED
 };
 
+enum MouseState
+{
+	MOUSESTATE_CLICKED,
+	MOUSESTATE_CLICK_HELD,
+	MOUSESTATE_RELEASED
+};
+
 class Input
 {
 	bool		_keysPressed[KEY_AMOUNT];
@@ -76,6 +83,9 @@ class Input
 	int			_deltaY;
 	bool		_mWheelUp;
 	bool		_mWheelDown;
+	bool		_mouseClicked;
+	bool		_mouseReleased;
+	bool		_mouseClickHeld;
 
 public:
 	static inline Input& instance()
@@ -84,10 +94,11 @@ public:
 		return input;
 	}
 	void update();
-	bool poll(Key key, KeyState state) const;
-	bool poll(Key key) const;
-	bool poll(unsigned int key, KeyState state) const;
-	bool poll(unsigned int key) const;
+	bool pollKeyboard(Key key, KeyState state) const;
+	bool pollKeyboard(Key key) const;
+	bool pollKeyboard(unsigned int key, KeyState state) const;
+	bool pollKeyboard(unsigned int key) const;
+	bool pollMouse(MouseState state) const;
 	inline int getMouseX() const { return _mouseX; }
 	inline int getMouseY() const { return _mouseY; }
 	inline int getMouseDeltaX() const { return _deltaX; }

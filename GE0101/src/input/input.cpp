@@ -3,6 +3,9 @@
 Input::Input()
 	: _mWheelDown(false)
 	, _mWheelUp(false)
+	, _mouseClicked(false)
+	, _mouseReleased(false)
+	, _mouseClickHeld(false)
 {
 	SDL_GetMouseState(&_mouseX, &_mouseY);
 	int i;
@@ -19,6 +22,8 @@ void Input::update()
 {
 	_mWheelDown = false;
 	_mWheelUp = false;
+	_mouseClicked = false;
+	_mouseReleased = false;
 
 	static bool keyEventHappened = false;
 
@@ -65,6 +70,22 @@ void Input::update()
 			_deltaY = ev.motion.yrel;
 		}
 		else
+			if (ev.type == SDL_MOUSEBUTTONDOWN)
+			{
+				if (ev.button.button == SDL_BUTTON_LEFT)
+				{
+					_mouseClicked = true;
+					_mouseClickHeld = true;
+				}
+			} else
+				if (ev.type == SDL_MOUSEBUTTONUP)
+				{
+					if (ev.button.button == SDL_BUTTON_LEFT)
+					{
+						_mouseReleased = true;
+						_mouseClickHeld = false;
+					}
+				}
 			if (ev.type == SDL_MOUSEWHEEL)
 		{
 				if (ev.wheel.y < 0)
@@ -80,7 +101,7 @@ void Input::update()
 	
 }
 
-bool Input::poll(Key key, KeyState state) const
+bool Input::pollKeyboard(Key key, KeyState state) const
 {
 	if (state >= KEY_AMOUNT)
 		return false;
@@ -98,19 +119,33 @@ bool Input::poll(Key key, KeyState state) const
 	}
 }
 
-bool Input::poll(Key key) const
+bool Input::pollKeyboard(Key key) const
 {
-	return poll(key, KEYSTATE_PRESSED);
+	return pollKeyboard(key, KEYSTATE_PRESSED);
 }
 
-bool Input::poll(unsigned int key, KeyState state) const
+bool Input::pollKeyboard(unsigned int key, KeyState state) const
 {
-	return poll((Key)key, state);
+	return pollKeyboard((Key)key, state);
 }
 
-bool Input::poll(unsigned int key) const
+bool Input::pollKeyboard(unsigned int key) const
 {
-	return poll((Key)key);
+	return pollKeyboard((Key)key);
+}
+
+bool Input::pollMouse(MouseState state) const
+{
+	switch (state)
+	{
+	case MOUSESTATE_CLICKED:
+		return _mouseClicked;
+	case MOUSESTATE_CLICK_HELD:
+		return _mouseClickHeld;
+	case MOUSESTATE_RELEASED:
+		return _mouseReleased;
+	}
+	return false;
 }
 
 Key Input::translateSDLKey(SDL_Keycode key)
