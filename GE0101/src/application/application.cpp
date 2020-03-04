@@ -25,7 +25,7 @@ void Application::deleteGlobalData()
 }
 */
 Application::Application()
-	: _window(1280, 720, "GE0101", true)
+	: _window(1280, 720, "GE0101", false)
 	, _layer(_window, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 	, _game(g_assetManager)
 {
@@ -46,11 +46,6 @@ void Application::run()
 
 	Input& in = Input::instance();
 
-
-
-	
-
-
 	std::shared_ptr<Font> lsFont = g_assetManager.get<Font>("res/fonts/liberation_serif");
 	std::shared_ptr<Font> arialFont = g_assetManager.get<Font>("res/fonts/arial");
 
@@ -63,10 +58,8 @@ void Application::run()
 	layers[1] = &uiLayer;
 	layers[2] = &cursorLayer;
 	//TextRenderable* engineInfo = TextRenderable::createTextRenderable("Lord Engine, v0.1", lsFont, Vec4(0.5f, -0.48f, 0, 1), 0.3f, true);
-	TextBox::setDefaultFont(lsFont);
 	TextBox textBox("FPS: ", 0.3f);
 	textBox.setColor(Vec4(0.1f, 0.6f, 0.0f, 0.6f));
-	textBox.setFont(arialFont);
 
 	int fps = 0;
 	Vec2 fpsScreenPos(-0.9f, 0.45f);
@@ -92,10 +85,16 @@ void Application::run()
 	Timer gameTimer;
 	gameTimer.start();
 
+	float enBoxScale = 0.4f;
+
+	TextBox EngineBox("Lord Engine, v0.1", enBoxScale);
+	EngineBox.addContent("(C) Jaakko Tahtinen");
+
 	Screen screen(cursor, cursorLayer);
 	screen.addScreenElement(&red);
 	screen.addScreenElement(&green);
 	screen.addScreenElement(&blue);
+
 
 
 	while (running)
@@ -114,37 +113,15 @@ void Application::run()
 			toggleFPS = !toggleFPS;
 		}
 
-		if (slidersVisible)
+		if (in.pollKeyboard(KEY_U))
 		{
-			if (in.pollKeyboard(KEY_U))
-			{
-				red.slideByAbs(0.01f);
-			}
-
-			if (in.pollKeyboard(KEY_J))
-			{
-				red.slideByAbs(-0.01f);
-			}
-
-			if (in.pollKeyboard(KEY_I))
-			{
-				green.slideByAbs(0.01f);
-			}
-
-			if (in.pollKeyboard(KEY_K))
-			{
-				green.slideByAbs(-0.01f);
-			}
-
-			if (in.pollKeyboard(KEY_O))
-			{
-				blue.slideByAbs(0.01f);
-			}
-
-			if (in.pollKeyboard(KEY_L))
-			{
-				blue.slideByAbs(-0.01f);
-			}
+			enBoxScale += 0.01f;
+			EngineBox.setScale(enBoxScale);
+		}
+		if (in.pollKeyboard(KEY_J))
+		{
+			enBoxScale -= 0.01f;
+			EngineBox.setScale(enBoxScale);
 		}
 
 		if (in.pollKeyboard(KEY_P, KEYSTATE_TYPED))
@@ -156,8 +133,6 @@ void Application::run()
 		{
 			slidersVisible = !slidersVisible;
 		}
-
-		
 
 		frameTime = (float)(gameTimer.getElapsedSinceLastUpdateInMillis() * 0.001f);
 
@@ -189,8 +164,9 @@ void Application::run()
 			green.render(uiLayer);
 			blue.render(uiLayer);
 		}
-		uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
-	//	cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
+		//uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
+		EngineBox.render(uiLayer, Vec2(0.2f, -0.52f));
+		//	cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
 
 		for (auto& layer : layers)
 		{

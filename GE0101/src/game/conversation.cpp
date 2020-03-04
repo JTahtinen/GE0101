@@ -17,10 +17,10 @@ void ConvNode::render(Layer& layer) const
 {
 	TextBox box(_text);
 	unsigned int i = 1;
-	box.pushContent(" ");
+	box.addContent(" ");
 	for (auto& option : _options)
 	{
-		box.pushContent(std::to_string(i++) + ": " +  option.text);
+		box.addContent(std::to_string(i++) + ": " +  option.text);
 	}
 	box.render(layer, Vec2(-0.4f, 0.2f));
 }

@@ -6,28 +6,21 @@ Label::Label(const std::string& content, const float scale, std::shared_ptr<cons
 	: _content(content)
 	, _scale(scale)
 	, _font(font)
-	, _screenWidth(0)
-	, _screenHeight(0)
+	, _screenDimensions(0, 0)
 {
 	ASSERT(_font);
-	for (const char l : _content)
-	{
-		const Letter* letter = _font->getLetter(l);
-		_screenWidth += letter->width;
-		float curLetterHeight = letter->height;
-		if (curLetterHeight > _screenHeight)
-		{
-			_screenHeight = curLetterHeight;
-		}
-	}
-
-	_screenWidth *= _scale;
-	_screenHeight *= _scale;
+	calculateDimensions();
 }
 
 Label::Label(const std::string& content, const float scale)
 	: Label(content, scale, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 {
+}
+
+void Label::setScale(const float scale)
+{
+	_scale = scale;
+	calculateDimensions();
 }
 
 void Label::render(const Vec2& pos, Layer& layer) const
@@ -38,7 +31,27 @@ void Label::render(const Vec2& pos, Layer& layer) const
 	}
 }
 
-Vec2 Label::getScreenDimensions() const
+const Vec2& Label::getScreenDimensions() const
 {
-	return Vec2(_screenWidth, _screenHeight);
+	return _screenDimensions;
+}
+
+void Label::calculateDimensions()
+{
+	_screenDimensions = Vec2(0, 0);
+	for (const char l : _content)
+	{
+		const Letter* letter = _font->getLetter(l);
+		if (!letter)
+		{
+			continue;
+		}
+		_screenDimensions.x += letter->xAdvance;
+		float curLetterHeight = letter->height;
+		if (curLetterHeight > _screenDimensions.y)
+		{
+			_screenDimensions.y = curLetterHeight;
+		}
+	}
+	_screenDimensions *= _scale;
 }

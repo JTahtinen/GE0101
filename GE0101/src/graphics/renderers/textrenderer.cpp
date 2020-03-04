@@ -89,7 +89,10 @@ void TextRenderer::flush()
 			for (const char c : text)
 			{
 				const auto l = font->getLetter(c);
-
+				if (!l)
+				{
+					continue;
+				}
 
 				_buffer->pos = renderable.pos + Vec2(cursor, 0);
 				_buffer->dimensions = Vec2(l->width, l->height);
