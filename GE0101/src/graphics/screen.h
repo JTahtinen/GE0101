@@ -14,9 +14,10 @@ class Screen
 	std::vector<ScreenElement*>							_screenElements;
 	ScreenElement*										_selectedElement;
 	std::string											_elementLabel;
-	Layer&												_layer;
+	Layer												_uiLayer;
+	Layer												_cursorLayer;
 public:
-	Screen(std::shared_ptr<const Sprite> cursorSprite, Layer& layer);
+	Screen(std::shared_ptr<const Sprite> cursorSprite, Window& win);
 	void update(const Window& win);
 	void addScreenElement(ScreenElement* screenElement);
 private:

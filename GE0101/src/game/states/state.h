@@ -1,6 +1,6 @@
 #pragma once
 
-class Game;
+class Application;
 class Layer;
 class Vec2;
 
@@ -20,7 +20,7 @@ class State
 {
 public:
 	virtual ~State() {};
-	virtual State_Condition update(Game& game) = 0;
+	virtual State_Condition update(Application& app) = 0;
 	virtual void render(Layer& layer) = 0;
 	virtual Vec2 getInContextPosition(const Vec2& screenPosition) const = 0;
 };

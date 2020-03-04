@@ -17,6 +17,7 @@ public:
 	void render(const Vec2& pos, Layer& layer) const;
 	const Vec2& getScreenDimensions() const;
 	inline const std::string& str() const { return _content; }
+	void setScaleToFit(const Vec2& dimensions);
 private:
 	void calculateDimensions();
 };

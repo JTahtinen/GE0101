@@ -23,7 +23,7 @@ public:
 	void slideByAbs(float value);
 	void slideByZeroToOne(float value);
 	void toggleLabel();
-	void render(Layer& layer) const;
+	virtual void render(Layer& layer) const override;
 	float getValue() const;
 
 	virtual void onHover(const Vec2& relativePos) override;

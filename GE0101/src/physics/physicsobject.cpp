@@ -2,6 +2,7 @@
 #include "../game/states/gamestate.h"
 #include "collider.h"
 #include "../game/game.h"
+#include "../application/application.h"
 
 PhysicsObject::PhysicsObject(const Vec2& pos, const Vec2& dimensions)
 	: _pos({ pos, dimensions })
@@ -15,12 +16,12 @@ void PhysicsObject::setPos(const Vec2& pos)
 
 void PhysicsObject::setForce(const Vec2& force)
 {
-	_force = force * Game::frameTime;
+	_force = force * Application::frametime;
 }
 
 void PhysicsObject::applyForce(const Vec2& force)
 {
-	_force += force * Game::frameTime;
+	_force += force * Application::frametime;
 }
 
 void PhysicsObject::collisionCheck(const PhysicsObject& other)

@@ -2,11 +2,12 @@
 #include "../defs.h"
 #include <math.h>
 #include "../game/game.h"
+#include "../application/application.h"
 
 bool physics::overlaps(const Position& loc1, const Position& loc2)
 {
 	// Margin needed because of floating point rounding error
-	float errorMargin = 0.003f * Game::frameTime;
+	float errorMargin = 0.003f * Application::frametime;
 	const Vec2& pos1 = loc1.center;
 	const Vec2& pos2 = loc2.center;
 

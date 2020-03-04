@@ -1,13 +1,15 @@
 #include "screen.h"
 #include "../input/input.h"
 #include "../defs.h"
+#include "../globals.h"
 
 #define LABEL_WIDTH_OFFSET -0.05f
 #define LABEL_HEIGHT_OFFSET -0.03f
 
-Screen::Screen(std::shared_ptr<const Sprite> cursorSprite, Layer& layer)
+Screen::Screen(std::shared_ptr<const Sprite> cursorSprite, Window& win)
 	: _cursorSprite(cursorSprite)
-	, _layer(layer)
+	, _uiLayer(win, g_assetManager.get<Font>("res/fonts/liberation_serif"))
+	, _cursorLayer(win, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 	, _selectedElement(nullptr)
 	, _elementLabel("")
 {
@@ -16,12 +18,22 @@ Screen::Screen(std::shared_ptr<const Sprite> cursorSprite, Layer& layer)
 
 void Screen::update(const Window& win)
 {
+	_uiLayer.begin();
+	_cursorLayer.begin();
 	static Input& in = Input::instance();
 	_cursorPos = win.getScreenCoordsRatioCorrected(in.getMouseX(), win.getHeight() - in.getMouseY());
 	
+	bool firstCycle = false;
 	if (!_selectedElement)
 	{
-		selectScreenElement(win);
+		if (!in.pollMouse(MOUSESTATE_CLICK_HELD))
+		{
+			selectScreenElement(win);
+			if (_selectedElement)
+			{
+				firstCycle = true;
+			}
+		}
 	}
 	
 	if (_selectedElement)
@@ -30,7 +42,9 @@ void Screen::update(const Window& win)
 		bool unSelectElement = false;
 		if (_selectedElement->coversPoint(_cursorPos))
 		{
+	
 			_selectedElement->onHover(_cursorElementRelativePos);
+			
 		}
 		else
 		{
@@ -44,11 +58,19 @@ void Screen::update(const Window& win)
 		{
 			_selectedElement->onClickHold(_cursorElementRelativePos);
 			unSelectElement = false;
+			if (!_selectedElement->coversPoint(_cursorPos))
+			{
+				_selectedElement->onExitHoverNoRelease(_cursorElementRelativePos);
+			}
 		}
-		if (in.pollMouse(MOUSESTATE_RELEASED))
+		if (!firstCycle && in.pollMouse(MOUSESTATE_RELEASED))
 		{
 			_selectedElement->onRelease(_cursorElementRelativePos);
-			if (!_selectedElement->coversPoint(_cursorPos))
+			if (_selectedElement->coversPoint(_cursorPos))
+			{
+				_selectedElement->onReleaseHover(_cursorElementRelativePos);
+			}
+			else 
 			{
 				unSelectElement = true;
 			}
@@ -57,13 +79,25 @@ void Screen::update(const Window& win)
 		{
 			unSelectScreenElement();
 		}
+		firstCycle = false;
 	}
+
+	for (auto& element : _screenElements)
+	{
+		element->render(_uiLayer);
+	}
+
 	Vec2 cursorVisPos(_cursorPos.x, _cursorPos.y - _cursorSprite->size.y);
-	_layer.submitSprite(_cursorSprite, cursorVisPos, Vec3(0, 0, -1));
+	_cursorLayer.submitSprite(_cursorSprite, cursorVisPos, Vec3(0, 0, -1));
 	if (_elementLabel != "")
 	{
-		_layer.submitText(_elementLabel, cursorVisPos + Vec2(LABEL_WIDTH_OFFSET, LABEL_HEIGHT_OFFSET), 0.2f);
+		_cursorLayer.submitText(_elementLabel, cursorVisPos + Vec2(LABEL_WIDTH_OFFSET, LABEL_HEIGHT_OFFSET), 0.2f);
 	}
+	_uiLayer.end();
+	_uiLayer.flush();
+	
+	_cursorLayer.end();
+	_cursorLayer.flush();
 }
 
 void Screen::addScreenElement(ScreenElement* screenElement)

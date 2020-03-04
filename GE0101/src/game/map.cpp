@@ -1,5 +1,5 @@
 #include "map.h"
-#include "game.h"
+#include "../application/application.h"
 #include "../defs.h"
 #include "../math/math.h"
 #include "../graphics/layer.h"
@@ -79,7 +79,7 @@ Vec2 Map::getTilePos(const Vec2& absPos) const
 	return Vec2(absPos.x / TILE_SIZE, absPos.y / TILE_SIZE);
 }
 
-std::shared_ptr<Map> Map::loadMap(const std::string& filepath, Game& game, AssetManager& assets)
+std::shared_ptr<Map> Map::loadMap(const std::string& filepath, Application& app)
 {
 	std::string mapFile = load_text_file(filepath);
 
@@ -107,7 +107,7 @@ std::shared_ptr<Map> Map::loadMap(const std::string& filepath, Game& game, Asset
 			ss >> line;
 			std::string tileKey;
 			ss >> tileKey;
-			tileTypeMap.emplace(stoi(tileKey), loadTile(line, game, assets));
+			tileTypeMap.emplace(stoi(tileKey), loadTile(line, app));
 			continue;
 		}
 		if (line == "w:")
@@ -143,7 +143,7 @@ std::shared_ptr<Map> Map::loadMap(const std::string& filepath, Game& game, Asset
 	return map;
 }
 
-std::shared_ptr<Tile> Map::loadTile(const std::string& filepath, Game& game, AssetManager& assets)
+std::shared_ptr<Tile> Map::loadTile(const std::string& filepath, Application& app)
 {
 	std::shared_ptr<Tile> tile = std::make_shared<Tile>();
 	std::string file = load_text_file(filepath);
@@ -159,7 +159,7 @@ std::shared_ptr<Tile> Map::loadTile(const std::string& filepath, Game& game, Ass
 		if (line == "sprite:")
 		{
 			ss >> line;
-			tile->sprite = assets.get<Sprite>(line);
+			tile->sprite = g_assetManager.get<Sprite>(line);
 		}
 		if (line == "barrier:")
 		{

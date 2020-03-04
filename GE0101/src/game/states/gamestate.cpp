@@ -4,8 +4,12 @@
 #include "../../input/input.h"
 #include "../../physics/collider.h"
 #include "../../defs.h"
+#include "../../application/application.h"
+#include "../../util/file.h"
+#include "../../globals.h"
+#include "../entity/controllers/inputcontroller.h"
 
-GameState::GameState(Game& game)
+GameState::GameState(Application& app)
 	: 
 	_camera(16.0f / 9.0f)
 	, _activeConversation(nullptr)
@@ -67,7 +71,7 @@ void GameState::setActiveConversation(std::shared_ptr<Conversation>& conversatio
 	_activeConversation = conversation;
 }
 
-State_Condition GameState::update(Game& game)
+State_Condition GameState::update(Application& app)
 {
 	static Input& in = Input::instance();
 	if (in.pollKeyboard(KEY_Q, KEYSTATE_TYPED))
@@ -147,4 +151,52 @@ void GameState::render(Layer& layer)
 	{
 		_activeConversation->render(layer);
 	}
+}
+
+std::unique_ptr<GameState> GameState::loadGameState(const std::string& filepath, Application& app)
+{
+	std::unique_ptr<GameState> gameState = std::make_unique<GameState>(app);
+	std::string file = load_text_file(filepath);
+	std::istringstream ss(file);
+	std::string line;
+	while (ss >> line)
+	{
+		if (line == "map:")
+		{
+			ss >> line;
+			gameState->setMap(std::shared_ptr<Map>(Map::loadMap(line, app)));
+			continue;
+		}
+		if (line == "player:")
+		{
+			ss >> line;
+			float x = stof(line);
+			ss >> line;
+			float y = stof(line);
+			ss >> line;
+			//	auto sprite = assets.get<Sprite>(line);
+			std::vector<std::shared_ptr<const Sprite>> animFrames;
+			animFrames.reserve(5);
+			animFrames.push_back(g_assetManager.get<Sprite>("res/sprites/stationary.sprite"));
+			animFrames.push_back(g_assetManager.get<Sprite>("res/sprites/left.sprite"));
+			animFrames.push_back(g_assetManager.get<Sprite>("res/sprites/up.sprite"));
+			animFrames.push_back(g_assetManager.get<Sprite>("res/sprites/right.sprite"));
+			animFrames.push_back(g_assetManager.get<Sprite>("res/sprites/down.sprite"));
+			std::shared_ptr<Actor> player = std::make_shared<Actor>(Vec2((float)x, (float)y), animFrames, std::make_shared<InputController>());
+			gameState->addActor(player);
+			gameState->setPlayer(player);
+			continue;
+		}
+		if (line == "e:")
+		{
+			ss >> line;
+			float x = stof(line);
+			ss >> line;
+			float y = stof(line);
+			ss >> line;
+			gameState->addActor(std::make_shared<Actor>(Vec2((float)x, (float)y), g_assetManager.get<Sprite>(line)));
+			continue;
+		}
+	}
+	return gameState;
 }

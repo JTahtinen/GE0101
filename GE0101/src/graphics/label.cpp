@@ -36,6 +36,17 @@ const Vec2& Label::getScreenDimensions() const
 	return _screenDimensions;
 }
 
+void Label::setScaleToFit(const Vec2& dimensions)
+{
+	setScale(1.0f);
+	setScale(dimensions.x / _screenDimensions.x);
+
+	if (_screenDimensions.y > dimensions.y)
+	{
+		setScale(dimensions.y / _screenDimensions.y);
+	}
+}
+
 void Label::calculateDimensions()
 {
 	_screenDimensions = Vec2(0, 0);

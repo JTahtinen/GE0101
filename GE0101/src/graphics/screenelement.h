@@ -1,6 +1,7 @@
 #pragma once
 #include "../math/math.h"
 #include <string>
+#include "layer.h"
 
 class ScreenElement
 {
@@ -14,7 +15,10 @@ public:
 	virtual void onClick(const Vec2& relativePos) {};
 	virtual void onClickHold(const Vec2& relativePos) {};
 	virtual void onRelease(const Vec2& relativePos) {};
+	virtual void onReleaseHover(const Vec2& relativePos) {};
+	virtual void onExitHoverNoRelease(const Vec2& relativePos) {};
 	virtual void onExit(const Vec2& relativePos) {}
+	virtual void render(Layer& layer) const = 0;
 	virtual const std::string getLabel() const { return ""; };
 	inline void setScreenPos(const Vec2& screenPos) 
 	{ 

@@ -5,7 +5,7 @@
 
 #define TILE_SIZE 0.2f
 
-class Game;
+class Application;
 class Entity;
 class Camera;
 class Layer;
@@ -36,8 +36,8 @@ public:
 		}
 		return _tiles[x + y * _width];
 	}
-	static std::shared_ptr<Map> loadMap(const std::string& filepath, Game& game, AssetManager& asset);
+	static std::shared_ptr<Map> loadMap(const std::string& filepath, Application& app);
 	Map() = default;
 private:
-	static std::shared_ptr<Tile> loadTile(const std::string& filepath, Game& game, AssetManager& assets);
+	static std::shared_ptr<Tile> loadTile(const std::string& filepath, Application& app);
 };
