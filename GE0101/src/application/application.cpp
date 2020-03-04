@@ -58,6 +58,7 @@ Application::Application()
 Application::~Application()
 {
 	//deleteGlobalData();
+	_states.clear();
 	g_assetManager.clear();
 }
 
