@@ -7,14 +7,15 @@
 #define SLIDER_VIS_WIDTH 0.02f
 #define SLIDER_VIS_LENGTH 0.25f
 #define SLIDER_KNOB_WIDTH 0.04f
-#define SLIDER_KNOB_DEFAULT_COLOR Vec4(0.8f, 0.8f, 0.8f, 0.8f);
-#define SLIDER_KNOB_HIGHLIGHT_COLOR Vec4(1.0f, 1.0f, 1.0f, 0.8f);
+#define SLIDER_KNOB_DEFAULT_COLOR Vec4(0.8f, 0.8f, 0.8f, 0.8f)
+#define SLIDER_KNOB_HIGHLIGHT_COLOR Vec4(1.0f, 1.0f, 1.0f, 0.8f)
+#define SLIDER_LABEL_SCALE 0.2f
 
 Slider::Slider(const float rangeMin, const float rangeMax, const float initValue, const std::string& label, const Vec2& pos)
 	: _rangeMin(rangeMin)
 	, _rangeMax(rangeMax)
 	, _valueAbs(initValue)
-	, _label(label)
+	, _label(label, SLIDER_LABEL_SCALE)
 	, _tiedValue(nullptr)
 	, _showLabel(true)
 	, _pos(pos)
@@ -130,9 +131,12 @@ void Slider::render(Layer& layer) const
 	
 	if (_showLabel)
 	{
-		layer.submitText(_label, Vec2(_pos.x - 0.02f, _pos.y + SLIDER_VIS_LENGTH + 0.022f), 0.2f);
+		_label.render(Vec2(_pos.x - 0.02f, _pos.y + SLIDER_VIS_LENGTH + 0.022f), layer);
+		//layer.submitText(_label, Vec2(_pos.x - 0.02f, _pos.y + SLIDER_VIS_LENGTH + 0.022f), 0.2f);
 	}
-	layer.submitText(stream.str(), Vec2(_pos.x, _pos.y - 0.04f), 0.2f);
+	Label valueLabel(stream.str(), SLIDER_LABEL_SCALE);
+	valueLabel.render(Vec2(_pos.x, _pos.y - valueLabel.getScreenDimensions().y - 0.02f), layer);
+	//layer.submitText(stream.str(), Vec2(_pos.x, _pos.y - 0.04f), 0.2f);
 }
 
 void Slider::onHover(const Vec2& relativePos)

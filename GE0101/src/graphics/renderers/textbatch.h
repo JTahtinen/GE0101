@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-struct Label
+struct LabelRenderable
 {
 	std::string content;
 	Vec2 pos;
@@ -15,7 +15,7 @@ class TextBatch
 {
 	std::shared_ptr<const Font>		_refFont;
 	float							_refScale;
-	std::vector<Label>				_data;
+	std::vector<LabelRenderable>				_data;
 public:
 	TextBatch(std::shared_ptr<const Font> referenceFont, float referenceScale);
 	void submit(const std::string& content, const Vec2& pos, const float scale);
@@ -24,7 +24,7 @@ public:
 		return (font.getId() == _refFont->getId() && scale == _refScale);
 	}
 	void bindFont() const;
-	inline const std::vector<Label>& getData() const { return _data; }
+	inline const std::vector<LabelRenderable>& getData() const { return _data; }
 	inline const std::shared_ptr<const Font> getFont() const { return _refFont; }
 	inline float getScale() const { return _refScale; }
 	void clear();

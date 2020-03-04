@@ -12,7 +12,7 @@ void TextBatch::submit(const std::string& content, const Vec2& pos, const float 
 {
 	if (content != "")
 	{
-		_data.emplace_back(Label{ content, pos, scale });
+		_data.emplace_back(LabelRenderable{ content, pos, scale });
 	}
 }
 

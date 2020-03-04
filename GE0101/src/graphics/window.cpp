@@ -36,7 +36,6 @@ Window::Window(int width, int height, const char* title)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_ShowCursor(false);
-
 	_win = SDL_CreateWindow(
 		title,
 		SDL_WINDOWPOS_CENTERED, 
@@ -44,6 +43,7 @@ Window::Window(int width, int height, const char* title)
 		_width, 
 		_height, 
 		SDL_WINDOW_OPENGL);
+	//SDL_SetWindowFullscreen(_win, SDL_WINDOW_FULLSCREEN);
 	_glContext = SDL_GL_CreateContext(_win);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
