@@ -1,7 +1,7 @@
 #pragma once
 #include "state.h"
 
-class MenuState : public State
+class Menu : public State
 {
 public:
 	virtual State_Condition update(Application& app) override;

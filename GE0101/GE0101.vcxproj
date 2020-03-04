@@ -185,7 +185,7 @@
     <ClCompile Include="src\math\vec3.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\game\entity\entity.cpp" />
-    <ClCompile Include="src\game\game.cpp" />
+    <ClCompile Include="src\game\gameObs.cpp" />
     <ClCompile Include="src\game\entity\controllers\inputcontroller.cpp" />
     <ClCompile Include="src\game\map.cpp" />
     <ClCompile Include="src\game\scenegraph.cpp" />
@@ -245,7 +245,7 @@
     <ClInclude Include="src\physics\collider.h" />
     <ClInclude Include="src\game\entity\controllers\controller.h" />
     <ClInclude Include="src\game\entity\entity.h" />
-    <ClInclude Include="src\game\game.h" />
+    <ClInclude Include="src\game\gameObs.h" />
     <ClInclude Include="src\game\entity\controllers\inputcontroller.h" />
     <ClInclude Include="src\game\map.h" />
     <ClInclude Include="src\game\scenegraph.h" />

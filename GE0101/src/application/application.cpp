@@ -51,8 +51,8 @@ Application::Application()
 	//loadGlobalData();
 	//_layer = std::make_shared<Layer>(&_window);
 	//_game = std::make_shared<Game>(_assetData);
-	_states.push_back(std::make_unique<MenuState>());
-	_states.push_back(std::move(GameState::loadGameState("res/levels/testlevel.txt", *this)));
+	_states.push_back(std::make_unique<Menu>());
+	_states.push_back(std::move(Game::loadGameState("res/levels/testlevel.txt", *this)));
 }
 
 Application::~Application()

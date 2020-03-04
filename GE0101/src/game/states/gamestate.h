@@ -15,7 +15,7 @@ enum Game_Substate
 };
 
 
-class GameState : public State
+class Game : public State
 {
 	std::shared_ptr<Map>					_map;
 	std::vector<std::shared_ptr<Entity>>	_entities;
@@ -25,8 +25,8 @@ class GameState : public State
 	std::shared_ptr<Conversation>			_activeConversation;
 	Game_Substate							_substate;
 public:
-	GameState(Application& app);
-	virtual ~GameState() override;
+	Game(Application& app);
+	virtual ~Game() override;
 	void addEntity(std::shared_ptr<Entity> e);
 	void addActor(std::shared_ptr<Actor> e);
 	void setPlayer(std::shared_ptr<Actor> e);
@@ -39,5 +39,5 @@ public:
 	inline std::shared_ptr<const Actor> getPlayer() const { return _player; }
 	virtual Vec2 getInContextPosition(const Vec2& screenPosition) const override;
 	virtual void render(Layer& layer) override;
-	static std::unique_ptr<GameState> loadGameState(const std::string& filepath, Application& app);
+	static std::unique_ptr<Game> loadGameState(const std::string& filepath, Application& app);
 };

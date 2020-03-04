@@ -1,7 +1,7 @@
 #pragma once
 #include "../math/vec2.h"
 
-class GameState;
+class Game;
 
 struct Position
 {

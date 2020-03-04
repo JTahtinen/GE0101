@@ -21,5 +21,5 @@ public:
 	std::shared_ptr<const Entity> getTarget() const;
 	void addAlly(std::shared_ptr<const Actor> ally);
 	void addEnemy(std::shared_ptr<const Actor> enemy);
-	virtual void update(GameState& gamestate) override;
+	virtual void update(Game& gamestate) override;
 };

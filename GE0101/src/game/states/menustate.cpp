@@ -2,7 +2,7 @@
 #include "../../input/input.h"
 #include "../../graphics/layer.h"
 
-State_Condition MenuState::update(Application& app)
+State_Condition Menu::update(Application& app)
 {
 	Input& in = Input::instance();
 	if (in.pollKeyboard(KEY_Q, KEYSTATE_TYPED))
@@ -12,11 +12,11 @@ State_Condition MenuState::update(Application& app)
 	return STATE_RUNNING;
 }
 
-void MenuState::render(Layer& layer)
+void Menu::render(Layer& layer)
 {
 }
 
-Vec2 MenuState::getInContextPosition(const Vec2& screenPosition) const
+Vec2 Menu::getInContextPosition(const Vec2& screenPosition) const
 {
 	return screenPosition;
 }

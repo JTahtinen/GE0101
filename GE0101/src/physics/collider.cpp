@@ -1,7 +1,6 @@
 #include "collider.h"
 #include "../defs.h"
 #include <math.h>
-#include "../game/game.h"
 #include "../application/application.h"
 
 bool physics::overlaps(const Position& loc1, const Position& loc2)

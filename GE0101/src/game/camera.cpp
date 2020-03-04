@@ -1,6 +1,5 @@
 #include "camera.h"
 #include "../graphics/window.h"
-#include "game.h"
 #include "../application/application.h"
 
 Camera::Camera(const Vec3& pos, float ratio)

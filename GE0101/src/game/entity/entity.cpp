@@ -91,7 +91,7 @@ void Entity::setConversation(std::shared_ptr<Conversation> conversation)
 	_conversation = conversation;
 }
 
-void Entity::update(GameState& gamestate)
+void Entity::update(Game& gamestate)
 {
 	bool speedBoost = false;
 	for (EntityCommand command : _commandList)
@@ -131,7 +131,7 @@ void Entity::update(GameState& gamestate)
 	_commandList.clear();
 }
 
-void Entity::engage(GameState& gamestate)
+void Entity::engage(Game& gamestate)
 {
 	if (_conversation)
 	{

@@ -11,7 +11,7 @@
 #include <sstream>
 
 class Camera;
-class GameState;
+class Game;
 class Game;
 
 typedef unsigned int GUID;
@@ -55,8 +55,8 @@ public:
 	void stopMoving();
 	void setConversation(std::shared_ptr<Conversation> conversation);
 	inline const PhysicsObject* getPhysics() const { return &_object; }
-	virtual void update(GameState& gamestate);
-	void engage(GameState& gamestate);
+	virtual void update(Game& gamestate);
+	void engage(Game& gamestate);
 	void render(Layer& layer, const Camera& camera) const;
 	inline GUID getId() const { return _id; }
 	inline std::string getName() const 

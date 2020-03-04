@@ -1,7 +1,6 @@
 #include "physicsobject.h"
 #include "../game/states/gamestate.h"
 #include "collider.h"
-#include "../game/game.h"
 #include "../application/application.h"
 
 PhysicsObject::PhysicsObject(const Vec2& pos, const Vec2& dimensions)

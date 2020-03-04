@@ -1,7 +1,7 @@
 #include "aicontroller.h"
 #include "../../../defs.h"
 
-AIController::AIController(std::shared_ptr<GameState> game)
+AIController::AIController(std::shared_ptr<Game> game)
 	: _game(game)
 {
 }

@@ -30,9 +30,6 @@
     <ClCompile Include="src\game\map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\input\input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -105,9 +102,6 @@
     <ClCompile Include="src\game\entity\controllers\inputcontroller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game\states\gamestate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\physics\physicsobject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,6 +156,12 @@
     <ClCompile Include="src\graphics\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game\gameObs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game\states\gamestate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h">
@@ -174,9 +174,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\math\vec2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\game\map.h">
@@ -284,9 +281,6 @@
     <ClInclude Include="src\game\entity\controllers\inputcontroller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\game\states\gamestate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\game\states\state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -357,6 +351,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\gameObs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game\states\gamestate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

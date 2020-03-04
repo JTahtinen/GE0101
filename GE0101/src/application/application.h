@@ -1,6 +1,5 @@
 #pragma once
 #include "../graphics/window.h"
-#include "../game/game.h"
 #include "../graphics/renderers/renderer.h"
 #include "../graphics/button.h"
 #include <vector>

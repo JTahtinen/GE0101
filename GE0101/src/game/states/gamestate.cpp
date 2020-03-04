@@ -1,6 +1,5 @@
 #include "gamestate.h"
 #include "../map.h"
-#include "../game.h"
 #include "../../input/input.h"
 #include "../../physics/collider.h"
 #include "../../defs.h"
@@ -9,7 +8,7 @@
 #include "../../globals.h"
 #include "../entity/controllers/inputcontroller.h"
 
-GameState::GameState(Application& app)
+Game::Game(Application& app)
 	: 
 	_camera(16.0f / 9.0f)
 	, _activeConversation(nullptr)
@@ -20,12 +19,12 @@ GameState::GameState(Application& app)
 
 }
 
-GameState::~GameState()
+Game::~Game()
 {
 	_entities.clear();
 }
 
-void GameState::addEntity(std::shared_ptr<Entity> e)
+void Game::addEntity(std::shared_ptr<Entity> e)
 {
 	if (!e)
 	{
@@ -35,7 +34,7 @@ void GameState::addEntity(std::shared_ptr<Entity> e)
 	_entities.push_back(e);
 }
 
-void GameState::addActor(std::shared_ptr<Actor> e)
+void Game::addActor(std::shared_ptr<Actor> e)
 {
 	if (!e)
 	{
@@ -46,7 +45,7 @@ void GameState::addActor(std::shared_ptr<Actor> e)
 	addEntity(e);
 }
 
-void GameState::setPlayer(std::shared_ptr<Actor> e)
+void Game::setPlayer(std::shared_ptr<Actor> e)
 {
 	if (!e)
 	{
@@ -56,22 +55,22 @@ void GameState::setPlayer(std::shared_ptr<Actor> e)
 	_player = e;
 }
 
-void GameState::setSubState(Game_Substate substate)
+void Game::setSubState(Game_Substate substate)
 {
 	_substate = substate;
 }
 
-void GameState::setMap(std::shared_ptr<Map> map)
+void Game::setMap(std::shared_ptr<Map> map)
 {
 	_map = map;
 }
 
-void GameState::setActiveConversation(std::shared_ptr<Conversation>& conversation)
+void Game::setActiveConversation(std::shared_ptr<Conversation>& conversation)
 {
 	_activeConversation = conversation;
 }
 
-State_Condition GameState::update(Application& app)
+State_Condition Game::update(Application& app)
 {
 	static Input& in = Input::instance();
 	if (in.pollKeyboard(KEY_Q, KEYSTATE_TYPED))
@@ -130,7 +129,7 @@ State_Condition GameState::update(Application& app)
 	return STATE_RUNNING;
 }
 
-Vec2 GameState::getInContextPosition(const Vec2& screenPosition) const
+Vec2 Game::getInContextPosition(const Vec2& screenPosition) const
 {
 	//Vec2 projectedMousePos(screenPosition.x * 0.5f + 0.5f, screenPosition.y * 0.5f + 0.5f);
 	Vec2 projectedMousePos(math::projectToCoordinates(screenPosition.x, -1.0f, 1.0f, 0, 1.0f)
@@ -138,7 +137,7 @@ Vec2 GameState::getInContextPosition(const Vec2& screenPosition) const
 	return _camera.getWorldPoint(projectedMousePos);
 }
 
-void GameState::render(Layer& layer)
+void Game::render(Layer& layer)
 {
 	_map->render(layer, _camera);
 
@@ -153,9 +152,9 @@ void GameState::render(Layer& layer)
 	}
 }
 
-std::unique_ptr<GameState> GameState::loadGameState(const std::string& filepath, Application& app)
+std::unique_ptr<Game> Game::loadGameState(const std::string& filepath, Application& app)
 {
-	std::unique_ptr<GameState> gameState = std::make_unique<GameState>(app);
+	std::unique_ptr<Game> gameState = std::make_unique<Game>(app);
 	std::string file = load_text_file(filepath);
 	std::istringstream ss(file);
 	std::string line;

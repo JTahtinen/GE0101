@@ -82,7 +82,7 @@ void Actor::addEnemy(std::shared_ptr<const Actor> enemy)
 	}
 }
 
-void Actor::update(GameState& gamestate)
+void Actor::update(Game& gamestate)
 {
 	stopMoving();
 
