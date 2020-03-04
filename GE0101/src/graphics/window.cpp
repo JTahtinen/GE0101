@@ -2,9 +2,10 @@
 #include <iostream>
 #include "../defs.h"
 
-Window::Window(int width, int height, const char* title)
+Window::Window(int width, int height, const char* title, bool fullScreen)
 	: _width(width)
 	, _height(height)
+	, _fullScreen(fullScreen)
 {
 	if (_width < 100)
 	{
@@ -36,6 +37,7 @@ Window::Window(int width, int height, const char* title)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_ShowCursor(false);
+
 	_win = SDL_CreateWindow(
 		title,
 		SDL_WINDOWPOS_CENTERED, 
@@ -43,7 +45,7 @@ Window::Window(int width, int height, const char* title)
 		_width, 
 		_height, 
 		SDL_WINDOW_OPENGL);
-	//SDL_SetWindowFullscreen(_win, SDL_WINDOW_FULLSCREEN);
+	setFullScreen(fullScreen);
 	_glContext = SDL_GL_CreateContext(_win);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -63,6 +65,7 @@ void Window::update() const
 	SDL_GL_SwapWindow(_win);
 }
 
+
 void Window::setClearColor(GLclampf r, GLclampf g, GLclampf b)
 {
 	GLCALL(glClearColor(r, g, b, 1.0f));
@@ -77,4 +80,31 @@ void Window::clear() const
 void Window::setTitle(const char* title)
 {
 	SDL_SetWindowTitle(_win, title);
+}
+
+void Window::toggleFullScreen()
+{
+	if (!_fullScreen)
+	{
+		setFullScreen(true);
+	}
+	else
+	{
+		setFullScreen(false);
+	}
+}
+
+void Window::setFullScreen(bool fullScreen)
+{
+	if (fullScreen)
+	{
+		SDL_SetWindowFullscreen(_win, SDL_WINDOW_FULLSCREEN);
+		_fullScreen = true;
+	}
+	else
+	{
+		SDL_SetWindowFullscreen(_win, 0);
+		SDL_SetWindowSize(_win, _width, _height);
+		_fullScreen = false;
+	}
 }

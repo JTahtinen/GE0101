@@ -25,7 +25,7 @@ void Application::deleteGlobalData()
 }
 */
 Application::Application()
-	: _window(1280, 720, "GE0101")
+	: _window(1280, 720, "GE0101", true)
 	, _layer(_window, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 	, _game(g_assetManager)
 {
@@ -145,6 +145,11 @@ void Application::run()
 			{
 				blue.slideByAbs(-0.01f);
 			}
+		}
+
+		if (in.pollKeyboard(KEY_P, KEYSTATE_TYPED))
+		{
+			_window.toggleFullScreen();
 		}
 
 		if (in.pollKeyboard(KEY_M, KEYSTATE_TYPED))
