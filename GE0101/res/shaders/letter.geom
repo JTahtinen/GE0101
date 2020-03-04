@@ -4,12 +4,13 @@ layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
 uniform float u_ScreenRatio;
-uniform float u_Scale;
+//uniform float u_Scale;
 
 in VS_OUT
 {
 	vec2 dimensions;
 	vec2 texCoord;
+	float scale;
 } gs_in[];
 
 out vec2 v_TexCoord;
@@ -19,7 +20,8 @@ void main()
 {	
 	vec2 dimensions = gs_in[0].dimensions;
 	vec2 texCoord = gs_in[0].texCoord;
-	vec2 finalDimensions = vec2(dimensions.x * u_Scale, dimensions.y * u_Scale * u_ScreenRatio);
+	float scale = gs_in[0].scale;
+	vec2 finalDimensions = vec2(dimensions.x * scale, dimensions.y * scale * u_ScreenRatio);
 	vec4 pos = gl_in[0].gl_Position;
 	
 	gl_Position = pos;

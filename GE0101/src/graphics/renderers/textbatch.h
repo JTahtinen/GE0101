@@ -13,19 +13,17 @@ struct LabelRenderable
 
 class TextBatch
 {
-	std::shared_ptr<const Font>		_refFont;
-	float							_refScale;
+	std::shared_ptr<const Font>					_refFont;
 	std::vector<LabelRenderable>				_data;
 public:
-	TextBatch(std::shared_ptr<const Font> referenceFont, float referenceScale);
+	TextBatch(std::shared_ptr<const Font> referenceFont);
 	void submit(const std::string& content, const Vec2& pos, const float scale);
-	inline bool checkCompatibility(const Font& font, float scale) const
+	inline bool checkCompatibility(const Font& font) const
 	{
-		return (font.getId() == _refFont->getId() && scale == _refScale);
+		return (font.getId() == _refFont->getId());
 	}
 	void bindFont() const;
 	inline const std::vector<LabelRenderable>& getData() const { return _data; }
 	inline const std::shared_ptr<const Font> getFont() const { return _refFont; }
-	inline float getScale() const { return _refScale; }
 	void clear();
 };

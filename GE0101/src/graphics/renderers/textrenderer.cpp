@@ -8,6 +8,7 @@ struct LetterData
 	Vec2 dimensions;
 	Vec2 offset;
 	Vec2 texCoord;
+	float scale;
 };
 
 enum ShaderAttributeIndex
@@ -15,7 +16,8 @@ enum ShaderAttributeIndex
 	SHADER_INDEX_POSITION = 0,
 	SHADER_INDEX_DIMENSIONS,
 	SHADER_INDEX_OFFSET,
-	SHADER_INDEX_TEXCOORD
+	SHADER_INDEX_TEXCOORD,
+	SHADER_INDEX_SCALE
 };
 
 
@@ -41,11 +43,13 @@ TextRenderer::TextRenderer(Window* win)
 	glEnableVertexAttribArray(SHADER_INDEX_DIMENSIONS);
 	glEnableVertexAttribArray(SHADER_INDEX_OFFSET);
 	glEnableVertexAttribArray(SHADER_INDEX_TEXCOORD);
-	
+	glEnableVertexAttribArray(SHADER_INDEX_SCALE);
+
 	glVertexAttribPointer(SHADER_INDEX_POSITION, 2, GL_FLOAT, GL_FALSE, RENDERER_LETTER_SIZE, (const void*)0);
 	glVertexAttribPointer(SHADER_INDEX_DIMENSIONS, 2, GL_FLOAT, GL_FALSE, RENDERER_LETTER_SIZE, (const void*)(2 * sizeof(float)));
 	glVertexAttribPointer(SHADER_INDEX_OFFSET, 2, GL_FLOAT, GL_FALSE, RENDERER_LETTER_SIZE, (const void*)(4 * sizeof(float)));
 	glVertexAttribPointer(SHADER_INDEX_TEXCOORD, 2, GL_FLOAT, GL_FALSE, RENDERER_LETTER_SIZE, (const void*)(6 * sizeof(float)));
+	glVertexAttribPointer(SHADER_INDEX_SCALE, 1, GL_FLOAT, GL_FALSE, RENDERER_LETTER_SIZE, (const void*)(8 * sizeof(float)));
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -54,13 +58,13 @@ void TextRenderer::submit(const std::string& label, const Vec2& pos, const float
 {
 	for (auto& batch : _batches)
 	{
-		if (batch.checkCompatibility(*font, scale))
+		if (batch.checkCompatibility(*font))
 		{
 			batch.submit(label, pos, scale);
 			return;
 		}
 	}
-	_batches.emplace_back(TextBatch(font, scale));
+	_batches.emplace_back(TextBatch(font));
 	_batches.back().submit(label, pos, scale);
 }
 
@@ -77,11 +81,12 @@ void TextRenderer::flush()
 		batch.bindFont();
 		glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 		const auto font = batch.getFont();
-		float scale = batch.getScale();
+	//	float scale = batch.getScale();
 		_shader.setUniform1i("u_Texture", TEXTURE_SLOT_FONT_ATLAS);
-		_shader.setUniform1f("u_Base", batch.getFont()->getBase() * scale);
+	//	_shader.setUniform1f("u_Base", batch.getFont()->getBase() * scale);
+		_shader.setUniform1f("u_Base", batch.getFont()->getBase());
 		_buffer = (LetterData*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-		_shader.setUniform1f("u_Scale", scale);
+//		_shader.setUniform1f("u_Scale", scale);
 		for (const auto& renderable : data)
 		{
 			const std::string& text = renderable.content;
@@ -98,9 +103,10 @@ void TextRenderer::flush()
 				_buffer->dimensions = Vec2(l->width, l->height);
 				_buffer->texCoord = Vec2(l->x, l->y);
 				_buffer->offset = Vec2(l->xOffset, l->yOffset);
+				_buffer->scale = renderable.scale;
 				++_buffer;
 
-				cursor += l->xAdvance * scale;
+				cursor += l->xAdvance * renderable.scale;
 				++numLetters;
 			}
 		}
