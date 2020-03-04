@@ -1,8 +1,9 @@
 #pragma once
 #include "../util/assetcollection.h"
-#include "../graphics/font.h"
-#include "../graphics/texture.h"
-#include "../graphics/sprite.h"
+
+class Font;
+class Texture;
+class Sprite;
 
 class AssetManager
 {

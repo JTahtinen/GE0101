@@ -8,7 +8,7 @@
 
 class Application
 {
-	AssetManager					_assetData;
+//	AssetManager					_assetData;
 	Window							_window;
 	Layer							_layer;
 	Game							_game;

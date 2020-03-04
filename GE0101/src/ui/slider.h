@@ -28,7 +28,7 @@ public:
 	virtual void onHover(const Vec2& relativePos) override;
 	virtual void onClickHold(const Vec2& relativePos) override;
 	virtual void onExit(const Vec2& relativePos) override;
-	virtual inline const std::string& getLabel() const override { return _label; }
+	virtual inline const std::string getLabel() const override { return _label; }
 private:
 	float projectToAbs(float zeroToOneRelative);
 	float projectToZeroToOne(float valueAbs);

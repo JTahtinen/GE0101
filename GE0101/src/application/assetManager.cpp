@@ -1,13 +1,12 @@
 #include "assetmanager.h"
+#include "../graphics/font.h"
+#include "../graphics/texture.h"
+#include "../graphics/sprite.h"
+#include "../defs.h"
 
 AssetManager::~AssetManager()
 {
-	_fontData.clear();
-	message("Fonts cleared");
-	_textureData.clear();
-	message("Textures cleared");
-	_spriteData.clear();
-	message("Sprites cleared");
+	clear();
 }
 
 template<>
@@ -125,9 +124,21 @@ std::shared_ptr<Font> AssetManager::get<Font>(const std::string& name)
 
 void AssetManager::clear()
 {
-	_textureData.clear();
-	_spriteData.clear();
-	_fontData.clear();
+	if (!_fontData.empty())
+	{
+		_fontData.clear();
+		message("Fonts cleared");
+	}
+	if (!_textureData.empty())
+	{
+		_textureData.clear();
+		message("Textures cleared");
+	}
+	if (_spriteData.empty())
+	{
+		_spriteData.clear();
+		message("Sprites cleared");
+	}
 }
 
 void AssetManager::message(const std::string& message)

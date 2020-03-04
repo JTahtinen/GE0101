@@ -8,6 +8,7 @@
 #include "../graphics/screen.h"
 
 //Log gameLog;
+AssetManager g_assetManager;
 
 /*void Application::loadGlobalData()
 {
@@ -25,8 +26,8 @@ void Application::deleteGlobalData()
 */
 Application::Application()
 	: _window(1280, 720, "GE0101")
-	, _layer(_window, _assetData.get<Font>("res/fonts/liberation_serif"))
-	, _game(_assetData)
+	, _layer(_window, g_assetManager.get<Font>("res/fonts/liberation_serif"))
+	, _game(g_assetManager)
 {
 	//loadGlobalData();
 	//_layer = std::make_shared<Layer>(&_window);
@@ -36,6 +37,7 @@ Application::Application()
 Application::~Application()
 {
 	//deleteGlobalData();
+	g_assetManager.clear();
 }
 
 void Application::run()
@@ -49,8 +51,8 @@ void Application::run()
 	
 
 
-	std::shared_ptr<Font> lsFont = _assetData.get<Font>("res/fonts/liberation_serif");
-	std::shared_ptr<Font> arialFont = _assetData.get<Font>("res/fonts/arial");
+	std::shared_ptr<Font> lsFont = g_assetManager.get<Font>("res/fonts/liberation_serif");
+	std::shared_ptr<Font> arialFont = g_assetManager.get<Font>("res/fonts/arial");
 
 	Layer gameLayer(_window, lsFont);
 	Layer uiLayer(_window, lsFont);
@@ -78,7 +80,7 @@ void Application::run()
 	Slider blue(0.0f, 1.0f, &winColor.z, "Blue", Vec2(0.80f, 0.0f));
 
 	static int winHeight = _window.getHeight();
-	const std::shared_ptr<const Sprite> cursor = _assetData.get<Sprite>("res/sprites/cursor.sprite");
+	const std::shared_ptr<const Sprite> cursor = g_assetManager.get<Sprite>("res/sprites/cursor.sprite");
 
 	bool slidersVisible = false;
 
@@ -202,6 +204,5 @@ void Application::run()
 		screen.update(_window);
 		_window.update();
 	}
-	_assetData.clear();
 	//gameLog.writeToFile("log.txt");
 }

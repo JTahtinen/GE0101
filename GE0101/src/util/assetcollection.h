@@ -2,7 +2,6 @@
 
 #include <unordered_map>
 #include <string>
-#include "../defs.h"
 
 template <typename T>
 class AssetCollection
@@ -18,17 +17,17 @@ public:
 		_data.clear();
 	}
 
-	void addElement(std::shared_ptr<T> element, const std::string& name)
+	inline void addElement(std::shared_ptr<T> element, const std::string& name)
 	{		
 		_data[name] = element;
 	}
 
-	void removeElement(const std::string& name)
+	inline void removeElement(const std::string& name)
 	{
 		_data.erase(name);
 	}
 
-	std::shared_ptr<T> getElement(const std::string& name)
+	inline std::shared_ptr<T> getElement(const std::string& name)
 	{
 		std::shared_ptr<T> elem = _data[name];
 		if (!elem)
@@ -38,8 +37,13 @@ public:
 		return elem;
 	}
 
-	void clear()
+	inline void clear()
 	{
 		_data.clear();
+	}
+
+	inline bool empty() const
+	{
+		return _data.empty();
 	}
 };

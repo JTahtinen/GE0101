@@ -168,6 +168,7 @@
     <ClCompile Include="src\game\entity\controllers\aicontroller.cpp" />
     <ClCompile Include="src\game\camera.cpp" />
     <ClCompile Include="src\game\conversation.cpp" />
+    <ClCompile Include="src\graphics\label.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
     <ClCompile Include="src\graphics\renderers\batchrenderer.cpp" />
     <ClCompile Include="src\graphics\layer.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="src\game\states\menustate.h" />
     <ClInclude Include="src\game\states\state.h" />
     <ClInclude Include="src\graphics\font.h" />
+    <ClInclude Include="src\graphics\label.h" />
     <ClInclude Include="src\graphics\mesh.h" />
     <ClInclude Include="src\graphics\renderers\batchrenderer.h" />
     <ClInclude Include="src\graphics\layer.h" />
