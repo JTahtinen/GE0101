@@ -134,7 +134,7 @@ void AssetManager::clear()
 		_textureData.clear();
 		message("Textures cleared");
 	}
-	if (_spriteData.empty())
+	if (!_spriteData.empty())
 	{
 		_spriteData.clear();
 		message("Sprites cleared");
