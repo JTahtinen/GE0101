@@ -8,9 +8,9 @@
 #include "../../globals.h"
 #include "../entity/controllers/inputcontroller.h"
 
-Game::Game(Application& app)
-	: 
-	_camera(16.0f / 9.0f)
+Game::Game(Window& win, std::weak_ptr<Sprite> cursorSprite)
+	: State(win, cursorSprite)
+	, _camera(16.0f / 9.0f)
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)
 {
@@ -73,8 +73,9 @@ void Game::setActiveConversation(std::shared_ptr<Conversation>& conversation)
 State_Condition Game::update(Application& app)
 {
 	static Input& in = Input::instance();
-	if (in.pollKeyboard(KEY_Q, KEYSTATE_TYPED))
+	if (in.pollKeyboard(KEY_ESCAPE, KEYSTATE_TYPED))
 	{
+		app.setCurrentState("menu");
 		return STATE_FINISHED;
 	}
 
@@ -154,7 +155,7 @@ void Game::render(Layer& layer)
 
 std::unique_ptr<Game> Game::loadGameState(const std::string& filepath, Application& app)
 {
-	std::unique_ptr<Game> gameState = std::make_unique<Game>(app);
+	std::unique_ptr<Game> gameState = std::make_unique<Game>(app.getWindow(), g_assetManager.get<Sprite>("res/sprites/cursor.sprite"));
 	std::string file = load_text_file(filepath);
 	std::istringstream ss(file);
 	std::string line;

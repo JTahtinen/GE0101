@@ -2,14 +2,14 @@
 
 #define BUTTON_TEXT_MARGIN 0.02f
 
-Button::Button(const std::string& label, const Vec2& pos, const Vec2& dimensions, void (*callback)())
+Button::Button(const std::string& label, const Vec2& pos, const Vec2& dimensions, bool* callbackVal)
 	: ScreenElement(pos, dimensions)
 	, _idleColor(0.4f, 0.4f, 0.4f, 1.0f)
 	, _pressedColor(0.8f, 0.8f, 0.8f, 1.0f)
 	, _hoverColor(0.6f, 0.6f, 0.6f, 1.0f)
 	, _label(label, 0.6f)
 	, _currentColor(&_idleColor)
-	, _callback(callback)
+	, _callbackVal(callbackVal)
 {
 	_label.setScaleToFit(Vec2(_screenDimensions.x - BUTTON_TEXT_MARGIN, _screenDimensions.y - BUTTON_TEXT_MARGIN));
 }
@@ -36,7 +36,8 @@ void Button::onRelease(const Vec2& relativePos)
 
 void Button::onReleaseHover(const Vec2& relativePos)
 {
-	_callback();
+	//_callback();
+	*_callbackVal = !*_callbackVal;
 }
 
 void Button::onExitHoverNoRelease(const Vec2& relativePos)

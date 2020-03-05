@@ -7,14 +7,16 @@
 
 class Button : public ScreenElement
 {
-	void					(*_callback)();
+	//void					(*_callback)();
+	bool*					_callbackVal;
 	Vec4					_idleColor;
 	Vec4					_pressedColor;
 	Vec4					_hoverColor;
 	Vec4*					_currentColor;
 	Label					_label;
 public:
-	Button(const std::string& label, const Vec2& pos, const Vec2& dimensions, void (*callback)());
+	//Button(const std::string& label, const Vec2& pos, const Vec2& dimensions, void (*callback)());
+	Button(const std::string& label, const Vec2& pos, const Vec2& dimensions, bool* callbackVal);
 	virtual void onHover(const Vec2& relativePos) override;
 	virtual void onClick(const Vec2& relativePos) override;
 	virtual void onClickHold(const Vec2& relativePos) override;

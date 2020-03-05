@@ -37,22 +37,19 @@ void Application::deleteGlobalData()
 }
 */
 
-static void exit()
-{
-	s_running = false;
-}
 
 Application::Application()
 	: _window(1280, 720, "GE0101", false)
 	, _layer(_window, g_assetManager.get<Font>("res/fonts/liberation_serif"))
-	, _exitButton("Exit", Vec2(-0.25f, -0.25f), Vec2(0.5f, 0.1f), &exit)
 {
 	_states.reserve(2);
 	//loadGlobalData();
 	//_layer = std::make_shared<Layer>(&_window);
 	//_game = std::make_shared<Game>(_assetData);
-	_states.push_back(std::make_unique<Menu>());
-	_states.push_back(std::move(Game::loadGameState("res/levels/testlevel.txt", *this)));
+	_states["menu"] = std::make_unique<Menu>(*this);
+	_states["game"] = std::move(Game::loadGameState("res/levels/testlevel.txt", *this));
+	_currentState = "menu";
+	
 }
 
 Application::~Application()
@@ -89,9 +86,6 @@ void Application::run()
 	
 	Vec3 curWinColor(0.50f, 0.45f, 0.45f);
 	Vec3 winColor = curWinColor;
-	Slider red(0.0f, 1.0f, &winColor.x, "Red", Vec2(0.60f, 0.0f));
-	Slider green(0.0f, 1.0f, &winColor.y, "Green", Vec2(0.70f, 0.0f));
-	Slider blue(0.0f, 1.0f, &winColor.z, "Blue", Vec2(0.80f, 0.0f));
 
 	static int winHeight = _window.getHeight();
 	const std::shared_ptr<const Sprite> cursor = g_assetManager.get<Sprite>("res/sprites/cursor.sprite");
@@ -111,27 +105,48 @@ void Application::run()
 	TextBox EngineBox("Lord Engine, v0.1", enBoxScale);
 	EngineBox.addContent("(C) Jaakko Tahtinen");
 
-	Button newGameButton("New Game", Vec2(-0.25f, 0.05f), Vec2(0.5f, 0.1f), &buttonTest);
-
-	Screen screen(cursor, _window);
-	screen.addScreenElement(&red);
-	screen.addScreenElement(&green);
-	screen.addScreenElement(&blue);
-	screen.addScreenElement(&newGameButton);
-	screen.addScreenElement(&_exitButton);
 
 
+
+	bool startNewGame = false;
+
+
+	auto& menu = _states["menu"];
+	menu->addScreenElement(std::make_unique<Slider>(0.0f, 1.0f, &winColor.x, "Red", Vec2(0.60f, 0.0f)), "Red");
+	menu->addScreenElement(std::make_unique<Slider>(0.0f, 1.0f, &winColor.y, "Green", Vec2(0.70f, 0.0f)), "Green");
+	menu->addScreenElement(std::make_unique<Slider>(0.0f, 1.0f, &winColor.z, "Blue", Vec2(0.80f, 0.0f)), "Blue");
+	menu->addScreenElement(std::make_unique<Button>("New Game", Vec2(-0.25f, 0.05f), Vec2(0.5f, 0.1f), &startNewGame), "New game");
+	menu->addScreenElement(std::make_unique<Button>("Exit", Vec2(-0.25f, -0.25f), Vec2(0.5f, 0.1f), &s_running), "Exit");
+	bool gameExists = false;
+	bool returnToGame = false;
 	while (s_running)
 	{
 		_window.clear();
 		in.update();
 
+		if (startNewGame)
+		{
+			newGame();
+			if (!gameExists)
+			{
+				menu->addScreenElement(std::make_unique<Button>("Return to game", Vec2(-0.25f, -0.1f), Vec2(0.5f, 0.1f), &returnToGame), "Return to game");
+				gameExists = true;
+			}
+			startNewGame = false;
+		}
+
+		if (returnToGame)
+		{
+			setCurrentState("game");
+			returnToGame = false;
+		}
+
 		Vec2 mousePos = _window.getScreenCoordsRatioCorrected(in.getMouseX(), winHeight - in.getMouseY());
-		if (in.pollKeyboard(KEY_ESCAPE))
+	/*	if (in.pollKeyboard(KEY_ESCAPE))
 		{
 			s_running = false;
 		}
-
+		*/
 		if (in.pollKeyboard(KEY_F, KEYSTATE_TYPED))
 		{
 			toggleFPS = !toggleFPS;
@@ -167,16 +182,9 @@ void Application::run()
 
 
 
-		auto& state = _states[_curStateIndex];
+		auto& state = _states[_currentState];
+		ASSERT(state);
 		State_Condition sCond = state->update(*this);
-		if (sCond == STATE_FINISHED)
-		{
-			++_curStateIndex;
-			if (_curStateIndex >= _states.size())
-			{
-				_curStateIndex = 0;
-			}
-		}
 		_gameTimer.update();
 
 
@@ -222,8 +230,18 @@ void Application::run()
 			frames = 0;
 			updateFPS = true;
 		}
-		screen.update(_window);
 		_window.update();
 	}
 	//gameLog.writeToFile("log.txt");
+}
+
+void Application::setCurrentState(const std::string& state)
+{
+	_currentState = state;
+}
+
+void Application::newGame()
+{
+	_states["game"] = std::move(Game::loadGameState("res/levels/testlevel.txt", *this));
+	_currentState = "game";
 }

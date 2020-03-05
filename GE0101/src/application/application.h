@@ -6,26 +6,34 @@
 #include "../graphics/layer.h"
 #include "assetmanager.h"
 #include "../game/states/state.h"
+#include "../game/states/gamestate.h"
+#include "../game/states/menustate.h"
 #include "../util/timer.h"
+#include <unordered_map>
+#include <string>
 
 class Application
 {
 //	AssetManager					_assetData;
-	std::vector<std::unique_ptr<State>>			_states;
-	unsigned int								_curStateIndex;
-	Timer										_gameTimer;
-	Window										_window;
-	Layer										_layer;
-	//Game										_game;
-	Button										_exitButton;
+	
+	Window																_window;
+	std::unordered_map<std::string, std::unique_ptr<State>>				_states;
+//std::vector<std::pair<std::unique_ptr<State>, std::string>>			_states;
+	std::string															_currentState;
+	Timer																_gameTimer;
+	Layer																_layer;
+	//Game																_game;
 public:
-	static float								frametime;
+	static float														frametime;
 
 public:
 	Application();
 	~Application();
 	void run();
+	void setCurrentState(const std::string& state);
+	Window& getWindow() { return _window; }
 private:
+	void newGame();
 //	void loadGlobalData();
 //	void deleteGlobalData();
 };

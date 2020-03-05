@@ -25,7 +25,7 @@ class Game : public State
 	std::shared_ptr<Conversation>			_activeConversation;
 	Game_Substate							_substate;
 public:
-	Game(Application& app);
+	Game(Window& win, std::weak_ptr<Sprite> cursorSprite);
 	virtual ~Game() override;
 	void addEntity(std::shared_ptr<Entity> e);
 	void addActor(std::shared_ptr<Actor> e);
