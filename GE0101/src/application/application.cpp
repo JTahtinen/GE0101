@@ -9,9 +9,14 @@
 #include "../graphics/button.h"
 #include "../game/states/menustate.h"
 #include "../game/states/gamestate.h"
+#include "heaptracker.h"
+#include <sstream>
+#include <iomanip>
+#include "../datatypes/string.h"
 
 //Log gameLog;
 AssetManager g_assetManager;
+HeapTracker g_heapTracker;
 
 float Application::frametime;
 
@@ -42,6 +47,10 @@ Application::Application()
 	: _window(1280, 720, "GE0101", false)
 	, _layer(_window, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 {
+	
+	String testString = "Hello, there";
+//	testString.print();
+
 	_states.reserve(2);
 	//loadGlobalData();
 	//_layer = std::make_shared<Layer>(&_window);
@@ -61,6 +70,11 @@ Application::~Application()
 
 void Application::run()
 {
+	/*std::vector<Vec2> points = { {0.0f, 0.1f}, {0.3f, 0.5f}, {0.4f, 0.6f}, {0.5f, 0.1f}, {1.0f, 0.9f}, {0.75f, 0.8f}, {0.9f, 1.3f}, {0.5f, 1.8f} };
+	std::vector<Vec2> points2 = { {1.5f, 0.0f}, {1.5f, -0.5f}, {2.0f, -0.5f}, {2.0f, 0.0f} };
+	Polygon testPoly(points);
+	Polygon testPoly2(points2);*/
+
 	s_running = true;
 	Input& in = Input::instance();
 
@@ -90,8 +104,7 @@ void Application::run()
 	static int winHeight = _window.getHeight();
 	const std::shared_ptr<const Sprite> cursor = g_assetManager.get<Sprite>("res/sprites/cursor.sprite");
 
-	bool slidersVisible = false;
-
+	
 
 	float frameTime = 0;
 	unsigned int frames = 0;
@@ -106,8 +119,6 @@ void Application::run()
 	EngineBox.addContent("(C) Jaakko Tahtinen");
 
 
-
-
 	bool startNewGame = false;
 
 
@@ -119,6 +130,11 @@ void Application::run()
 	menu->addScreenElement(std::make_unique<Button>("Exit", Vec2(-0.25f, -0.25f), Vec2(0.5f, 0.1f), &s_running), "Exit");
 	bool gameExists = false;
 	bool returnToGame = false;
+	/*std::string totalAllocStr = "Total heap allocations: ";
+	std::string freedAllocStr = "Freed heap allocations: ";
+	std::string currentAllocStr = "Current heap allocations: ";
+*/
+	
 	while (s_running)
 	{
 		_window.clear();
@@ -152,26 +168,11 @@ void Application::run()
 			toggleFPS = !toggleFPS;
 		}
 
-		if (in.pollKeyboard(KEY_U))
-		{
-			enBoxScale *= 1.01f;
-			EngineBox.setScale(enBoxScale);
-		}
-		if (in.pollKeyboard(KEY_J))
-		{
-			enBoxScale *= 0.99f;
-			EngineBox.setScale(enBoxScale);
-		}
-
 		if (in.pollKeyboard(KEY_P, KEYSTATE_TYPED))
 		{
 			_window.toggleFullScreen();
 		}
 
-		if (in.pollKeyboard(KEY_M, KEYSTATE_TYPED))
-		{
-			slidersVisible = !slidersVisible;
-		}
 
 		frameTime = (float)(gameTimer.getElapsedSinceLastUpdateInMillis() * 0.001f);
 
@@ -205,17 +206,23 @@ void Application::run()
 		}
 		state->render(gameLayer);
 		textBox.render(uiLayer, fpsScreenPos);
-		
-		/*if (slidersVisible)
-		{
-			red.render(uiLayer);
-			green.render(uiLayer);
-			blue.render(uiLayer);
-		}*/
-		//uiLayer.submitText("Lord Engine, v0.1", Vec2(0.4f, -0.52f), 0.4f, lsFont);
-		EngineBox.render(uiLayer, Vec2(0.2f, -0.52f));
-		//	cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
 
+		EngineBox.render(uiLayer, Vec2(0.2f, -0.52f));
+
+	/*	uiLayer.submitPolygon(testPoly, Vec2(0, 0));
+		uiLayer.submitPolygon(testPoly2, Vec2(0, 0));*/
+		//	cursorLayer.submitSprite(cursor, Vec2(mousePos.x, mousePos.y - cursor->size.y), Vec3(0, 0, -1));
+		
+	/*	std::stringstream stream;
+		stream << std::fixed << std::setprecision(2) << g_heapTracker.getTotalAllocationsInMegaBytes(); 
+		uiLayer.submitText(totalAllocStr + stream.str() + " MB" , Vec2(-0.95f, 0.3f), 0.2f);
+		std::stringstream stream2;
+		stream2 << std::fixed << std::setprecision(2) << g_heapTracker.getFreedAllocationsInMegaBytes();
+		uiLayer.submitText(freedAllocStr + stream2.str() + " MB", Vec2(-0.95f, 0.25f), 0.2f);
+		std::stringstream stream3;
+		stream3 << std::fixed << std::setprecision(2) << g_heapTracker.getCurrentAllocationsInMegaBytes();
+		uiLayer.submitText(currentAllocStr + stream3.str() + " MB", Vec2(-0.95f, 0.2f), 0.2f);*/
+		
 		for (auto& layer : layers)
 		{
 			layer->end();
@@ -229,6 +236,9 @@ void Application::run()
 			fps = frames;
 			frames = 0;
 			updateFPS = true;
+			//MSG(totalAllocStr << g_heapTracker.getTotalAllocationsInMegaBytes() << " MB");
+			//MSG(freedAllocStr << g_heapTracker.getFreedAllocationsInMegaBytes() << " MB");
+			//MSG(currentAllocStr << g_heapTracker.getCurrentAllocationsInMegaBytes() << " MB\n");
 		}
 		_window.update();
 	}

@@ -79,6 +79,19 @@ float Vec2::dot(const Vec2& other) const
 	return x * other.x + y * other.y;
 }
 
+Vec2& Vec2::setToAbs()
+{
+	if (x < 0.0f)
+	{
+		x = -x;
+	}
+	if (y < 0.0f)
+	{
+		y = -y;
+	}
+	return *this;
+}
+
 Vec2 Vec2::operator+(const Vec2& other) const
 {
 	return Vec2(x + other.x, y + other.y);

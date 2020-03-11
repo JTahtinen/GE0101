@@ -92,7 +92,6 @@ std::shared_ptr<Texture> AssetManager::get<Texture>(const std::string& name)
 	std::shared_ptr<Texture> texture = _textureData.getElement(name);
 	if (!texture)
 	{
-		message("Could not get Texture: " + name + ". Attempting to load Texture from file.");
 		texture = load<Texture>(name);
 	}
 	return texture;
@@ -104,7 +103,6 @@ std::shared_ptr<Sprite> AssetManager::get<Sprite>(const std::string& name)
 	std::shared_ptr<Sprite> sprite = _spriteData.getElement(name);
 	if (!sprite)
 	{
-		message("Could not get Sprite: "  + name + ". Attempting to load Sprite from file.");
 		sprite = load<Sprite>(name);
 	}
 	return sprite;
@@ -116,7 +114,6 @@ std::shared_ptr<Font> AssetManager::get<Font>(const std::string& name)
 	std::shared_ptr<Font> font = _fontData.getElement(name);
 	if (!font)
 	{
-		message("Could not get Font: " + name + ". Attempting to load Font from file.");
 		font = load<Font>(name);
 	}
 	return font;

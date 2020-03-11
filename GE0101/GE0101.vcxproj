@@ -153,11 +153,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\application\assetManager.cpp" />
+    <ClCompile Include="src\datatypes\string.cpp" />
+    <ClCompile Include="src\external\triangulate.cpp" />
     <ClCompile Include="src\game\assets\geometrydata.cpp" />
     <ClCompile Include="src\game\assets\spritedata.cpp" />
     <ClCompile Include="src\game\assets\texturedata.cpp" />
     <ClCompile Include="src\game\entity\components\animatedgraphicscomponent.cpp" />
     <ClCompile Include="src\game\entity\components\staticgraphicscomponent.cpp" />
+    <ClCompile Include="src\defs.cpp" />
     <ClCompile Include="src\game\states\gamestate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -172,11 +175,14 @@
     <ClCompile Include="src\game\conversation.cpp" />
     <ClCompile Include="src\graphics\label.cpp" />
     <ClCompile Include="src\graphics\mesh.cpp" />
+    <ClCompile Include="src\graphics\polygon.cpp" />
     <ClCompile Include="src\graphics\renderers\batchrenderer.cpp" />
     <ClCompile Include="src\graphics\layer.cpp" />
+    <ClCompile Include="src\graphics\renderers\polygonbatch.cpp" />
     <ClCompile Include="src\graphics\renderers\quadbatch.cpp" />
     <ClCompile Include="src\graphics\renderers\quadrenderer.cpp" />
     <ClCompile Include="src\graphics\renderers\renderer.cpp" />
+    <ClCompile Include="src\graphics\renderers\meshrenderer.cpp" />
     <ClCompile Include="src\graphics\renderers\spritebatch.cpp" />
     <ClCompile Include="src\graphics\renderers\textbatch.cpp" />
     <ClCompile Include="src\graphics\renderers\textrenderer.cpp" />
@@ -208,9 +214,12 @@
   <ItemGroup>
     <ClInclude Include="src\application\assetmanager.h" />
     <ClInclude Include="src\application\application.h" />
+    <ClInclude Include="src\application\heaptracker.h" />
     <ClInclude Include="src\application\observer.h" />
     <ClInclude Include="src\datatypes\asset.h" />
+    <ClInclude Include="src\datatypes\string.h" />
     <ClInclude Include="src\defs.h" />
+    <ClInclude Include="src\external\triangulate.h" />
     <ClInclude Include="src\game\entity\actor.h" />
     <ClInclude Include="src\game\assets\assetdata.h" />
     <ClInclude Include="src\game\assets\dataops.h" />
@@ -231,8 +240,11 @@
     <ClInclude Include="src\graphics\font.h" />
     <ClInclude Include="src\graphics\label.h" />
     <ClInclude Include="src\graphics\mesh.h" />
+    <ClInclude Include="src\graphics\polygon.h" />
     <ClInclude Include="src\graphics\renderers\batchrenderer.h" />
     <ClInclude Include="src\graphics\layer.h" />
+    <ClInclude Include="src\graphics\renderers\meshrenderer.h" />
+    <ClInclude Include="src\graphics\renderers\polygonbatch.h" />
     <ClInclude Include="src\graphics\renderers\quadbatch.h" />
     <ClInclude Include="src\graphics\renderers\quadrenderer.h" />
     <ClInclude Include="src\graphics\renderers\renderer.h" />
@@ -271,6 +283,41 @@
     <ClInclude Include="src\util\glutil.h" />
     <ClInclude Include="src\util\log.h" />
     <ClInclude Include="src\util\timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\basic.frag" />
+    <None Include="res\shaders\basic.vert" />
+    <None Include="res\shaders\colorquad.frag" />
+    <None Include="res\shaders\colorquad.geom" />
+    <None Include="res\shaders\colorquad.vert" />
+    <None Include="res\shaders\letter.frag" />
+    <None Include="res\shaders\letter.geom" />
+    <None Include="res\shaders\letter.vert" />
+    <None Include="res\shaders\mesh.frag" />
+    <None Include="res\shaders\mesh.vert" />
+    <None Include="res\sprites\cursor.sprite" />
+    <None Include="res\sprites\down.sprite" />
+    <None Include="res\sprites\floor.sprite" />
+    <None Include="res\sprites\guy.sprite" />
+    <None Include="res\sprites\left.sprite" />
+    <None Include="res\sprites\right.sprite" />
+    <None Include="res\sprites\stationary.sprite" />
+    <None Include="res\sprites\up.sprite" />
+    <None Include="res\sprites\wall.sprite" />
+    <None Include="res\textures\guy.pdn" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\cursor1.png" />
+    <Image Include="res\textures\cursor2.png" />
+    <Image Include="res\textures\down.png" />
+    <Image Include="res\textures\floor.png" />
+    <Image Include="res\textures\guy.png" />
+    <Image Include="res\textures\IMG_2086.png" />
+    <Image Include="res\textures\left.png" />
+    <Image Include="res\textures\right.png" />
+    <Image Include="res\textures\stationary.png" />
+    <Image Include="res\textures\up.png" />
+    <Image Include="res\textures\wall.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

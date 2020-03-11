@@ -12,9 +12,10 @@ public:
 	{
 		_data.reserve(50);
 	}
+
 	~AssetCollection()
 	{
-		_data.clear();
+		clear();
 	}
 
 	inline void addElement(std::shared_ptr<T> element, const std::string& name)

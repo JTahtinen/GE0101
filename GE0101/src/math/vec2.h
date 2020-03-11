@@ -19,6 +19,7 @@ public:
 	Vec2& sub(const Vec2& other);
 	Vec2& mul(float value);
 	float dot(const Vec2& other) const;
+	Vec2& setToAbs();
 	Vec2 operator+(const Vec2& other) const;
 	Vec2 operator-(const Vec2& other) const;
 	Vec2 operator*(float value) const;

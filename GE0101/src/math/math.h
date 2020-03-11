@@ -47,4 +47,9 @@ namespace math
 		float targetRange = targetMax - targetMin;
 		return (sourceVal - originMin) / (originRange / targetRange) + targetMin;
 	}
+
+	inline float hypotenuse(const float a, const float b)
+	{
+		return sqrtf(a * a + b * b);
+	}
 }

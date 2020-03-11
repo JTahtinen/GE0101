@@ -3,6 +3,12 @@
 #include "globals.h"
 #include <GLEW/glew.h>
 
+
+extern void* operator new(size_t size);
+extern void* operator new[](size_t size);
+extern void operator delete(void* memory, size_t size);
+extern void operator delete[](void* memory, size_t size);
+
 template<typename T> using ptr = std::shared_ptr<T>;
 template<typename T> using ptr_s = std::shared_ptr<T>;
 template<typename T> using ptr_u = std::unique_ptr<T>;

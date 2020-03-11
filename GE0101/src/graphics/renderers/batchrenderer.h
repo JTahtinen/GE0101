@@ -7,6 +7,7 @@
 #include "spritebatch.h"
 #include "../shader.h"
 
+
 struct VertexData;
 
 class BatchRenderer : public Renderer

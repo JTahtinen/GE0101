@@ -165,6 +165,24 @@
     <ClCompile Include="src\game\states\state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\defs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\datatypes\string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\external\triangulate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\polygon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderers\meshrenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderers\polygonbatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h">
@@ -362,5 +380,80 @@
     <ClInclude Include="src\game\states\gamestate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\application\heaptracker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\external\triangulate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\polygon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderers\meshrenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderers\polygonbatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\mesh.vert" />
+    <None Include="res\shaders\mesh.frag" />
+    <None Include="res\shaders\letter.vert" />
+    <None Include="res\shaders\basic.frag" />
+    <None Include="res\shaders\basic.vert" />
+    <None Include="res\shaders\colorquad.frag" />
+    <None Include="res\shaders\colorquad.geom" />
+    <None Include="res\shaders\colorquad.vert" />
+    <None Include="res\shaders\letter.frag" />
+    <None Include="res\shaders\letter.geom" />
+    <None Include="res\sprites\cursor.sprite" />
+    <None Include="res\sprites\down.sprite" />
+    <None Include="res\sprites\floor.sprite" />
+    <None Include="res\sprites\guy.sprite" />
+    <None Include="res\sprites\left.sprite" />
+    <None Include="res\sprites\right.sprite" />
+    <None Include="res\sprites\stationary.sprite" />
+    <None Include="res\sprites\up.sprite" />
+    <None Include="res\sprites\wall.sprite" />
+    <None Include="res\textures\guy.pdn" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\cursor1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\cursor2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\down.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\floor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\guy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\IMG_2086.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\stationary.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\up.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\wall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

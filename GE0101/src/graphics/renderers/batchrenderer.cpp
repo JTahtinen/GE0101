@@ -1,6 +1,7 @@
 #include "batchrenderer.h"
 #include "../../input/input.h"
 #include "../../math/vec4.h"
+#include "../../defs.h"
 
 struct VertexData
 {
