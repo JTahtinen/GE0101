@@ -9,7 +9,7 @@
 #include "../entity/controllers/inputcontroller.h"
 
 Game::Game(Window& win, std::weak_ptr<Sprite> cursorSprite)
-	: State(win, cursorSprite)
+	: State(win, cursorSprite, "game")
 	, _camera(16.0f / 9.0f)
 	, _activeConversation(nullptr)
 	, _substate(SUBSTATE_ACTIVE)

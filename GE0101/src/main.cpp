@@ -7,11 +7,19 @@
 #include "external/triangulate.h"
 
 
+static int* y;
+
+static void foo(int& x)
+{
+	y = &x;
+}
+
 static void playground()
 {
-	std::vector<unsigned int> result;
-	std::vector<Vec2> points = { {0.0f, 1.0f}, {0.3f, 0.5f}, {0.4f, 0.6f}, {0.5f, 0.1f}, {1.0f, 0.9f}, {0.75f, 0.8f}, {0.9f, 1.3f}, {0.5f, 1.8f} };
-	Triangulate::Process(points, result);
+	int x = 5;
+	foo(x);
+	int* p = y;
+	*y = 4;
 }
 
 static void run()

@@ -11,7 +11,7 @@ Button::Button(const std::string& label, const Vec2& pos, const Vec2& dimensions
 	, _currentColor(&_idleColor)
 	, _callbackVal(callbackVal)
 {
-	_label.setScaleToFit(Vec2(_screenDimensions.x - BUTTON_TEXT_MARGIN, _screenDimensions.y - BUTTON_TEXT_MARGIN));
+	_label.setScaleToFit(Vec2(_dimensions.x - BUTTON_TEXT_MARGIN, _dimensions.y - BUTTON_TEXT_MARGIN));
 }
 
 void Button::onHover(const Vec2& relativePos)
@@ -50,11 +50,13 @@ void Button::onExit(const Vec2& relativePos)
 	_currentColor = &_idleColor;
 }
 
-void Button::render(Layer& layer) const
+void Button::render(Layer& layer, const Vec2& pos) const
 {
-	layer.submitQuad(_screenStart, _screenDimensions, *_currentColor);
+	Vec2 finalPos = _posStart + pos;
+	layer.submitQuad(finalPos, _dimensions, *_currentColor);
 	const Vec2& labelDim = _label.getScreenDimensions();
-	Vec2 labelPos(_screenStart.x + _screenDimensions.x * 0.5f - labelDim.x * 0.5f,
-						_screenStart.y + _screenDimensions.y * 0.5f - labelDim.y * 0.5f);
+	Vec2 labelPos(finalPos.x + _dimensions.x * 0.5f - labelDim.x * 0.5f,
+						finalPos.y + _dimensions.y * 0.5f - labelDim.y * 0.5f);
 	_label.render(labelPos, layer);	
+	ScreenElement::render(layer, finalPos);
 }

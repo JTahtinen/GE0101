@@ -123,11 +123,11 @@ void Application::run()
 
 
 	auto& menu = _states["menu"];
-	menu->addScreenElement(std::make_unique<Slider>(0.0f, 1.0f, &winColor.x, "Red", Vec2(0.60f, 0.0f)), "Red");
-	menu->addScreenElement(std::make_unique<Slider>(0.0f, 1.0f, &winColor.y, "Green", Vec2(0.70f, 0.0f)), "Green");
-	menu->addScreenElement(std::make_unique<Slider>(0.0f, 1.0f, &winColor.z, "Blue", Vec2(0.80f, 0.0f)), "Blue");
-	menu->addScreenElement(std::make_unique<Button>("New Game", Vec2(-0.25f, 0.05f), Vec2(0.5f, 0.1f), &startNewGame), "New game");
-	menu->addScreenElement(std::make_unique<Button>("Exit", Vec2(-0.25f, -0.25f), Vec2(0.5f, 0.1f), &s_running), "Exit");
+	menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.x, "Red", Vec2(1.60f, 0.5f)));
+	menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.y, "Green", Vec2(1.70f, 0.5f)));
+	menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.z, "Blue", Vec2(1.80f, 0.5f)));
+	menu->addScreenElement(std::make_shared<Button>("New Game", Vec2(0.75f, 0.55f), Vec2(0.5f, 0.1f), &startNewGame));
+	menu->addScreenElement(std::make_shared<Button>("Exit", Vec2(0.75f, 0.25f), Vec2(0.5f, 0.1f), &s_running));
 	bool gameExists = false;
 	bool returnToGame = false;
 	/*std::string totalAllocStr = "Total heap allocations: ";
@@ -145,7 +145,7 @@ void Application::run()
 			newGame();
 			if (!gameExists)
 			{
-				menu->addScreenElement(std::make_unique<Button>("Return to game", Vec2(-0.25f, -0.1f), Vec2(0.5f, 0.1f), &returnToGame), "Return to game");
+				menu->addScreenElement(std::make_shared<Button>("Return to game", Vec2(0.75f, 0.4f), Vec2(0.5f, 0.1f), &returnToGame));
 				gameExists = true;
 			}
 			startNewGame = false;

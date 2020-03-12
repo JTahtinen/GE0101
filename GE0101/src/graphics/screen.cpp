@@ -14,10 +14,10 @@ Screen::Screen(std::weak_ptr<const Sprite> cursorSprite, Window& target)
 	, _targetWindow(target)
 	, _mainLayer(target, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 	, _cursorLayer(target, g_assetManager.get<Font>("res/fonts/liberation_serif"))
-	, _selectedElement(NULL_ELEMENT)
+	, _selectedFrame(NULL_ELEMENT)
 	, _elementLabel("")
 {
-	_screenElements.reserve(500);
+	_frames.reserve(8);
 }
 
 void Screen::update()
@@ -27,69 +27,71 @@ void Screen::update()
 	static Input& in = Input::instance();
 	_cursorPos = _targetWindow.getScreenCoordsRatioCorrected(in.getMouseX(), _targetWindow.getHeight() - in.getMouseY());
 	
-	bool firstCycle = false;
-	if (_selectedElement == NULL_ELEMENT)
-	{
-		if (!in.pollMouse(MOUSESTATE_CLICK_HELD))
-		{
-			selectScreenElement(_targetWindow);
-			if (_selectedElement != NULL_ELEMENT)
-			{
-				firstCycle = true;
-			}
-		}
-	}
-	
-	if (_selectedElement != NULL_ELEMENT)
-	{
-		auto& elem = _screenElements[_selectedElement];
-		_cursorElementRelativePos = _cursorPos - elem->getScreenPos();
-		bool unSelectElement = false;
-		if (elem->coversPoint(_cursorPos))
-		{
-	
-			elem->onHover(_cursorElementRelativePos);
-			
-		}
-		else
-		{
-			unSelectElement = true;
-		}
-		if (in.pollMouse(MOUSESTATE_CLICKED))
-		{
-			elem->onClick(_cursorElementRelativePos);
-		}
-		if (in.pollMouse(MOUSESTATE_CLICK_HELD))
-		{
-			elem->onClickHold(_cursorElementRelativePos);
-			unSelectElement = false;
-			if (!elem->coversPoint(_cursorPos))
-			{
-				elem->onExitHoverNoRelease(_cursorElementRelativePos);
-			}
-		}
-		if (!firstCycle && in.pollMouse(MOUSESTATE_RELEASED))
-		{
-			elem->onRelease(_cursorElementRelativePos);
-			if (elem->coversPoint(_cursorPos))
-			{
-				elem->onReleaseHover(_cursorElementRelativePos);
-			}
-			else 
-			{
-				unSelectElement = true;
-			}
-		}
-		if (unSelectElement)
-		{
-			unSelectScreenElement();
-		}
-		firstCycle = false;
-	}
+	//bool firstCycle = false;
+	//if (_selectedFrame == NULL_ELEMENT)
+	//{
+	//	if (!in.pollMouse(MOUSESTATE_CLICK_HELD))
+	//	{
+	//		selectFrame(_targetWindow);
+	//		if (_selectedFrame != NULL_ELEMENT)
+	//		{
+	//			firstCycle = true;
+	//		}
+	//	}
+	//}
+	//
+	//if (_selectedFrame != NULL_ELEMENT)
+	//{
+	//	auto& frame = _frames[_selectedFrame];
+	//	_cursorElementRelativePos = _cursorPos - frame->getPos();
+	//	bool unSelectElement = false;
+	//	if (frame->coversPoint(_cursorPos))
+	//	{
+	//
+	//		frame->onHover(_cursorElementRelativePos);
+	//		
+	//	}
+	//	else
+	//	{
+	//		unSelectElement = true;
+	//	}
+	//	if (in.pollMouse(MOUSESTATE_CLICKED))
+	//	{
+	//		frame->onClick(_cursorElementRelativePos);
+	//	}
+	//	if (in.pollMouse(MOUSESTATE_CLICK_HELD))
+	//	{
+	//		frame->onClickHold(_cursorElementRelativePos);
+	//		unSelectElement = false;
+	//		if (!frame->coversPoint(_cursorPos))
+	//		{
+	//			frame->onExitHoverNoRelease(_cursorElementRelativePos);
+	//		}
+	//	}
+	//	if (!firstCycle && in.pollMouse(MOUSESTATE_RELEASED))
+	//	{
+	//		frame->onRelease(_cursorElementRelativePos);
+	//		if (frame->coversPoint(_cursorPos))
+	//		{
+	//			frame->onReleaseHover(_cursorElementRelativePos);
+	//		}
+	//		else 
+	//		{
+	//			unSelectElement = true;
+	//		}
+	//	}
+	//	if (unSelectElement)
+	//	{
+	//		unSelectFrame();
+	//	}
+	//	firstCycle = false;
+	//}
 
-	for (auto& element : _screenElements)
+
+	for (auto& frame : _frames)
 	{
-		element.second->render(_mainLayer);
+		frame.second->update(_cursorPos);
+		frame.second->render(_mainLayer, Vec2(0, 0));
 	}
 
 	Vec2 cursorVisPos(_cursorPos.x, _cursorPos.y - _cursorSprite->size.y);
@@ -108,35 +110,76 @@ void Screen::update()
 	_cursorLayer.flush();
 }
 
-void Screen::addScreenElement(std::unique_ptr<ScreenElement> screenElement, const std::string& label)
+void Screen::addFrame(FrameType type, const char* label)
 {
-	if (screenElement)
+	if (frameExists(label))
 	{
-		_screenElements[label] = std::move(screenElement);
+		ERR("[SCREEN] Could not create frame: " << label << ". Label collision!");
+		return;
+	}
+	
+	float screenRatio = _targetWindow.getRatio();
+	Vec2 screenStart(-1.0f, -1.0f / screenRatio);
+	Vec2 dimensions(2.0f, 2.0f / screenRatio);
+	switch (type)
+	{
+	case FRAMETYPE_FULL:
+		_frames[label] = std::make_unique<Frame>(screenStart, dimensions);
+		break;
+	default:
+		break;
 	}
 }
 
-void Screen::selectScreenElement(const Window& win)
+void Screen::addScreenElement(std::weak_ptr<ScreenElement> screenElement, const char* frame)
 {
-	for (auto& screenElement : _screenElements)
+	if (frameExists(frame))
 	{
-		auto& elem = screenElement.second;
-		if (elem->coversPoint(_cursorPos))
+		_frames[frame]->addChild(screenElement);
+	}
+}
+
+void Screen::removeScreenElement(std::weak_ptr<const ScreenElement> element)
+{
+	for (auto& frame : _frames)
+	{
+		frame.second->removeChild(element);
+	}
+}
+
+void Screen::selectFrame(const Window& win)
+{
+	for (auto& frame : _frames)
+	{
+		auto& potentialFrame = frame.second;	
+		if (potentialFrame->coversPoint(_cursorPos))
 		{
-			_selectedElement = screenElement.first;
-			_elementLabel = elem->getLabel();
+			_selectedFrame = frame.first;
+			_elementLabel = potentialFrame->getLabel();
 			return;
 		}
 	}
-	_selectedElement = NULL_ELEMENT;
+	_selectedFrame = NULL_ELEMENT;
 }
 
-void Screen::unSelectScreenElement()
+void Screen::unSelectFrame()
 {
-	if (_selectedElement != NULL_ELEMENT)
+	if (_selectedFrame != NULL_ELEMENT)
 	{
-		_screenElements[_selectedElement]->onExit(_cursorElementRelativePos);
-		_selectedElement = NULL_ELEMENT;
+		_frames[_selectedFrame]->onExit(_cursorElementRelativePos);
+		_selectedFrame = NULL_ELEMENT;
 	}
 	_elementLabel = "";
+}
+
+bool Screen::frameExists(const char* label) const
+{
+	for (const auto& frame : _frames)
+	{
+		if (frame.first == label)
+		{
+			return true;
+		}
+	}
+	return false;
 }

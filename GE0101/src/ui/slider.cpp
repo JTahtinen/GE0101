@@ -98,8 +98,9 @@ float Slider::getValue() const
 	return _valueAbs;
 }
 
-void Slider::render(Layer& layer) const
+void Slider::render(Layer& layer, const Vec2& pos) const
 {
+	Vec2 finalPos = _posStart + pos;
 	float visValue = 0;
 	if (_valueAbs <= _rangeMin)
 	{
@@ -109,9 +110,9 @@ void Slider::render(Layer& layer) const
 	{
 		visValue = _valueAbs;
 	}
-	float knobVisPos = _pos.y + math::projectToCoordinates(visValue, _rangeMin, _rangeMax, 0, SLIDER_VIS_LENGTH) + SLIDER_KNOB_WIDTH * 0.5f;
-	layer.submitQuad(Vec2(_pos.x - 0.5f * SLIDER_VIS_WIDTH, _pos.y - 0.5f * SLIDER_VIS_WIDTH), Vec2(SLIDER_VIS_WIDTH * 2.0f, SLIDER_VIS_LENGTH + SLIDER_VIS_WIDTH), Vec4(0.4f, 0.4f, 0.4f, 1.0f));
-	layer.submitQuad(_pos, Vec2(SLIDER_VIS_WIDTH, SLIDER_VIS_LENGTH), Vec4(0, 0, 0, 1.0f));
+	float knobVisPos = finalPos.y + math::projectToCoordinates(visValue, _rangeMin, _rangeMax, 0, SLIDER_VIS_LENGTH) + SLIDER_KNOB_WIDTH * 0.5f;
+	layer.submitQuad(Vec2(finalPos.x - 0.5f * SLIDER_VIS_WIDTH, finalPos.y - 0.5f * SLIDER_VIS_WIDTH), Vec2(SLIDER_VIS_WIDTH * 2.0f, SLIDER_VIS_LENGTH + SLIDER_VIS_WIDTH), Vec4(0.4f, 0.4f, 0.4f, 1.0f));
+	layer.submitQuad(finalPos, Vec2(SLIDER_VIS_WIDTH, SLIDER_VIS_LENGTH), Vec4(0, 0, 0, 1.0f));
 	
 	Vec4 knobColor;
 	if (_highLight)
@@ -123,7 +124,7 @@ void Slider::render(Layer& layer) const
 		knobColor = SLIDER_KNOB_DEFAULT_COLOR;
 	}
 	
-	layer.submitQuad(Vec2(_pos.x - 0.25f * SLIDER_KNOB_WIDTH, knobVisPos), Vec2(SLIDER_KNOB_WIDTH, -SLIDER_KNOB_WIDTH), knobColor);
+	layer.submitQuad(Vec2(finalPos.x - 0.25f * SLIDER_KNOB_WIDTH, knobVisPos), Vec2(SLIDER_KNOB_WIDTH, -SLIDER_KNOB_WIDTH), knobColor);
 	
 	
 	std::stringstream stream;
@@ -131,12 +132,13 @@ void Slider::render(Layer& layer) const
 	
 	if (_showLabel)
 	{
-		_label.render(Vec2(_pos.x - 0.02f, _pos.y + SLIDER_VIS_LENGTH + 0.022f), layer);
+		_label.render(Vec2(finalPos.x - 0.02f, finalPos.y + SLIDER_VIS_LENGTH + 0.022f), layer);
 		//layer.submitText(_label, Vec2(_pos.x - 0.02f, _pos.y + SLIDER_VIS_LENGTH + 0.022f), 0.2f);
 	}
 	Label valueLabel(stream.str(), SLIDER_LABEL_SCALE);
 	valueLabel.render(Vec2(_pos.x, _pos.y - valueLabel.getScreenDimensions().y - 0.02f), layer);
 	//layer.submitText(stream.str(), Vec2(_pos.x, _pos.y - 0.04f), 0.2f);
+	ScreenElement::render(layer, finalPos);
 }
 
 void Slider::onHover(const Vec2& relativePos)
@@ -146,7 +148,8 @@ void Slider::onHover(const Vec2& relativePos)
 
 void Slider::onClickHold(const Vec2& relativePos)
 {
-	setValueAbs(math::projectToCoordinates(relativePos.y - SLIDER_KNOB_WIDTH * 0.5f, _screenStart.y, _screenEnd.y, _rangeMin, _rangeMax));
+	// HACK: 
+	setValueAbs(math::projectToCoordinates(1.0f + relativePos.y - _posStart.y - SLIDER_KNOB_WIDTH * 0.5f, _posStart.y, _posEnd.y, _rangeMin, _rangeMax));
 }
 
 void Slider::onExit(const Vec2& relativePos) 

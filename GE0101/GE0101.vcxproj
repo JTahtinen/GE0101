@@ -161,6 +161,7 @@
     <ClCompile Include="src\game\entity\components\animatedgraphicscomponent.cpp" />
     <ClCompile Include="src\game\entity\components\staticgraphicscomponent.cpp" />
     <ClCompile Include="src\defs.cpp" />
+    <ClCompile Include="src\game\states\editor.cpp" />
     <ClCompile Include="src\game\states\gamestate.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -208,6 +209,7 @@
     <ClCompile Include="src\math\vec2.cpp" />
     <ClCompile Include="src\math\vec4.cpp" />
     <ClCompile Include="src\physics\physicsobject.cpp" />
+    <ClCompile Include="src\ui\frame.cpp" />
     <ClCompile Include="src\ui\slider.cpp" />
     <ClCompile Include="src\util\log.cpp" />
   </ItemGroup>
@@ -233,6 +235,7 @@
     <ClInclude Include="src\game\entity\controllers\aicontroller.h" />
     <ClInclude Include="src\game\camera.h" />
     <ClInclude Include="src\game\conversation.h" />
+    <ClInclude Include="src\game\states\editor.h" />
     <ClInclude Include="src\game\states\gamestate.h" />
     <ClInclude Include="src\game\states\menustate.h" />
     <ClInclude Include="src\game\states\state.h" />
@@ -277,6 +280,7 @@
     <ClInclude Include="src\math\vec2.h" />
     <ClInclude Include="src\math\vec4.h" />
     <ClInclude Include="src\physics\physicsobject.h" />
+    <ClInclude Include="src\ui\frame.h" />
     <ClInclude Include="src\ui\slider.h" />
     <ClInclude Include="src\util\assetcollection.h" />
     <ClInclude Include="src\util\file.h" />

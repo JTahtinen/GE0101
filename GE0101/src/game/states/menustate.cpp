@@ -5,7 +5,7 @@
 #include "../../ui/slider.h"
 
 Menu::Menu(Application& app)
-	: State(app.getWindow(), g_assetManager.get<Sprite>("res/sprites/cursor.sprite"))
+	: State(app.getWindow(), g_assetManager.get<Sprite>("res/sprites/cursor.sprite"), "menu")
 {
 	
 }
@@ -28,10 +28,4 @@ void Menu::render(Layer& layer)
 Vec2 Menu::getInContextPosition(const Vec2& screenPosition) const
 {
 	return screenPosition;
-}
-
-
-void Menu::clear()
-{
-	//_buttons.clear();
 }

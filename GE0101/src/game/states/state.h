@@ -21,12 +21,15 @@ enum State_Condition
 class State
 {
 protected:
-	Screen						_screen;
+	Screen													_screen;
+	std::vector<std::shared_ptr<ScreenElement>>				_elements;
+	std::string												_label;
 public:
-	State(Window& win, std::weak_ptr<Sprite> cursorSprite);
+	State(Window& win, std::weak_ptr<Sprite> cursorSprite, const char* label);
 	virtual ~State() {};
 	virtual State_Condition update(Application& app) = 0;
 	virtual void render(Layer& layer);
 	virtual Vec2 getInContextPosition(const Vec2& screenPosition) const = 0;
-	void addScreenElement(std::unique_ptr<ScreenElement> element, const std::string& label);
+	virtual void addScreenElement(std::shared_ptr<ScreenElement> element);
+	virtual void clear();
 };
