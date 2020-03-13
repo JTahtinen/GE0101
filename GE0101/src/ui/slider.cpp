@@ -148,8 +148,7 @@ void Slider::onHover(const Vec2& relativePos)
 
 void Slider::onClickHold(const Vec2& relativePos)
 {
-	// HACK: 
-	setValueAbs(math::projectToCoordinates(1.0f + relativePos.y - _posStart.y - SLIDER_KNOB_WIDTH * 0.5f, _posStart.y, _posEnd.y, _rangeMin, _rangeMax));
+	setValueAbs(math::projectToCoordinates(_posStart.y + relativePos.y, _posStart.y, _posEnd.y, _rangeMin, _rangeMax));
 }
 
 void Slider::onExit(const Vec2& relativePos) 

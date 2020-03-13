@@ -9,7 +9,7 @@ Frame::Frame(const Vec2& pos, const Vec2& dimensions)
 
 void Frame::onHover(const Vec2& relativePos)
 {
-	MSG("Hovering on " << relativePos.toString());
+	//MSG("Hovering on " << relativePos.toString());
 }
 
 void Frame::onClick(const Vec2& relativePos)
