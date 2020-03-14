@@ -12,8 +12,8 @@
 #include "heaptracker.h"
 #include <sstream>
 #include <iomanip>
+#include <memory>
 #include "../datatypes/string.h"
-
 //Log gameLog;
 AssetManager g_assetManager;
 HeapTracker g_heapTracker;
@@ -48,8 +48,10 @@ Application::Application()
 	, _layer(_window, g_assetManager.get<Font>("res/fonts/liberation_serif"))
 {
 	
-	String testString = "Hello, there";
-//	testString.print();
+	String testString = "Hello, there again! How are you?";
+	testString.set("Hello, there again!");
+//	MSG(testString.c_str());
+	testString.print();
 
 	_states.reserve(2);
 	//loadGlobalData();
@@ -123,9 +125,22 @@ void Application::run()
 
 
 	auto& menu = _states["menu"];
-	menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.x, "Red", Vec2(1.60f, 0.5f)));
-	menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.y, "Green", Vec2(1.70f, 0.5f)));
-	menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.z, "Blue", Vec2(1.80f, 0.5f)));
+
+	std::shared_ptr<Frame> sliderCollection = std::make_shared<Frame>(Vec2(0.25f, 0), Vec2(0.5f, 0.5f));
+
+
+	std::shared_ptr<Slider> red = std::make_shared<Slider>(0.0f, 1.0f, &winColor.x, "Red", Vec2(1.25f, 0.5f));
+	std::shared_ptr<Slider> green = std::make_shared<Slider>(0.0f, 1.0f, &winColor.y, "Green", Vec2(1.35f, 0.5f));
+	std::shared_ptr<Slider> blue = std::make_shared<Slider>(0.0f, 1.0f, &winColor.z, "Blue", Vec2(1.45f, 0.5f));
+
+	sliderCollection->addChild(red);
+	sliderCollection->addChild(green);
+	sliderCollection->addChild(blue);
+
+	// menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.x, "Red", Vec2(1.60f, 0.5f)));
+	// menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.y, "Green", Vec2(1.70f, 0.5f)));
+	// menu->addScreenElement(std::make_shared<Slider>(0.0f, 1.0f, &winColor.z, "Blue", Vec2(1.80f, 0.5f)));
+	menu->addScreenElement(sliderCollection);
 	menu->addScreenElement(std::make_shared<Button>("New Game", Vec2(0.75f, 0.55f), Vec2(0.5f, 0.1f), &startNewGame));
 	menu->addScreenElement(std::make_shared<Button>("Exit", Vec2(0.75f, 0.25f), Vec2(0.5f, 0.1f), &s_running));
 	bool gameExists = false;

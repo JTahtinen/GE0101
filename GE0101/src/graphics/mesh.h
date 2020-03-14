@@ -3,6 +3,7 @@
 #include "buffers/indexbuffer.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 class Mesh
 {

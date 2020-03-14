@@ -26,7 +26,7 @@ void Screen::update()
 	_cursorLayer.begin();
 	static Input& in = Input::instance();
 	_cursorPos = _targetWindow.getScreenCoordsRatioCorrected(in.getMouseX(), _targetWindow.getHeight() - in.getMouseY());
-	MSG(_cursorPos.toString());
+	//MSG(_cursorPos.toString());
 	//bool firstCycle = false;
 	//if (_selectedFrame == NULL_ELEMENT)
 	//{

@@ -1,6 +1,7 @@
 #pragma once
 #include "entity/entity.h"
 #include "../math/vec3.h"
+#include <memory>
 
 class Window;
 

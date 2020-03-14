@@ -13,9 +13,10 @@ protected:
 	Vec2													_dimensions;
 	bool													_elementSelected{ false };
 public:
-	ScreenElement(const Vec2& screenPos, const Vec2& screenDimensions) : _posStart(screenPos), _posEnd(screenPos + screenDimensions), _dimensions(screenDimensions)
+	ScreenElement(const Vec2& pos, const Vec2& dimensions) : _posStart(pos), _posEnd(pos + dimensions), _dimensions(dimensions)
 	{
 		_children.reserve(20);
+
 	}
 
 	void update(const Vec2& cursorPos)

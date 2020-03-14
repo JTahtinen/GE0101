@@ -1,4 +1,5 @@
 #include "button.h"
+#include <memory>
 
 #define BUTTON_TEXT_MARGIN 0.02f
 

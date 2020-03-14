@@ -5,21 +5,13 @@
 #include "globals.h"
 #include "math/math.h"
 #include "external/triangulate.h"
+#include "application/factory.h"
 
-
-static int* y;
-
-static void foo(int& x)
-{
-	y = &x;
-}
 
 static void playground()
 {
-	int x = 5;
-	foo(x);
-	int* p = y;
-	*y = 4;
+	String* string = Factory::createString("Hello, World!");
+	string->print();
 }
 
 static void run()
@@ -40,6 +32,7 @@ static void run()
 
 int main(int argc, char** argv)
 {
+	Factory::init();
 	playground();
 	run();
 	MSG("\nTotal Heap allocations during runtime: " << g_heapTracker.getTotalAllocationsInMegaBytes() << " MB");

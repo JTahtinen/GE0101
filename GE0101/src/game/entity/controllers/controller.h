@@ -1,5 +1,6 @@
 #pragma once
 #include "../actor.h"
+#include <memory>
 
 class Controller
 {

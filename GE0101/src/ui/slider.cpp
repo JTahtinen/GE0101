@@ -136,7 +136,7 @@ void Slider::render(Layer& layer, const Vec2& pos) const
 		//layer.submitText(_label, Vec2(_pos.x - 0.02f, _pos.y + SLIDER_VIS_LENGTH + 0.022f), 0.2f);
 	}
 	Label valueLabel(stream.str(), SLIDER_LABEL_SCALE);
-	valueLabel.render(Vec2(_pos.x, _pos.y - valueLabel.getScreenDimensions().y - 0.02f), layer);
+	valueLabel.render(Vec2(finalPos.x, finalPos.y - valueLabel.getScreenDimensions().y - 0.02f), layer);
 	//layer.submitText(stream.str(), Vec2(_pos.x, _pos.y - 0.04f), 0.2f);
 	ScreenElement::render(layer, finalPos);
 }

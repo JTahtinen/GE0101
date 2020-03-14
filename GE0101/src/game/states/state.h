@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "../../graphics/screen.h"
 
 class Application;
